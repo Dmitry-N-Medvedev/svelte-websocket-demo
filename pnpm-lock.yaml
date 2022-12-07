@@ -1,5 +1,40 @@
 lockfileVersion: 5.4
 
+specifiers:
+  '@babel/core': ^7.20.5
+  '@babel/eslint-parser': ^7.19.1
+  '@babel/eslint-plugin': ^7.19.1
+  '@babel/preset-env': ^7.20.2
+  eslint: ^8.29.0
+  eslint-config-airbnb-base: ^15.0.0
+  eslint-import-resolver-node: ^0.3.6
+  eslint-module-utils: ^2.7.4
+  eslint-plugin-chai-friendly: ^0.7.2
+  eslint-plugin-es: ^4.1.0
+  eslint-plugin-import: ^2.26.0
+  eslint-plugin-node: ^11.1.0
+  eslint-rule-composer: ^0.3.0
+  eslint-scope: ^7.1.1
+  eslint-utils: ^3.0.0
+  eslint-visitor-keys: ^3.3.0
+
+devDependencies:
+  '@babel/core': 7.20.5
+  '@babel/eslint-parser': 7.19.1_xthtwe2nrrwct2fnasddpvoro4
+  '@babel/eslint-plugin': 7.19.1_iw4s3en7fyyxs2py43hgzzlham
+  '@babel/preset-env': 7.20.2_@babel+core@7.20.5
+  eslint: 8.29.0
+  eslint-config-airbnb-base: 15.0.0_lt3hqehuojhfcbzgzqfngbtmrq
+  eslint-import-resolver-node: 0.3.6
+  eslint-module-utils: 2.7.4_uplb3bqnui63takc5j27khdnpm
+  eslint-plugin-chai-friendly: 0.7.2_eslint@8.29.0
+  eslint-plugin-es: 4.1.0_eslint@8.29.0
+  eslint-plugin-import: 2.26.0_eslint@8.29.0
+  eslint-plugin-node: 11.1.0_eslint@8.29.0
+  eslint-rule-composer: 0.3.0
+  eslint-scope: 7.1.1
+  eslint-utils: 3.0.0_eslint@8.29.0
+  eslint-visitor-keys: 3.3.0
 importers:
 
   .:
