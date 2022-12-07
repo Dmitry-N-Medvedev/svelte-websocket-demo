@@ -82,6 +82,7 @@ importers:
       eslint: ^8.28.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-svelte3: ^4.0.0
+      inter-ui: ^3.19.3
       prettier: ^2.8.0
       prettier-plugin-svelte: ^2.8.1
       svelte: ^3.53.1
@@ -89,6 +90,8 @@ importers:
       typescript: ^4.9.3
       vite: ^3.2.4
       vitest: ^0.25.3
+    dependencies:
+      inter-ui: 3.19.3
     devDependencies:
       '@playwright/test': 1.28.1
       '@sveltejs/adapter-node': 1.0.0-next.102
@@ -2765,6 +2768,10 @@ packages:
   /inherits/2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
     dev: true
+
+  /inter-ui/3.19.3:
+    resolution: {integrity: sha512-5FG9fjuYOXocIfjzcCBhICL5cpvwEetseL3FU6tP3d6Bn7g8wODhB+I9RNGRTizCT7CUG4GOK54OPxqq3msQgg==}
+    dev: false
 
   /internal-slot/1.0.3:
     resolution: {integrity: sha512-O0DB1JC/sPyZl7cIo78n5dR7eUSwwpYPiXRhTzNxZVAMUuB8vlnRFyLxdrVToks6XPLVnFfbzaVd5WLjhgg+vA==}
