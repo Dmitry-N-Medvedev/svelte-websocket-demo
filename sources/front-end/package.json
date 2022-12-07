@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
@@ -12,6 +13,9 @@
     "test:unit": "vitest",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write ."
+  },
+  "dependencies": {
+    "inter-ui": "^3.19.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.28.1",
