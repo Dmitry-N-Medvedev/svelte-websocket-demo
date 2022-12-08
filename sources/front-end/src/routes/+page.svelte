@@ -27,7 +27,7 @@
       const fakeValue = (Math.random() * 10);
 
       MoneyStore.updateMoneyFromServer(fakeValue);
-    }, 1000);
+    }, 3000);
   });
 
   onDestroy(() => {
@@ -97,16 +97,20 @@
 
 <article>
   <div id='money'>
-    {#if money}
-      <div id='money-sum'>
+    <div id='money-sum'>
+      {#if money}
         {Number(money).toFixed(2)}
-      </div>
-      <sup id='money-delta'>
+      {:else}
+        0.00
+      {/if}
+    </div>
+    <sup id='money-delta'>
+      {#if moneyDelta}
         {Number(moneyDelta).toFixed(2)}
-      </sup>
-    {:else}
-      0
-    {/if}
+      {:else}
+        0.00
+      {/if}
+    </sup>
   </div>
   
   <button
