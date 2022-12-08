@@ -12,7 +12,7 @@ const createTsStore = () => {
 
   return {
     subscribe,
-    updateFromServer: (ts = null) => update((currentState) => {
+    updateTsFromServer: (ts = null) => update((currentState) => {
       if (ts === null) {
         throw new ReferenceError('ts is undefined');
       }

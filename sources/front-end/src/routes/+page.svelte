@@ -4,31 +4,36 @@
     onDestroy,
   } from 'svelte';
   import {
-    TsStore,
-  } from '$lib/stores/ts.store.mjs';
+    MoneyStore,
+  } from '$lib/stores/money.store.mjs';
 
   /**
 	 * @type {string | number | NodeJS.Timer | null | undefined}
 	 */
-  let interval = null;
+  let moneyInterval = null;
   /**
 	 * @type {number | null}
 	 */
-  let lastTs = null;
+  let money = 0;
+  let moneyDelta = 0;
 
-  const unsubscribeFromTsStore = TsStore.subscribe((/** @type {string | any[]} */ newState) => {
-    lastTs = newState.at(-1);
+  const unsubscribeFromMoneyStore = MoneyStore.subscribe((newState) => {
+    money = newState.reduce((acc, currentValue) => acc + currentValue, 0);
+    moneyDelta = newState.at(-1);
   });
 
   onMount(() => {
-    interval = setInterval(() => {
-      TsStore.updateFromServer(Date.now());
+    moneyInterval = setInterval(() => {
+      const fakeValue = (Math.random() * 10);
+
+      MoneyStore.updateMoneyFromServer(fakeValue);
     }, 1000);
   });
 
   onDestroy(() => {
-    clearInterval(interval);
-    unsubscribeFromTsStore();
+    clearInterval(moneyInterval);
+
+    unsubscribeFromMoneyStore();
   });
 </script>
 
@@ -38,7 +43,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 2fr;
     grid-template-areas:
-      'ts'
+      'money'
       'button'
     ;
     gap: min(1vh, 1vw);
@@ -52,12 +57,26 @@
     top: calc(50% - 20vh / 2 );
   }
 
-  #ts {
+  #money {
     display: flex;
-    grid-area: ts;
+    grid-area: money;
     justify-content: center;
     align-items: center;
     background-color: var(--theme-black);
+  }
+
+  #money::before {
+    content: "€ ";
+  }
+
+  #money-delta {
+    margin-left: 0.5vw;
+    color: var(--theme-green);
+    top: -0.5vh;
+  }
+
+  #money-delta::before {
+    content: "+";
   }
 
   #button {
@@ -77,14 +96,21 @@
 </style>
 
 <article>
-  <div id='ts'>
-    {#if lastTs}
-      {lastTs}
+  <div id='money'>
+    {#if money}
+      <div id='money-sum'>
+        {Number(money).toFixed(2)}
+      </div>
+      <sup id='money-delta'>
+        {Number(moneyDelta).toFixed(2)}
+      </sup>
+    {:else}
+      0
     {/if}
   </div>
   
   <button
     id="button"
-    type="submit"
-  >request</button>
+    type="button"
+  >donate</button>
 </article>
