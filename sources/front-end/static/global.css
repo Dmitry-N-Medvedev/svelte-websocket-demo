@@ -103,6 +103,7 @@ button {
   border: none;
   border-radius: max(0.125vh, 0.125vw);
   padding: max(0.5vh, 0.5vw);
+  max-height: 6rem;
 }
 
 button:active {
