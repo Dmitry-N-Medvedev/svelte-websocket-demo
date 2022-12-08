@@ -43,13 +43,13 @@
     ;
     gap: min(1vh, 1vw);
     align-self: center;
-    justify-self: center;
 
     width: 15vw;
     height: 20vh;
     background-color: var(--theme-dark_gray);
     filter: drop-shadow(0 0 1rem var(--theme-black));
     border-radius: max(0.125vh, 0.125vw);
+    top: calc(50% - 20vh / 2 );
   }
 
   #ts {
