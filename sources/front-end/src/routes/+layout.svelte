@@ -29,10 +29,6 @@
   
         wsClient = null;
       }
-
-      if (tsChannel) {
-        tsChannel.close();
-      }
     }
   });
 </script>
