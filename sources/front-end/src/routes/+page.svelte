@@ -15,8 +15,8 @@
   let moneyDelta = 0;
 
   const unsubscribeFromMoneyStore = MoneyStore.subscribe((newState) => {
-    money = newState.reduce((acc, currentValue) => acc + currentValue, 0);
-    moneyDelta = newState.at(-1);
+    money = newState.sum;
+    moneyDelta = newState.delta;
   });
 
   onMount(() => {
