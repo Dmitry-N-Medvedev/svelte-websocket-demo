@@ -7,6 +7,9 @@
     MoneyStore,
   } from '$lib/stores/money.store.mjs';
 
+  /**
+	 * @type {string | number | NodeJS.Timer | null | undefined}
+	 */
   let moneyInterval = null;
   let money = 0;
   let moneyDelta = 0;
