@@ -1,5 +1,8 @@
 <script>
   import {
+    browser as IsInBrowser,
+  } from '$app/environment';
+  import {
     onMount,
     onDestroy,
   } from 'svelte';
@@ -7,26 +10,37 @@
     TsStore,
   } from '$lib/stores/ts.store.mjs';
 
-  /**
-	 * @type {string | number | NodeJS.Timer | null | undefined}
-	 */
-  let tsInterval = null;
   let lastTs = null;
+  /**
+	 * @type {BroadcastChannel | null}
+	 */
+  let tsChannel = null;
 
   const unsubscribeFromTsStore = TsStore.subscribe((/** @type {string | any[]} */ newState) => {
     lastTs = newState.at(-1);
   });
 
+  const tsChannelMessageHandler = (/** @type {MessageEvent} */ messageEvent) => {
+    if (messageEvent.data.type === 'ts') {
+      TsStore.updateTsFromServer(messageEvent.data.payload);
+    }
+  }
+
   onMount(() => {
-    tsInterval = setInterval(() => {
-      TsStore.updateTsFromServer(Date.now());
-    }, 1000);
+    if (IsInBrowser === true) {
+      tsChannel = new BroadcastChannel('ts');
+
+      tsChannel.addEventListener('message', tsChannelMessageHandler);
+    }
   });
 
   onDestroy(() => {
-    clearInterval(tsInterval);
-
     unsubscribeFromTsStore();
+
+    if (tsChannel) {
+      tsChannel.close();
+    }
+
   });
 </script>
 
