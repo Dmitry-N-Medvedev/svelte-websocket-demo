@@ -1,6 +1,7 @@
 const decoder = new TextDecoder();
 const broadcastChannels = Object.freeze({
   ts: new BroadcastChannel('ts'),
+  money: new BroadcastChannel('money'),
 });
 
 export class WSClient {
