@@ -105,7 +105,7 @@ export class LibWebsocketServer {
           SHOULD_MESSAGE_BE_BINARY,
           SHOULD_MESSAGE_BE_COMPRESSED,
         );
-      }, Math.random() * 1000 + 100);
+      }, Math.random() * 3000 + 100);
 
       // eslint-disable-next-line no-promise-executor-return
       return undefined;
