@@ -1,5 +1,19 @@
 import util from 'node:util';
 import uWS from 'uWebSockets.js';
+import {
+  nanoid,
+} from 'nanoid';
+import {
+  createServerTSMessage,
+} from './messages/serializers/createServerTSMessage.mjs';
+
+const TOPICS = Object.freeze({
+  SERVER: {
+    TS: 'server/ts',
+  },
+});
+const SHOULD_MESSAGE_BE_BINARY = true;
+const SHOULD_MESSAGE_BE_COMPRESSED = false;
 
 export class LibWebsocketServer {
   #config = null;
@@ -7,6 +21,9 @@ export class LibWebsocketServer {
   #debuglog = () => {};
   #handle = null;
   #server = null;
+  #encoder = new TextEncoder();
+  #decoder = new TextDecoder();
+  #tsInterval = null;
 
   constructor(config = null) {
     if (config === null) {
@@ -37,16 +54,20 @@ export class LibWebsocketServer {
           idleTimeout: 16,
           // eslint-disable-next-line no-unused-vars
           open: (ws) => {
-            this.#debuglog('client connected');
+            ws.id = nanoid();
+
+            this.#debuglog('client connected', ws.id);
+
+            ws.subscribe(TOPICS.SERVER.TS);
           },
           message: (ws = null, message = null, isBinary = false) => {
-            this.#debuglog('client message received', message, isBinary);
+            this.#debuglog('client message received', this.#decoder.decode(message), isBinary);
 
             ws.send(message, isBinary);
           },
           // eslint-disable-next-line no-unused-vars
           close: (ws, code, message) => {
-            this.#debuglog('client disconnected');
+            this.#debuglog('client disconnected', code, this.#decoder.decode(message));
           },
         })
         .any('/*', (res) => {
@@ -63,6 +84,15 @@ export class LibWebsocketServer {
           ok();
         });
 
+      this.#tsInterval = setInterval(() => {
+        this.#server.publish(
+          TOPICS.SERVER.TS,
+          createServerTSMessage(),
+          SHOULD_MESSAGE_BE_BINARY,
+          SHOULD_MESSAGE_BE_COMPRESSED,
+        );
+      }, 1000);
+
       // eslint-disable-next-line no-promise-executor-return
       return undefined;
     });
@@ -70,6 +100,8 @@ export class LibWebsocketServer {
 
   stop() {
     if (this.#handle) {
+      clearInterval(this.#tsInterval);
+
       uWS.us_listen_socket_close(this.#handle);
 
       this.#handle = null;

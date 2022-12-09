@@ -22,10 +22,14 @@ import {
 import {
   newClient,
 } from './helpers/newClient.mjs';
+import {
+  MessageTypes,
+} from '../messages/serializers/MessageTypes.mjs';
 
 describe('LibWebsocketServer', function describeLibWebsocketServer() {
   const debuglog = util.debug(`${LibWebsocketServer.name}:specs`);
   let serverConfig = null;
+  const decoder = new TextDecoder();
 
   before(async function doBefore() {
     serverConfig = getServerConfig(debuglog);
@@ -79,4 +83,42 @@ describe('LibWebsocketServer', function describeLibWebsocketServer() {
 
     client = null;
   });
+
+  it('should receive 3 ts updates', async function shouldReceiveThreeTsUpdates() {
+    const receiveThreeTsUpdates = (client = null) => new Promise((ok, fail) => {
+      let messageCount = 0;
+
+      client.on('error', (err) => {
+        debuglog(['client:on:error =>', err]);
+
+        return fail(err);
+      });
+
+      client.on('message', (message = null) => {
+        const messageObject = JSON.parse(decoder.decode(message));
+
+        if (messageObject.type === MessageTypes.TS) {
+          debuglog('receiveThreeTsUpdates', messageObject);
+
+          messageCount += 1;
+        }
+
+        if (messageCount > 2) {
+          client.close();
+        }
+      });
+
+      client.on('close', (code = null, reason = null) => {
+        debuglog('client:close', code, `"${reason.toString()}"`);
+
+        return ok();
+      });
+    });
+
+    let client = newClient(serverConfig.server.proto, serverConfig.server.host, serverConfig.server.port, '/');
+
+    await receiveThreeTsUpdates(client);
+
+    client = null;
+  }).timeout(4000);
 });
