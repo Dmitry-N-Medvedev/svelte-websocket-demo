@@ -2,7 +2,10 @@ import {
   writable,
 } from 'svelte/store';
 
-const STORE = [];
+const STORE = {
+  sum: 0,
+  delta: 0,
+};
 
 const createMoneyStore = () => {
   const {
@@ -13,13 +16,13 @@ const createMoneyStore = () => {
   return {
     subscribe,
     updateMoneyFromServer: (money = 0) => update((currentState) => {
-      console.log('updateMoneyFromServer', currentState);
-
       if (money === 0) {
         return currentState;
       }
 
-      currentState.push(money);
+      currentState.sum += money;
+      currentState.delta = money;
+
       return currentState;
     }),
   }
