@@ -4,33 +4,49 @@
     onDestroy,
   } from 'svelte';
   import {
+    browser as IsInBrowser,
+  } from '$app/environment';
+  import {
     MoneyStore,
   } from '$lib/stores/money.store.mjs';
 
   /**
 	 * @type {string | number | NodeJS.Timer | null | undefined}
 	 */
-  let moneyInterval = null;
+  // let moneyInterval = null;
   let money = 0;
   let moneyDelta = 0;
+  /**
+	 * @type {BroadcastChannel | null}
+	 */
+  let moneyChannel = null;
 
   const unsubscribeFromMoneyStore = MoneyStore.subscribe((newState) => {
     money = newState.sum;
     moneyDelta = newState.delta;
   });
 
-  onMount(() => {
-    moneyInterval = setInterval(() => {
-      const fakeValue = (Math.random() * 10);
+  const moneyChannelMessageHandler = (/** @type {MessageEvent} */ messageEvent) => {
+    if (messageEvent.data.type === 'money') {
+      MoneyStore.updateMoneyFromServer(messageEvent.data.payload);
+    }
+  };
 
-      MoneyStore.updateMoneyFromServer(fakeValue);
-    }, 3000);
+  onMount(() => {
+    if (IsInBrowser === true) {
+      moneyChannel = new BroadcastChannel('money');
+      moneyChannel.addEventListener('message', moneyChannelMessageHandler);
+    }
   });
 
   onDestroy(() => {
-    clearInterval(moneyInterval);
+    if (IsInBrowser === true) {
+      unsubscribeFromMoneyStore();
+    }
 
-    unsubscribeFromMoneyStore();
+    if (moneyChannel) {
+      moneyChannel.close();
+    }
   });
 </script>
 

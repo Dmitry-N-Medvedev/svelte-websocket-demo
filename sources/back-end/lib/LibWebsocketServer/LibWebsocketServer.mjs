@@ -3,9 +3,13 @@ import uWS from 'uWebSockets.js';
 import {
   nanoid,
 } from 'nanoid';
+import { clear } from 'node:console';
 import {
   createServerTSMessage,
 } from './messages/serializers/createServerTSMessage.mjs';
+import {
+  createServerMoneyMessage,
+} from './messages/serializers/createServerMoneyMessage.mjs';
 
 const TOPICS = Object.freeze({
   SERVER: {
@@ -24,6 +28,7 @@ export class LibWebsocketServer {
   #encoder = new TextEncoder();
   #decoder = new TextDecoder();
   #tsInterval = null;
+  #moneyInterval = null;
 
   constructor(config = null) {
     if (config === null) {
@@ -93,6 +98,15 @@ export class LibWebsocketServer {
         );
       }, 1000);
 
+      this.#moneyInterval = setInterval(() => {
+        this.#server.publish(
+          TOPICS.SERVER.TS,
+          createServerMoneyMessage(),
+          SHOULD_MESSAGE_BE_BINARY,
+          SHOULD_MESSAGE_BE_COMPRESSED,
+        );
+      }, Math.random() * 1000 + 100);
+
       // eslint-disable-next-line no-promise-executor-return
       return undefined;
     });
@@ -101,6 +115,7 @@ export class LibWebsocketServer {
   stop() {
     if (this.#handle) {
       clearInterval(this.#tsInterval);
+      clearInterval(this.#moneyInterval);
 
       uWS.us_listen_socket_close(this.#handle);
 
