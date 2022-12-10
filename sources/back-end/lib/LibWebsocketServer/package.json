@@ -17,6 +17,7 @@
     "test": "pnpm run lint && NODE_ENV=test NODE_DEBUG=LibWebsocketServer* ./node_modules/.bin/c8 ./node_modules/.bin/mocha"
   },
   "dependencies": {
+    "@dmitry-n-medvedev/common": "workspace:^0.0.0",
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.15.0"
   },
   "devDependencies": {

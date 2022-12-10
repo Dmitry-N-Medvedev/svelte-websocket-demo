@@ -9,6 +9,9 @@
   import {
     TsStore,
   } from '$lib/stores/ts.store.mjs';
+  import {
+    MessageTypes,
+  } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
 
   let lastTs = null;
   /**
@@ -21,14 +24,14 @@
   });
 
   const tsChannelMessageHandler = (/** @type {MessageEvent} */ messageEvent) => {
-    if (messageEvent.data.type === 'ts') {
+    if (messageEvent.data.type === MessageTypes.TS) {
       TsStore.updateTsFromServer(messageEvent.data.payload);
     }
   }
 
   onMount(() => {
     if (IsInBrowser === true) {
-      tsChannel = new BroadcastChannel('ts');
+      tsChannel = new BroadcastChannel(MessageTypes.TS);
 
       tsChannel.addEventListener('message', tsChannelMessageHandler);
     }

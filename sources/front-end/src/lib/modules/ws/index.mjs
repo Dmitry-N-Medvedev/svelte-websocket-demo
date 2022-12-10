@@ -1,8 +1,12 @@
+import {
+  MessageTypes,
+} from '@dmitry-n-medvedev/common/MessageTypes.mjs';
+
 const decoder = new TextDecoder();
 const encoder = new TextEncoder();
 const broadcastChannels = Object.freeze({
-  ts: new BroadcastChannel('ts'),
-  money: new BroadcastChannel('money'),
+  ts: new BroadcastChannel(MessageTypes.TS),
+  money: new BroadcastChannel(MessageTypes.MONEY),
   toServer: new BroadcastChannel('to-server'),
 });
 
@@ -31,10 +35,7 @@ export class WSClient {
   };
 
   async #handleOutgoingMessage(/** @type {MessageEvent} */ messageEvent) {
-    const messageObject = Object.assign({}, await messageEvent.data);
-    const messageBinary = encoder.encode(JSON.stringify(messageObject));
-
-    this.#client.send(messageBinary);
+    this.#client.send(messageEvent.data);
   }
   
   start() {

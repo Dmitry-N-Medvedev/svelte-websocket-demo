@@ -1,6 +1,6 @@
 import {
   MessageTypes,
-} from './MessageTypes.mjs';
+} from '../../MessageTypes.mjs';
 
 const encoder = new TextEncoder();
 
