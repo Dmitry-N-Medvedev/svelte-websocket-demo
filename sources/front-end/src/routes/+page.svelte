@@ -69,13 +69,15 @@
     border-radius: max(0.125vh, 0.125vw);
     top: calc(50% - 20vh / 2 );
 
+    padding: min(0.125vh, 0.125vw);
+
     pointer-events: all;
-    transition: filter 0.125s ease;
+    transition: all var(--transition-duration) var(--transition-timing-function);
   }
 
   article:hover {
-    filter: drop-shadow(0 0 0.5rem var(--theme-black));
-    transition: filter 0.125s ease;
+    filter: drop-shadow(0 0 1.5rem var(--theme-black));
+    transition: all var(--transition-duration) var(--transition-timing-function);
   }
 
   #money {
