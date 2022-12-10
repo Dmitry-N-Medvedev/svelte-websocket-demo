@@ -65,9 +65,17 @@
     width: 15vw;
     height: 20vh;
     background-color: var(--theme-dark_gray);
-    filter: drop-shadow(0 0 1rem var(--theme-black));
+    filter: drop-shadow(0 0 0.25rem var(--theme-black));
     border-radius: max(0.125vh, 0.125vw);
     top: calc(50% - 20vh / 2 );
+
+    pointer-events: all;
+    transition: filter 0.125s ease;
+  }
+
+  article:hover {
+    filter: drop-shadow(0 0 0.5rem var(--theme-black));
+    transition: filter 0.125s ease;
   }
 
   #money {
@@ -79,7 +87,9 @@
   }
 
   #money::before {
-    content: "€ ";
+    content: "€";
+    color: var(--theme-light_gray);
+    margin-right: 0.025vw;
   }
 
   #money-delta {
