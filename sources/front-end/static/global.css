@@ -19,6 +19,7 @@
 
   --theme-icon-svg-color: var(--main-color);
   --transition-timing-function: cubic-bezier(.03,.97,.93,.95);
+  --transition-duration: 0.125s;
 }
 
 * {
