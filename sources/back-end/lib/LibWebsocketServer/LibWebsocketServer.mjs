@@ -5,11 +5,14 @@ import {
 } from 'nanoid';
 import { clear } from 'node:console';
 import {
+  MessageTypes,
+} from '@dmitry-n-medvedev/common/MessageTypes.mjs';
+import {
   createServerTSMessage,
-} from './messages/serializers/createServerTSMessage.mjs';
+} from '@dmitry-n-medvedev/common/messages/serializers/createServerTSMessage.mjs';
 import {
   createServerMoneyMessage,
-} from './messages/serializers/createServerMoneyMessage.mjs';
+} from '@dmitry-n-medvedev/common/messages/serializers/createServerMoneyMessage.mjs';
 
 const TOPICS = Object.freeze({
   SERVER: {
@@ -69,7 +72,7 @@ export class LibWebsocketServer {
             const messageObject = JSON.parse(this.#decoder.decode(message));
 
             switch (messageObject.type) {
-              case 'donate': {
+              case MessageTypes.DONATE: {
                 this.#debuglog(`[${ws.id}] should donate ${messageObject.payload}`);
 
                 const donateMessage = createServerMoneyMessage(0 - messageObject.payload);

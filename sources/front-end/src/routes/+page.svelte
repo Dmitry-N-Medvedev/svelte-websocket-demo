@@ -9,11 +9,13 @@
   import {
     MoneyStore,
   } from '$lib/stores/money.store.mjs';
+  import {
+    MessageTypes,
+  } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
+  import {
+    createDonateMessage,
+  } from '@dmitry-n-medvedev/common/messages/serializers/createDonateMessage.mjs';
 
-  /**
-   * @type {string | number | NodeJS.Timer | null | undefined}
-   */
-  // let moneyInterval = null;
   let money = 0;
   let moneyDelta = 0;
   let moneyDeltaIsNegative = false;
@@ -36,22 +38,20 @@
   });
 
   const moneyChannelMessageHandler = (/** @type {MessageEvent} */ messageEvent) => {
-    if (messageEvent.data.type === 'money') {
+    if (messageEvent.data.type === MessageTypes.MONEY) {
       MoneyStore.updateMoneyFromServer(messageEvent.data.payload);
     }
   };
 
   const handleSubmit = (/** @type {PointerEvent} */ event) => {
-    toServerChannel?.postMessage({
-      type: 'donate',
-      // @ts-ignore
-      payload: money * 0.1,
-    });
+    const donateMessage = createDonateMessage(money * 0.1);
+
+    toServerChannel?.postMessage(donateMessage);
   }
 
   onMount(() => {
     if (IsInBrowser === true) {
-      moneyChannel = new BroadcastChannel('money');
+      moneyChannel = new BroadcastChannel(MessageTypes.MONEY);
       moneyChannel.addEventListener('message', moneyChannelMessageHandler);
 
       toServerChannel = new BroadcastChannel('to-server');
