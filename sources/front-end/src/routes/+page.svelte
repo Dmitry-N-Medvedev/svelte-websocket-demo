@@ -11,15 +11,24 @@
   } from '$lib/stores/money.store.mjs';
 
   /**
-	 * @type {string | number | NodeJS.Timer | null | undefined}
-	 */
+   * @type {string | number | NodeJS.Timer | null | undefined}
+   */
   // let moneyInterval = null;
   let money = 0;
   let moneyDelta = 0;
+  let moneyDeltaIsNegative = false;
   /**
-	 * @type {BroadcastChannel | null}
-	 */
+   * @type {BroadcastChannel | null}
+   */
   let moneyChannel = null;
+  /**
+   * @type {BroadcastChannel | null}
+   */
+  let toServerChannel = null;
+
+  $: {
+    moneyDeltaIsNegative = moneyDelta < 0;
+  }
 
   const unsubscribeFromMoneyStore = MoneyStore.subscribe((newState) => {
     money = newState.sum;
@@ -32,10 +41,20 @@
     }
   };
 
+  const handleSubmit = (/** @type {PointerEvent} */ event) => {
+    toServerChannel?.postMessage({
+      type: 'donate',
+      // @ts-ignore
+      payload: money * 0.1,
+    });
+  }
+
   onMount(() => {
     if (IsInBrowser === true) {
       moneyChannel = new BroadcastChannel('money');
       moneyChannel.addEventListener('message', moneyChannelMessageHandler);
+
+      toServerChannel = new BroadcastChannel('to-server');
     }
   });
 
@@ -46,6 +65,10 @@
 
     if (moneyChannel) {
       moneyChannel.close();
+    }
+
+    if (toServerChannel) {
+      toServerChannel.close();
     }
   });
 </script>
@@ -100,10 +123,6 @@
     top: -0.5vh;
   }
 
-  #money-delta::before {
-    content: "+";
-  }
-
   #button {
     display: flex;
     grid-area: button;
@@ -118,6 +137,10 @@
     align-self: center;
     justify-self: center;
   }
+
+  .moneyDeltaIsNegative {
+    color: var(--theme-red) !important;
+  }
 </style>
 
 <article>
@@ -129,9 +152,9 @@
         0.00
       {/if}
     </div>
-    <sup id='money-delta'>
+    <sup id='money-delta' class:moneyDeltaIsNegative>
       {#if moneyDelta}
-        {Number(moneyDelta).toFixed(2)}
+        {Number(Math.abs(moneyDelta)).toFixed(2)}
       {:else}
         0.00
       {/if}
@@ -141,5 +164,6 @@
   <button
     id="button"
     type="button"
+    on:click|preventDefault|stopPropagation|trusted={handleSubmit}
   >donate</button>
 </article>

@@ -66,9 +66,26 @@ export class LibWebsocketServer {
             ws.subscribe(TOPICS.SERVER.TS);
           },
           message: (ws = null, message = null, isBinary = false) => {
-            this.#debuglog('client message received', this.#decoder.decode(message), isBinary);
+            const messageObject = JSON.parse(this.#decoder.decode(message));
 
-            ws.send(message, isBinary);
+            switch (messageObject.type) {
+              case 'donate': {
+                this.#debuglog(`[${ws.id}] should donate ${messageObject.payload}`);
+
+                const donateMessage = createServerMoneyMessage(0 - messageObject.payload);
+
+                ws.send(donateMessage, isBinary);
+
+                break;
+              }
+              default: {
+                this.#debuglog(`unknown message type: ${messageObject.type}`, messageObject);
+
+                break;
+              }
+            }
+
+            // ws.send(message, isBinary);
           },
           // eslint-disable-next-line no-unused-vars
           close: (ws, code, message) => {
