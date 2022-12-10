@@ -52,6 +52,7 @@
     align-items: center;
     font-size: 0.95rem;
   }
+
 </style>
 
 <footer>
