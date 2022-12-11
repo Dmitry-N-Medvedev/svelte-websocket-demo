@@ -1,6 +1,9 @@
 import {
   MessageTypes,
 } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
+import {
+  createWsOnlineStatusMessage,
+} from '@dmitry-n-medvedev/common/messages/serializers/createWsOnlineStatusMessage.mjs';
 
 const decoder = new TextDecoder();
 const encoder = new TextEncoder();
@@ -50,6 +53,9 @@ export class WSClient {
 
     console.log('#handleClientClose', code, reason, wasClean);
 
+    const onlineStatus = createWsOnlineStatusMessage(false);
+    this.#broadcastChannels.onlineStatus?.postMessage(onlineStatus);
+
     if (this.#shouldStopConnection === false && reconnectInTimeout === null) {
       reconnectInTimeout = setTimeout(() => {
         clearTimeout(reconnectInTimeout);
@@ -64,6 +70,9 @@ export class WSClient {
   }
 
   #handleClientOpen(/** @type {Event} */ openEvent) {
+    const onlineStatus = createWsOnlineStatusMessage(true);
+    this.#broadcastChannels.onlineStatus?.postMessage(onlineStatus);
+
     console.log('#handleClientOpen', openEvent);
   }
   
@@ -73,6 +82,7 @@ export class WSClient {
       ts: new BroadcastChannel(MessageTypes.TS),
       money: new BroadcastChannel(MessageTypes.MONEY),
       toServer: new BroadcastChannel('to-server'),
+      onlineStatus: new BroadcastChannel(MessageTypes.ONLINE_STATUS)
     });
     this.#client = new WebSocket(this.#url);
     this.#client.addEventListener('message', this.#handleMessage.bind(this));
