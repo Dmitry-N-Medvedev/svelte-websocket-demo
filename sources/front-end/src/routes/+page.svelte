@@ -95,7 +95,7 @@
     padding: min(0.125vh, 0.125vw);
 
     pointer-events: all;
-    transform: scale3d(0.98, 0.98, 0.98);
+    transform: scale3d(0.99, 0.99, 0.99);
 
     transition: all var(--transition-duration) var(--transition-timing-function);
   }
