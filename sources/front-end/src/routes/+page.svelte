@@ -95,16 +95,16 @@
     padding: min(0.125vh, 0.125vw);
 
     pointer-events: all;
-    transition: all var(--transition-duration) var(--transition-timing-function);
-
     transform: scale3d(0.98, 0.98, 0.98);
+
+    transition: all var(--transition-duration) var(--transition-timing-function);
   }
 
   article:hover {
-    filter: drop-shadow(0 0 1.5rem var(--theme-black));
-    transition: all var(--transition-duration) var(--transition-timing-function);
-
+    filter: drop-shadow(0 0 0.8rem var(--theme-black));
     transform: scale3d(1.0, 1.0, 1.0);
+
+    transition: all var(--transition-duration) var(--transition-timing-function);
   }
 
   #money {
