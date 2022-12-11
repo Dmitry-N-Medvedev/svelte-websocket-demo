@@ -100,6 +100,10 @@
     transition: all var(--transition-duration) var(--transition-timing-function);
   }
 
+  article > * {
+    pointer-events: none;
+  }
+
   article:hover {
     filter: drop-shadow(0 0 0.8rem var(--theme-black));
     transform: scale3d(1.0, 1.0, 1.0);
