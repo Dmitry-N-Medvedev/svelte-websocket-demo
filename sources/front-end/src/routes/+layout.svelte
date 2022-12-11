@@ -1,4 +1,6 @@
 <script>
+  import 'inter-ui/inter.css';
+
   import {
     browser as IsInBrowser,
   } from '$app/environment';

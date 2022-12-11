@@ -1,6 +1,3 @@
-@import "./node_modules/inter-ui/inter.css";
-@import "../themes/nord/theme.css";
-
 :root {
   --main-font-family: "Inter var experimental";
   --main-color: var(--theme-white);
