@@ -96,11 +96,15 @@
 
     pointer-events: all;
     transition: all var(--transition-duration) var(--transition-timing-function);
+
+    transform: scale3d(0.98, 0.98, 0.98);
   }
 
   article:hover {
     filter: drop-shadow(0 0 1.5rem var(--theme-black));
     transition: all var(--transition-duration) var(--transition-timing-function);
+
+    transform: scale3d(1.1, 1.1, 1.1);
   }
 
   #money {
