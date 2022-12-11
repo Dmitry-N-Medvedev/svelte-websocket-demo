@@ -87,7 +87,7 @@
 
     width: 15vw;
     height: 20vh;
-    background-color: var(--theme-dark_gray);
+    background-color: var(--theme-gray);
     filter: drop-shadow(0 0 0.25rem var(--theme-black));
     border-radius: max(0.125vh, 0.125vw);
     top: calc(50% - 20vh / 2 );
