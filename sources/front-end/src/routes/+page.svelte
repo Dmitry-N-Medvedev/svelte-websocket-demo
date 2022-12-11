@@ -10,6 +10,9 @@
     MoneyStore,
   } from '$lib/stores/money.store.mjs';
   import {
+    WSOnlineStatusStore,
+  } from '$lib/stores/ws-online-status.store.mjs/';
+  import {
     MessageTypes,
   } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
   import {
@@ -23,10 +26,11 @@
    * @type {BroadcastChannel | null}
    */
   let moneyChannel = null;
-  /**
-   * @type {BroadcastChannel | null}
-   */
+  /** @type {BroadcastChannel | null} */
+  let onlineStatusChannel = null;
+  /** @type {BroadcastChannel | null} */
   let toServerChannel = null;
+  let IsOffline = true;
 
   $: {
     moneyDeltaIsNegative = moneyDelta < 0;
@@ -35,6 +39,12 @@
   const unsubscribeFromMoneyStore = MoneyStore.subscribe((newState) => {
     money = newState.sum;
     moneyDelta = newState.delta;
+  });
+
+  const unsubscribeFromWSOnlineStatusStore = WSOnlineStatusStore.subscribe((isConnected) => {
+    console.log('WSOnlineStatusStore::online status:', isConnected);
+
+    IsOffline = !isConnected;
   });
 
   const moneyChannelMessageHandler = (/** @type {MessageEvent} */ messageEvent) => {
@@ -49,18 +59,27 @@
     toServerChannel?.postMessage(donateMessage);
   }
 
+  const onlineStatusChangeHandler = (isConnectedEvent) => {
+    console.log('onlineStatusChangeHandler', isConnectedEvent.data.payload);
+
+    WSOnlineStatusStore.updateOnlineStatus(isConnectedEvent.data.payload);
+  };
+
   onMount(() => {
     if (IsInBrowser === true) {
       moneyChannel = new BroadcastChannel(MessageTypes.MONEY);
       moneyChannel.addEventListener('message', moneyChannelMessageHandler);
 
       toServerChannel = new BroadcastChannel('to-server');
+      onlineStatusChannel = new BroadcastChannel(MessageTypes.ONLINE_STATUS);
+      onlineStatusChannel.addEventListener('message', onlineStatusChangeHandler);
     }
   });
 
   onDestroy(() => {
     if (IsInBrowser === true) {
       unsubscribeFromMoneyStore();
+      unsubscribeFromWSOnlineStatusStore();
     }
 
     if (moneyChannel) {
@@ -69,6 +88,10 @@
 
     if (toServerChannel) {
       toServerChannel.close();
+    }
+
+    if (onlineStatusChannel) {
+      onlineStatusChannel.close();
     }
   });
 </script>
@@ -149,9 +172,14 @@
   .moneyDeltaIsNegative {
     color: var(--theme-red) !important;
   }
+
+  .IsOffline {
+    filter: blur(3px) opacity(0.5);
+    pointer-events: none !important;
+  }
 </style>
 
-<article>
+<article class:IsOffline>
   <div id='money'>
     <div id='money-sum'>
       {#if money}
@@ -170,6 +198,7 @@
   </div>
   
   <button
+    class:IsOffline
     id="button"
     type="button"
     on:click|preventDefault|stopPropagation|trusted={handleSubmit}

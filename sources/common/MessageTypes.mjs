@@ -3,4 +3,5 @@ export const MessageTypes = Object.freeze({
   TS: 'ts',
   MONEY: 'money',
   DONATE: 'donate',
+  ONLINE_STATUS: 'online-status',
 });
