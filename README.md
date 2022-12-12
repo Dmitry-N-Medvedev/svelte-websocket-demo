@@ -6,6 +6,7 @@
 2. pnpm 7.18.1
 
 `NB`: I use [volta](https://volta.sh/) to manage node and pnpm versions.
+
 `NB`: Please also ditch using npm altogether, do use [pnpm](https://pnpm.io/) for god's sake.
 
 Install node using volta:
