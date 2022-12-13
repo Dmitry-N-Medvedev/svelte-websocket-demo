@@ -156,6 +156,31 @@ importers:
       vite: 4.0.0
       vitest: 0.25.7
 
+  sources/fsm/front-end:
+    specifiers:
+      c8: ^7.12.0
+      chai: ^4.3.7
+      eslint: ^8.29.0
+      eslint-config-airbnb-base: ^15.0.0
+      eslint-plugin-chai-friendly: ^0.7.2
+      eslint-plugin-import: ^2.26.0
+      eslint-plugin-node: ^11.1.0
+      mocha: ^10.2.0
+      nanoid: ^4.0.0
+      xstate: ^4.35.0
+    dependencies:
+      xstate: 4.35.0
+    devDependencies:
+      c8: 7.12.0
+      chai: 4.3.7
+      eslint: 8.29.0
+      eslint-config-airbnb-base: 15.0.0_lt3hqehuojhfcbzgzqfngbtmrq
+      eslint-plugin-chai-friendly: 0.7.2_eslint@8.29.0
+      eslint-plugin-import: 2.26.0_eslint@8.29.0
+      eslint-plugin-node: 11.1.0_eslint@8.29.0
+      mocha: 10.2.0
+      nanoid: 4.0.0
+
 packages:
 
   /@ampproject/remapping/2.2.0:
@@ -4352,6 +4377,10 @@ packages:
       utf-8-validate:
         optional: true
     dev: true
+
+  /xstate/4.35.0:
+    resolution: {integrity: sha512-MSc3MCn2SDB/ShI0KHXpWGIDMo6i+qwJPKgBdyi1AClJm37k4oHJ7lr79qdTrTvirKuC2ZP+63lhsvvYrl0URQ==}
+    dev: false
 
   /y18n/5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
