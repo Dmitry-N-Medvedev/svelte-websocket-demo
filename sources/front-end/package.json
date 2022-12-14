@@ -2,6 +2,12 @@
   "name": "@dmitry-n-medvedev/svelte-websocket-demo-front-end",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
+  "engines": {
+    "node": "=19.2.0",
+    "pnpm": "=7.18.1"
+  },
+  "engineStrict": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite dev",
@@ -32,6 +38,5 @@
     "typescript": "^4.9.4",
     "vite": "^4.0.1",
     "vitest": "^0.25.8"
-  },
-  "type": "module"
+  }
 }
