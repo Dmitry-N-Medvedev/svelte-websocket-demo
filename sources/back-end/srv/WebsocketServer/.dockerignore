@@ -1,2 +1,4 @@
 .dockerignore
-node_modules
+**/node_modules
+**/*.node
+!**/uws_linux_x64_111.node
