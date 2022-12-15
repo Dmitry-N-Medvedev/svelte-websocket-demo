@@ -1,4 +1,4 @@
-FROM node:19.3.0 AS system-setup
+FROM node:19.3.0-bullseye-slim AS system-setup
 RUN corepack enable \
   && corepack prepare pnpm@7.18.2 --activate
 
