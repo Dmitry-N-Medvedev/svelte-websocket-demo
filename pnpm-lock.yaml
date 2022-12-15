@@ -90,7 +90,8 @@ importers:
       uWebSockets.js: github:uNetworking/uWebSockets.js#v20.15.0
       ws: ^8.11.0
     dependencies:
-      '@dmitry-n-medvedev/common': link:../../../common
+      '@dmitry-n-medvedev/common': file:sources/common
+      nanoid: 4.0.0
       uWebSockets.js: github.com/uNetworking/uWebSockets.js/77bc1fd5577ae42b56675912eb8481a31f3fefd2
     devDependencies:
       c8: 7.12.0
@@ -102,8 +103,10 @@ importers:
       eslint-plugin-import: 2.26.0_eslint@8.29.0
       eslint-plugin-node: 11.1.0_eslint@8.29.0
       mocha: 10.2.0
-      nanoid: 4.0.0
       ws: 8.11.0
+    dependenciesMeta:
+      '@dmitry-n-medvedev/common':
+        injected: true
 
   sources/back-end/srv/WebsocketServer:
     specifiers:
@@ -112,11 +115,16 @@ importers:
       linkemon: ^0.1.1
       nodemon: ^2.0.20
     dependencies:
-      '@dmitry-n-medvedev/libwebsocketserver': link:../../lib/LibWebsocketServer
+      '@dmitry-n-medvedev/libwebsocketserver': file:sources/back-end/lib/LibWebsocketServer
       dotenv: 16.0.3
     devDependencies:
       linkemon: 0.1.1_nodemon@2.0.20
       nodemon: 2.0.20
+    dependenciesMeta:
+      '@dmitry-n-medvedev/libwebsocketserver':
+        injected: true
+      dotenv:
+        injected: true
 
   sources/common:
     specifiers: {}
@@ -139,7 +147,7 @@ importers:
       vite: ^4.0.1
       vitest: ^0.25.8
     dependencies:
-      '@dmitry-n-medvedev/common': link:../common
+      '@dmitry-n-medvedev/common': file:sources/common
       inter-ui: 3.19.3
     devDependencies:
       '@playwright/test': 1.28.1
@@ -155,6 +163,11 @@ importers:
       typescript: 4.9.4
       vite: 4.0.1
       vitest: 0.25.8
+    dependenciesMeta:
+      '@dmitry-n-medvedev/common':
+        injected: true
+      inter-ui:
+        injected: true
 
   sources/fsm/front-end:
     specifiers:
@@ -3427,7 +3440,6 @@ packages:
     resolution: {integrity: sha512-IgBP8piMxe/gf73RTQx7hmnhwz0aaEXYakvqZyE302IXW3HyVNhdNGC+O2MwMAVhLEnvXlvKtGbtJf6wvHihCg==}
     engines: {node: ^14 || ^16 || >=18}
     hasBin: true
-    dev: true
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
@@ -4424,6 +4436,26 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  file:sources/back-end/lib/LibWebsocketServer:
+    resolution: {directory: sources/back-end/lib/LibWebsocketServer, type: directory}
+    name: '@dmitry-n-medvedev/libwebsocketserver'
+    version: 0.0.0
+    engines: {node: 19.3.0, pnpm: 7.18.2}
+    requiresBuild: true
+    dependencies:
+      '@dmitry-n-medvedev/common': file:sources/common
+      nanoid: 4.0.0
+      uWebSockets.js: github.com/uNetworking/uWebSockets.js/77bc1fd5577ae42b56675912eb8481a31f3fefd2
+    dev: false
+
+  file:sources/common:
+    resolution: {directory: sources/common, type: directory}
+    name: '@dmitry-n-medvedev/common'
+    version: 0.0.0
+    engines: {node: '=19.3.0', pnpm: '=7.18.2'}
+    requiresBuild: true
+    dev: false
 
   github.com/uNetworking/uWebSockets.js/77bc1fd5577ae42b56675912eb8481a31f3fefd2:
     resolution: {tarball: https://codeload.github.com/uNetworking/uWebSockets.js/tar.gz/77bc1fd5577ae42b56675912eb8481a31f3fefd2}

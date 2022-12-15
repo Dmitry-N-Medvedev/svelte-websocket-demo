@@ -4,12 +4,12 @@
   "description": "Websocket Server",
   "type": "module",
   "engines": {
-    "node": "=19.2.0",
-    "pnpm": "=7.18.1"
+    "node": "=19.3.0",
+    "pnpm": "=7.18.2"
   },
   "engineStrict": true,
   "volta": {
-    "node": "19.2.0"
+    "node": "19.3.0"
   },
   "main": "./server.mjs",
   "bin": "./server.mjs",
@@ -40,5 +40,13 @@
   "devDependencies": {
     "linkemon": "^0.1.1",
     "nodemon": "^2.0.20"
+  },
+  "dependenciesMeta": {
+    "@dmitry-n-medvedev/libwebsocketserver": {
+      "injected": true
+    },
+    "dotenv": {
+      "injected": true
+    }
   }
 }

@@ -1,13 +1,20 @@
-FROM node:19.2.0 AS system-setup
+FROM node:19.3.0 AS system-setup
 RUN corepack enable \
-  && corepack prepare pnpm@7.18.1 --activate
+  && corepack prepare pnpm@7.18.2 --activate
 
 FROM system-setup AS build-all
-WORKDIR /sources
+WORKDIR /repo
 ADD . ./
-RUN pnpm install
+RUN pnpm --recursive --prod install
+RUN pnpm run dockerize:back-end
 
-FROM build-all AS run-server
-WORKDIR /sources/sources/back-end/srv/WebsocketServer
+FROM node:19.3.0 AS package-server
+SHELL ["/bin/bash", "-c"]
+ENV NODE_ENV=production
+WORKDIR /app
+COPY --chown=node:node --from=build-all /repo/sources/back-end/srv/WebsocketServer .
+
+FROM package-server AS run-server
+USER node
 EXPOSE 9090
-CMD [ "pnpm", "run", "dev:server" ]
+CMD [ "./server.mjs" ]
