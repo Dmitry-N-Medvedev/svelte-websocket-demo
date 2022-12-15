@@ -1,6 +1,0 @@
-#!/bin/bash
-
-docker build \
-  --file ./docker/WebsocketServer.Dockerfile \
-  --tag websocket-server:latest \
-  .

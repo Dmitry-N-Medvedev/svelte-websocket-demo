@@ -2,7 +2,7 @@
 
 docker run \
   -d \
-  --name front-end \
+  --name ws-front-end \
   --rm \
   -p 3000:3000 \
-  front-end:latest
+  ws-front-end:latest

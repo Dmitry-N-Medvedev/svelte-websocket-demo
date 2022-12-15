@@ -2,7 +2,7 @@
 
 docker run \
   -d \
-  --name websocket-server \
+  --name ws-back-end \
   --rm \
   -p 9090:9090 \
-  websocket-server:latest
+  ws-back-end:latest

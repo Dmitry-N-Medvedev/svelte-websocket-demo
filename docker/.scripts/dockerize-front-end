@@ -2,5 +2,5 @@
 
 docker build \
   --file ./docker/front-end.Dockerfile \
-  --tag front-end:latest \
+  --tag ws-front-end:latest \
   .
