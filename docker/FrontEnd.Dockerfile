@@ -8,12 +8,12 @@ RUN corepack enable \
 FROM system-setup AS build-all
 WORKDIR /repo
 ADD . ./
-RUN pnpm --recursive install
-RUN rm -rf sources/front-end/node_modules
-RUN rm -rf sources/front-end/.svelte-kit
-RUN rm -rf sources/front-end/build
-RUN pnpm run dockerize:front-end
-RUN pnpm --filter=@dmitry-n-medvedev/svelte-websocket-demo-front-end run build
+RUN pnpm --recursive install \
+  && rm -rf sources/front-end/node_modules \
+  && rm -rf sources/front-end/.svelte-kit \
+  && rm -rf sources/front-end/build \
+  && pnpm run dockerize:front-end \
+  && pnpm --filter=@dmitry-n-medvedev/svelte-websocket-demo-front-end run build
 
 FROM node:alpine3.16 AS package-web-app
 SHELL ["/bin/bash", "-c"]
