@@ -1,6 +1,6 @@
 #!/bin/bash
 
 docker build \
-  --file ./docker/FrontEnd.Dockerfile \
+  --file ./docker/front-end.Dockerfile \
   --tag front-end:latest \
   .
