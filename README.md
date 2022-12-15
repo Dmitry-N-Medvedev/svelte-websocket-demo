@@ -42,3 +42,31 @@ Now you are ready to run the app.
 1. [front-end](sources/front-end/README.md)
 2. [back-end](sources/back-end/readme.md)
 3. [common](sources/common/readme.md)
+
+## dockerization
+
+`NB`: please run the following commands from the root directory of this monorepo
+
+### build the ws-front-end image
+
+```bash
+./docker/.scripts/dockerize-front-end
+```
+
+### build the ws-back-end image
+
+```bash
+./docker/.scripts/dockerize-back-end
+```
+
+### run containers
+
+```bash
+./docker/bin/run-front-end
+```
+
+```bash
+./docker/bin/run-back-end
+```
+
+now, open your web browser at http://localhost:3000/ to see how the front-end looks like.
