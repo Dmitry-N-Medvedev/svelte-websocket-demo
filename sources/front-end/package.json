@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "=19.2.0",
-    "pnpm": "=7.18.1"
+    "node": "=19.3.0",
+    "pnpm": "=7.18.2"
   },
   "engineStrict": true,
   "scripts": {
@@ -38,5 +38,13 @@
     "typescript": "^4.9.4",
     "vite": "^4.0.1",
     "vitest": "^0.25.8"
+  },
+  "dependenciesMeta": {
+    "@dmitry-n-medvedev/common": {
+      "injected": true
+    },
+    "inter-ui": {
+      "injected": true
+    }
   }
 }

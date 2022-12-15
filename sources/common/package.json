@@ -4,12 +4,12 @@
   "description": "common stuff",
   "type": "module",
   "engines": {
-    "node": "=19.2.0",
-    "pnpm": "=7.18.1"
+    "node": "=19.3.0",
+    "pnpm": "=7.18.2"
   },
   "engineStrict": true,
   "volta": {
-    "node": "19.2.0"
+    "node": "19.3.0"
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm"
