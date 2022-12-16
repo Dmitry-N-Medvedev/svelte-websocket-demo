@@ -7,11 +7,6 @@ import {
 
 const decoder = new TextDecoder();
 const encoder = new TextEncoder();
-// const broadcastChannels = Object.freeze({
-//   ts: new BroadcastChannel(MessageTypes.TS),
-//   money: new BroadcastChannel(MessageTypes.MONEY),
-//   toServer: new BroadcastChannel('to-server'),
-// });
 
 export class WSClient {
   /** @type {WebSocket} */
@@ -81,7 +76,7 @@ export class WSClient {
     this.#broadcastChannels = Object.freeze({
       ts: new BroadcastChannel(MessageTypes.TS),
       money: new BroadcastChannel(MessageTypes.MONEY),
-      toServer: new BroadcastChannel('to-server'),
+      toServer: new BroadcastChannel(MessageTypes.TO_SERVER),
       onlineStatus: new BroadcastChannel(MessageTypes.ONLINE_STATUS)
     });
     this.#client = new WebSocket(this.#url);
