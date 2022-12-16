@@ -3,47 +3,21 @@
     browser as IsInBrowser,
   } from '$app/environment';
   import {
-    onMount,
     onDestroy,
   } from 'svelte';
   import {
     TsStore,
   } from '$lib/stores/ts.store.mjs';
-  import {
-    MessageTypes,
-  } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
 
   let lastTs = null;
-  /**
-	 * @type {BroadcastChannel | null}
-	 */
-  let tsChannel = null;
 
   const unsubscribeFromTsStore = TsStore.subscribe((/** @type {string | any[]} */ newState) => {
     lastTs = newState.at(-1);
   });
 
-  const tsChannelMessageHandler = (/** @type {MessageEvent} */ messageEvent) => {
-    if (messageEvent.data.type === MessageTypes.TS) {
-      TsStore.updateTsFromServer(messageEvent.data.payload);
-    }
-  }
-
-  onMount(() => {
-    if (IsInBrowser === true) {
-      tsChannel = new BroadcastChannel(MessageTypes.TS);
-
-      tsChannel.addEventListener('message', tsChannelMessageHandler);
-    }
-  });
 
   onDestroy(() => {
     unsubscribeFromTsStore();
-
-    if (tsChannel) {
-      tsChannel.close();
-    }
-
   });
 </script>
 
