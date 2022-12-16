@@ -70,7 +70,7 @@
       moneyChannel = new BroadcastChannel(MessageTypes.MONEY);
       moneyChannel.addEventListener('message', moneyChannelMessageHandler);
 
-      toServerChannel = new BroadcastChannel('to-server');
+      toServerChannel = new BroadcastChannel(MessageTypes.TO_SERVER);
       onlineStatusChannel = new BroadcastChannel(MessageTypes.ONLINE_STATUS);
       onlineStatusChannel.addEventListener('message', onlineStatusChangeHandler);
     }
