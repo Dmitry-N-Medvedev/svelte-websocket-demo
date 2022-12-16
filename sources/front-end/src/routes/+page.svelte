@@ -22,12 +22,6 @@
   let money = 0;
   let moneyDelta = 0;
   let moneyDeltaIsNegative = false;
-  /**
-   * @type {BroadcastChannel | null}
-   */
-  let moneyChannel = null;
-  /** @type {BroadcastChannel | null} */
-  let onlineStatusChannel = null;
   /** @type {BroadcastChannel | null} */
   let toServerChannel = null;
   let IsOffline = true;
@@ -47,32 +41,15 @@
     IsOffline = !isConnected;
   });
 
-  const moneyChannelMessageHandler = (/** @type {MessageEvent} */ messageEvent) => {
-    if (messageEvent.data.type === MessageTypes.MONEY) {
-      MoneyStore.updateMoneyFromServer(messageEvent.data.payload);
-    }
-  };
-
   const handleSubmit = (/** @type {PointerEvent} */ event) => {
     const donateMessage = createDonateMessage(money * 0.1);
 
     toServerChannel?.postMessage(donateMessage);
   }
 
-  const onlineStatusChangeHandler = (isConnectedEvent) => {
-    console.log('onlineStatusChangeHandler', isConnectedEvent.data.payload);
-
-    WSOnlineStatusStore.updateOnlineStatus(isConnectedEvent.data.payload);
-  };
-
   onMount(() => {
     if (IsInBrowser === true) {
-      moneyChannel = new BroadcastChannel(MessageTypes.MONEY);
-      moneyChannel.addEventListener('message', moneyChannelMessageHandler);
-
       toServerChannel = new BroadcastChannel(MessageTypes.TO_SERVER);
-      onlineStatusChannel = new BroadcastChannel(MessageTypes.ONLINE_STATUS);
-      onlineStatusChannel.addEventListener('message', onlineStatusChangeHandler);
     }
   });
 
@@ -82,16 +59,8 @@
       unsubscribeFromWSOnlineStatusStore();
     }
 
-    if (moneyChannel) {
-      moneyChannel.close();
-    }
-
     if (toServerChannel) {
       toServerChannel.close();
-    }
-
-    if (onlineStatusChannel) {
-      onlineStatusChannel.close();
     }
   });
 </script>
