@@ -3,7 +3,6 @@ import uWS from 'uWebSockets.js';
 import {
   nanoid,
 } from 'nanoid';
-import { clear } from 'node:console';
 import {
   MessageTypes,
 } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
@@ -13,10 +12,14 @@ import {
 import {
   createServerMoneyMessage,
 } from '@dmitry-n-medvedev/common/messages/serializers/createServerMoneyMessage.mjs';
+import {
+  donateMessageHandler,
+} from './handlers/donateMessageHandler.mjs';
 
 const TOPICS = Object.freeze({
   SERVER: {
     TS: 'server/ts',
+    MONEY: '/server/money',
   },
 });
 const SHOULD_MESSAGE_BE_BINARY = true;
@@ -32,6 +35,7 @@ export class LibWebsocketServer {
   #decoder = new TextDecoder();
   #tsInterval = null;
   #moneyInterval = null;
+  #clients = null;
 
   constructor(config = null) {
     if (config === null) {
@@ -54,6 +58,8 @@ export class LibWebsocketServer {
         return fail();
       }
 
+      this.#clients = new Map();
+
       this.#server = uWS
         .App({})
         .ws('/*', {
@@ -63,21 +69,19 @@ export class LibWebsocketServer {
           // eslint-disable-next-line no-unused-vars
           open: (ws) => {
             ws.id = nanoid();
+            this.#clients.set(ws.id, ws);
 
-            this.#debuglog('client connected', ws.id);
+            this.#debuglog('client connected', ws.id, this.#clients);
 
             ws.subscribe(TOPICS.SERVER.TS);
+            ws.subscribe(TOPICS.SERVER.MONEY);
           },
           message: (ws = null, message = null, isBinary = false) => {
             const messageObject = JSON.parse(this.#decoder.decode(message));
 
             switch (messageObject.type) {
               case MessageTypes.DONATE: {
-                this.#debuglog(`[${ws.id}] should donate ${messageObject.payload}`);
-
-                const donateMessage = createServerMoneyMessage(0 - messageObject.payload);
-
-                ws.send(donateMessage, isBinary);
+                donateMessageHandler(ws, messageObject, this.#clients, this.#debuglog);
 
                 break;
               }
@@ -92,6 +96,8 @@ export class LibWebsocketServer {
           },
           // eslint-disable-next-line no-unused-vars
           close: (ws, code, message) => {
+            this.#clients.delete(ws.id);
+
             this.#debuglog('client disconnected', code, this.#decoder.decode(message));
           },
         })
@@ -120,7 +126,7 @@ export class LibWebsocketServer {
 
       this.#moneyInterval = setInterval(() => {
         this.#server.publish(
-          TOPICS.SERVER.TS,
+          TOPICS.SERVER.MONEY,
           createServerMoneyMessage(),
           SHOULD_MESSAGE_BE_BINARY,
           SHOULD_MESSAGE_BE_COMPRESSED,
@@ -140,6 +146,7 @@ export class LibWebsocketServer {
       uWS.us_listen_socket_close(this.#handle);
 
       this.#handle = null;
+      this.#clients = null;
     }
 
     this.#debuglog(`${this.constructor.name} has stopped listening on ${this.#config.server.host}:${this.#config.server.port}`);
