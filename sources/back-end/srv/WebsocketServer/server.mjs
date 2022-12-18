@@ -2,13 +2,9 @@
 
 import util from 'util';
 import dotenv from 'dotenv';
-// import {
-//   Paths,
-// // eslint-disable-next-line import/no-unresolved, node/no-missing-import
-// } from '@work-shift/lib-websocket-server/Paths.mjs';
 import {
-  LibWebsocketServer,
-} from '@dmitry-n-medvedev/libwebsocketserver/LibWebsocketServer.mjs';
+  Controller,
+} from './controller.mjs';
 
 dotenv.config();
 
@@ -20,20 +16,7 @@ const serverConfig = Object.freeze({
     host: process.env.WS_HOST,
     port: parseInt(process.env.WS_PORT, 10),
   },
-  pathOpts: {
-    // [Paths.API]: {
-    //   maxPayloadLength: 16 * 1024 * 1024,
-    //   idleTimeout: 12,
-    // },
-    // [Paths.REGISTER]: {
-    //   maxPayloadLength: 16 * 1024 * 1024,
-    //   idleTimeout: 12,
-    // },
-    // [Paths.AUTHENTICATE]: {
-    //   maxPayloadLength: 16 * 1024 * 1024,
-    //   idleTimeout: 12,
-    // },
-  },
+  pathOpts: {},
 });
 
 debuglog(`process.env.NODE_DEBUG: ${process.env.NODE_DEBUG}`);
@@ -43,7 +26,8 @@ debuglog({
 
 process.exitCode = EXIT_CODE_ER;
 
-let lib = null;
+// eslint-disable-next-line prefer-const
+let ctrl = null;
 
 const handleProcessSignal = async (signal = null) => {
   if (signal !== null) {
@@ -52,7 +36,7 @@ const handleProcessSignal = async (signal = null) => {
     debuglog('exiting');
   }
 
-  lib.stop();
+  await ctrl.stop();
 
   // eslint-disable-next-line no-process-exit
   process.exit(EXIT_CODE_OK);
@@ -87,8 +71,8 @@ process.on('uncaughtException', handleUncaughtException);
 process.on('unhandledRejection', handleUnhandledRejection);
 process.on('warning', handleWarning);
 
-lib = new LibWebsocketServer(serverConfig);
+ctrl = new Controller();
 
-await lib.start();
+await ctrl.start(serverConfig);
 
 debuglog('ready');

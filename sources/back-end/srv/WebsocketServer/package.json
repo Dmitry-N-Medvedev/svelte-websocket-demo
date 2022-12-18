@@ -20,6 +20,8 @@
   "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@dmitry-n-medvedev/common": "workspace:^0.0.0",
+    "@dmitry-n-medvedev/libdb": "workspace:^0.0.0",
     "@dmitry-n-medvedev/libwebsocketserver": "workspace:^0.0.0",
     "dotenv": "^16.0.3"
   },
@@ -46,6 +48,9 @@
       "injected": true
     },
     "dotenv": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/libdb": {
       "injected": true
     }
   }
