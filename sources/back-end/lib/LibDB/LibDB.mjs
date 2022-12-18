@@ -38,6 +38,11 @@ export class LibDB extends EventEmitter {
     }
 
     this.#db.delete(userId);
+    this.emit(LibDBEvents.USER_DELETED, {
+      payload: {
+        userId,
+      },
+    });
   }
 
   addSum(userId = null, sum = 0.0) {

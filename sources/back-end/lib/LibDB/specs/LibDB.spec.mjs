@@ -66,6 +66,36 @@ describe(LibDB.name, () => {
     expect(userId).to.equal(expectedUserId);
   });
 
+  it(`it should handle ${LibDBEvents.USER_DELETED} event`, async () => {
+    const expectedUserId = nanoid();
+    const waitForUserAddedEvent = (userId) => new Promise((resolve, reject) => {
+      try {
+        libDB.addListener(LibDBEvents.USER_ADDED, resolve);
+        libDB.addUser(userId);
+      } catch (error) {
+        reject(error);
+      } finally {
+        libDB.removeListener(LibDBEvents.USER_ADDED, resolve);
+      }
+    });
+    const waitForUserDeletedEvent = (userId) => new Promise((resolve, reject) => {
+      try {
+        libDB.addListener(LibDBEvents.USER_DELETED, resolve);
+        libDB.deleteUser(userId);
+      } catch (error) {
+        reject(error);
+      } finally {
+        libDB.removeListener(LibDBEvents.USER_DELETED, resolve);
+      }
+    });
+
+    const userAddedId = (await waitForUserAddedEvent(expectedUserId)).payload.userId;
+    const userDeletedId = (await waitForUserDeletedEvent(userAddedId)).payload.userId;
+
+    expect(userAddedId).to.equal(expectedUserId);
+    expect(userDeletedId).to.equal(expectedUserId);
+  });
+
   it('should fail to addUser w/ userId undefined', async () => {
     const userId = undefined;
     let hasProperError = false;
