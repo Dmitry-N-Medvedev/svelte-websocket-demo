@@ -27,7 +27,7 @@ describe(LibDB.name, () => {
   });
 
   afterEach(() => {
-    expect(libDB.Data.size).to.equal(0);
+    expect(libDB.Data.size).to.equal(0, 'you must clean libDB at the end of each of your tests');
   });
 
   after(() => {
@@ -52,6 +52,34 @@ describe(LibDB.name, () => {
 
     try {
       libDB.addUser(userId);
+    } catch (userIdUndefinedError) {
+      expect(userIdUndefinedError instanceof ReferenceError).to.be.true;
+      hasProperError = true;
+    }
+
+    expect(hasProperError).to.be.true;
+  });
+
+  it('should addSum to a user', () => {
+    const userId = nanoid();
+    const expectedSum = Math.random() * 10 + 1;
+
+    libDB.addUser(userId);
+    libDB.addSum(userId, expectedSum);
+
+    const userData = libDB.Data.get(userId);
+
+    expect(userData.sum).to.equal(expectedSum);
+
+    libDB.deleteUser(userId);
+  });
+
+  it('should fail to addSum w/ userId undefined', async () => {
+    const userId = undefined;
+    let hasProperError = false;
+
+    try {
+      libDB.addSum(userId, Math.random());
     } catch (userIdUndefinedError) {
       expect(userIdUndefinedError instanceof ReferenceError).to.be.true;
       hasProperError = true;
