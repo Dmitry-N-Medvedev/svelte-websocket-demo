@@ -1,8 +1,17 @@
-export class LibDB {
+import {
+  EventEmitter,
+} from 'node:events';
+import {
+  LibDBEvents,
+} from './LibDBEvents.mjs';
+
+export class LibDB extends EventEmitter {
   /** @type {Map} */
   #db = null;
 
   constructor() {
+    super();
+
     this.#db = new Map();
   }
 
@@ -16,6 +25,11 @@ export class LibDB {
     }
 
     this.#db.set(userId, {});
+    this.emit(LibDBEvents.USER_ADDED, {
+      payload: {
+        userId,
+      },
+    });
   }
 
   deleteUser(userId = null) {

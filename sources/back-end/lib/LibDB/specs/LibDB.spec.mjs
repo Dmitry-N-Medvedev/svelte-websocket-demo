@@ -1,7 +1,6 @@
 import util from 'node:util';
 import {
-  before,
-  after,
+  beforeEach,
   afterEach,
   describe,
   it,
@@ -15,6 +14,9 @@ import {
 import {
   LibDB,
 } from '../LibDB.mjs';
+import {
+  LibDBEvents,
+} from '../LibDBEvents.mjs';
 
 describe(LibDB.name, () => {
   const debuglog = util.debuglog(`${LibDB.name}:specs`);
@@ -22,15 +24,11 @@ describe(LibDB.name, () => {
   /** @type {LibDB} */
   let libDB = null;
 
-  before(() => {
+  beforeEach(() => {
     libDB = new LibDB();
   });
 
   afterEach(() => {
-    expect(libDB.Data.size).to.equal(0, 'you must clean libDB at the end of each of your tests');
-  });
-
-  after(() => {
     libDB = undefined;
   });
 
@@ -44,6 +42,28 @@ describe(LibDB.name, () => {
     libDB.deleteUser(userId);
 
     expect(libDB.Data.has(userId)).to.be.false;
+  });
+
+  it(`it should handle ${LibDBEvents.USER_ADDED} event`, async () => {
+    const expectedUserId = nanoid();
+    const waitForUserAddedEvent = () => new Promise((resolve, reject) => {
+      try {
+        libDB.addListener(LibDBEvents.USER_ADDED, resolve);
+        libDB.addUser(expectedUserId);
+      } catch (error) {
+        reject(error);
+      } finally {
+        libDB.removeListener(LibDBEvents.USER_ADDED, resolve);
+      }
+    });
+
+    const {
+      payload: {
+        userId,
+      },
+    } = await waitForUserAddedEvent();
+
+    expect(userId).to.equal(expectedUserId);
   });
 
   it('should fail to addUser w/ userId undefined', async () => {
@@ -70,8 +90,6 @@ describe(LibDB.name, () => {
     const userData = libDB.Data.get(userId);
 
     expect(userData.sum).to.equal(expectedSum);
-
-    libDB.deleteUser(userId);
   });
 
   it('should fail to addSum w/ userId undefined', async () => {
