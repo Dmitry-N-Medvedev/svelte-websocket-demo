@@ -1,0 +1,63 @@
+{
+  "name": "@dmitry-n-medvedev/libdb",
+  "version": "0.0.0",
+  "description": "WS implementation",
+  "type": "module",
+  "engines": {
+    "node": "19.3.0",
+    "pnpm": "7.18.2"
+  },
+  "engineStrict": true,
+  "volta": {
+    "node": "19.3.0"
+  },
+  "main": "LibDB.mjs",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "lint": "./node_modules/.bin/eslint ./ --ext .mjs",
+    "test": "pnpm run lint && NODE_ENV=test NODE_DEBUG=LibDB* ./node_modules/.bin/c8 ./node_modules/.bin/mocha"
+  },
+  "dependencies": {
+    "nanoid": "^4.0.0"
+  },
+  "devDependencies": {
+    "c8": "^7.12.0",
+    "chai": "^4.3.7",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.30.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-chai-friendly": "^0.7.2",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "mocha": "^10.2.0",
+    "ws": "^8.11.0"
+  },
+  "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
+  "license": "MIT",
+  "mocha": {
+    "allowUncaught": true,
+    "failZero": true,
+    "async-only": false,
+    "bail": true,
+    "checkLeaks": true,
+    "forbidOnly": true,
+    "exit": true,
+    "forbidPending": true,
+    "slow": 50,
+    "timeout": 1000,
+    "color": true,
+    "diff": true,
+    "fullTrace": true,
+    "growl": false,
+    "inline-diffs": true,
+    "reporter": "spec",
+    "noConfig": true,
+    "noOpts": true,
+    "exclude": [
+      "**/node_modules/**/*"
+    ],
+    "spec": [
+      "**/specs/*.mjs"
+    ]
+  }
+}

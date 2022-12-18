@@ -2,9 +2,7 @@ import {
   createServerMoneyMessage,
 } from '@dmitry-n-medvedev/common/messages/serializers/createServerMoneyMessage.mjs';
 
-export const donateMessageHandler = (ws = null, messageObject = null, clients = null, debuglog = () => {}) => {
-  const isBinary = true;
-
+export const donateMessageHandler = (ws = null, messageObject = null, clients = null, isBinary = false, debuglog = () => {}) => {
   if (ws === null) {
     throw new ReferenceError('ws is undefined');
   }
