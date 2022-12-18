@@ -122,6 +122,33 @@ describe(LibDB.name, () => {
     expect(userData.sum).to.equal(expectedSum);
   });
 
+  it(`should handle ${LibDBEvents.SUM_ADDED} event`, async () => {
+    const expectedUserId = nanoid();
+    const expectedSum = Math.random() * 10 + 1;
+    const waitForSumAddedEvent = (userId, sum) => new Promise((resolve, reject) => {
+      try {
+        libDB.addListener(LibDBEvents.SUM_ADDED, resolve);
+        libDB.addSum(userId, sum);
+      } catch (error) {
+        reject(error);
+      } finally {
+        libDB.removeListener(LibDBEvents.SUM_ADDED, resolve);
+      }
+    });
+
+    libDB.addUser(expectedUserId);
+
+    const {
+      payload: {
+        userId,
+        sum,
+      },
+    } = await waitForSumAddedEvent(expectedUserId, expectedSum);
+
+    expect(userId).to.equal(expectedUserId);
+    expect(sum).to.equal(expectedSum);
+  });
+
   it('should fail to addSum w/ userId undefined', async () => {
     const userId = undefined;
     let hasProperError = false;
