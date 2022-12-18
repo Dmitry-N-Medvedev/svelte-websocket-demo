@@ -25,4 +25,16 @@ export class LibDB {
 
     this.#db.delete(userId);
   }
+
+  addSum(userId = null, sum = 0.0) {
+    if (userId === null) {
+      throw new ReferenceError('userId is undefined');
+    }
+
+    const userData = this.#db.get(userId);
+
+    userData.sum = sum;
+
+    this.#db.set(userId, userData);
+  }
 }
