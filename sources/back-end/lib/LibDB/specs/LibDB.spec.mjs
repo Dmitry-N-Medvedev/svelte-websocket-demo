@@ -162,4 +162,18 @@ describe(LibDB.name, () => {
 
     expect(hasProperError).to.be.true;
   });
+
+  it('should getUserData', async () => {
+    const expectedUserId = nanoid();
+    const expectedUserData = Object.freeze({
+      sum: Math.random(),
+    });
+
+    libDB.addUser(expectedUserId);
+    libDB.addSum(expectedUserId, expectedUserData.sum);
+
+    const userData = libDB.getUserData(expectedUserId);
+
+    expect(userData).to.deep.equal(expectedUserData);
+  });
 });

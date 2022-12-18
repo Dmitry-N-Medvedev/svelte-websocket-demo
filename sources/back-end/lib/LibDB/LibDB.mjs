@@ -32,6 +32,14 @@ export class LibDB extends EventEmitter {
     });
   }
 
+  getUserData(userId = null) {
+    if (userId === null) {
+      throw new ReferenceError('userId is undefined');
+    }
+
+    return this.#db.get(userId);
+  }
+
   deleteUser(userId = null) {
     if (userId === null) {
       throw new ReferenceError('userId is undefined');
