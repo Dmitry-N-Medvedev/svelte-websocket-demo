@@ -1,4 +1,7 @@
 import util from 'node:util';
+import {
+  EventEmitter,
+} from 'node:events';
 import uWS from 'uWebSockets.js';
 import {
   nanoid,
@@ -15,13 +18,13 @@ import {
 import {
   donateMessageHandler,
 } from './handlers/donateMessageHandler.mjs';
+import {
+  LibWebsocketServerEvents,
+} from './LibWebsocketServerEvents.mjs';
+import {
+  Topics,
+} from './Topics.mjs';
 
-const TOPICS = Object.freeze({
-  SERVER: {
-    TS: 'server/ts',
-    MONEY: '/server/money',
-  },
-});
 const SHOULD_MESSAGE_BE_BINARY = true;
 const SHOULD_MESSAGE_BE_COMPRESSED = false;
 
@@ -37,6 +40,8 @@ export class LibWebsocketServer {
   #moneyInterval = null;
   #clients = null;
 
+  #events = null;
+
   constructor(config = null) {
     if (config === null) {
       throw new ReferenceError('config is undefined');
@@ -44,10 +49,15 @@ export class LibWebsocketServer {
 
     this.#debuglog = util.debuglog(this.constructor.name);
     this.#config = Object.freeze({ ...config });
+    this.#events = new EventEmitter();
   }
 
   get IS_RUNNING() {
     return this.#handle !== null;
+  }
+
+  get Events() {
+    return this.#events;
   }
 
   start() {
@@ -73,24 +83,30 @@ export class LibWebsocketServer {
 
             this.#debuglog('client connected', ws.id, this.#clients);
 
-            ws.subscribe(TOPICS.SERVER.TS);
-            ws.subscribe(TOPICS.SERVER.MONEY);
+            ws.subscribe(Topics.SERVER.TS);
+            ws.subscribe(Topics.SERVER.MONEY);
           },
           message: (ws = null, message = null, isBinary = false) => {
-            const messageObject = JSON.parse(this.#decoder.decode(message));
+            this.#events.emit(LibWebsocketServerEvents.MESSAGE_EVENT, {
+              ws,
+              message,
+              isBinary,
+            });
 
-            switch (messageObject.type) {
-              case MessageTypes.DONATE: {
-                donateMessageHandler(ws, messageObject, this.#clients, isBinary, this.#debuglog);
+            // const messageObject = JSON.parse(this.#decoder.decode(message));
 
-                break;
-              }
-              default: {
-                this.#debuglog(`unknown message type: ${messageObject.type}`, messageObject);
+            // switch (messageObject.type) {
+            //   case MessageTypes.DONATE: {
+            //     donateMessageHandler(ws, messageObject, this.#clients, isBinary, this.#debuglog);
 
-                break;
-              }
-            }
+            //     break;
+            //   }
+            //   default: {
+            //     this.#debuglog(`unknown message type: ${messageObject.type}`, messageObject);
+
+            //     break;
+            //   }
+            // }
 
             // ws.send(message, isBinary);
           },
@@ -115,27 +131,22 @@ export class LibWebsocketServer {
           ok();
         });
 
-      this.#tsInterval = setInterval(() => {
-        this.#server.publish(
-          TOPICS.SERVER.TS,
-          createServerTSMessage(),
-          SHOULD_MESSAGE_BE_BINARY,
-          SHOULD_MESSAGE_BE_COMPRESSED,
-        );
-      }, 1000);
-
-      this.#moneyInterval = setInterval(() => {
-        this.#server.publish(
-          TOPICS.SERVER.MONEY,
-          createServerMoneyMessage(),
-          SHOULD_MESSAGE_BE_BINARY,
-          SHOULD_MESSAGE_BE_COMPRESSED,
-        );
-      }, Math.random() * 5000 + 1000);
-
       // eslint-disable-next-line no-promise-executor-return
       return undefined;
     });
+  }
+
+  publish(message, messageType) {
+    if (this.#handle === null) {
+      throw new ReferenceError('server is not started');
+    }
+
+    this.#server.publish(
+      messageType,
+      message,
+      SHOULD_MESSAGE_BE_BINARY,
+      SHOULD_MESSAGE_BE_COMPRESSED,
+    );
   }
 
   stop() {

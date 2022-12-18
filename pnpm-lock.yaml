@@ -137,17 +137,25 @@ importers:
 
   sources/back-end/srv/WebsocketServer:
     specifiers:
+      '@dmitry-n-medvedev/common': workspace:^0.0.0
+      '@dmitry-n-medvedev/libdb': workspace:^0.0.0
       '@dmitry-n-medvedev/libwebsocketserver': workspace:^0.0.0
       dotenv: ^16.0.3
       linkemon: ^0.1.1
       nodemon: ^2.0.20
     dependencies:
+      '@dmitry-n-medvedev/common': file:sources/common
+      '@dmitry-n-medvedev/libdb': file:sources/back-end/lib/LibDB
       '@dmitry-n-medvedev/libwebsocketserver': file:sources/back-end/lib/LibWebsocketServer
       dotenv: 16.0.3
     devDependencies:
       linkemon: 0.1.1_nodemon@2.0.20
       nodemon: 2.0.20
     dependenciesMeta:
+      '@dmitry-n-medvedev/common':
+        injected: true
+      '@dmitry-n-medvedev/libdb':
+        injected: true
       '@dmitry-n-medvedev/libwebsocketserver':
         injected: true
       dotenv:
@@ -4459,6 +4467,16 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  file:sources/back-end/lib/LibDB:
+    resolution: {directory: sources/back-end/lib/LibDB, type: directory}
+    name: '@dmitry-n-medvedev/libdb'
+    version: 0.0.0
+    engines: {node: 19.3.0, pnpm: 7.18.2}
+    requiresBuild: true
+    dependencies:
+      nanoid: 4.0.0
+    dev: false
 
   file:sources/back-end/lib/LibWebsocketServer:
     resolution: {directory: sources/back-end/lib/LibWebsocketServer, type: directory}
