@@ -52,8 +52,18 @@ export class LibDB extends EventEmitter {
 
     const userData = this.#db.get(userId);
 
-    userData.sum = sum;
+    if (Object.hasOwn.call(userData, 'sum') === true) {
+      userData.sum += sum;
+    } else {
+      userData.sum = sum;
+    }
 
     this.#db.set(userId, userData);
+    this.emit(LibDBEvents.SUM_ADDED, {
+      payload: {
+        userId,
+        sum: (this.#db.get(userId)).sum,
+      },
+    });
   }
 }
