@@ -81,7 +81,7 @@ export class LibWebsocketServer {
 
             switch (messageObject.type) {
               case MessageTypes.DONATE: {
-                donateMessageHandler(ws, messageObject, this.#clients, this.#debuglog);
+                donateMessageHandler(ws, messageObject, this.#clients, isBinary, this.#debuglog);
 
                 break;
               }
