@@ -19,6 +19,12 @@ import {
 import {
   createServerMoneyMessage,
 } from '@dmitry-n-medvedev/common/messages/serializers/createServerMoneyMessage.mjs';
+import {
+  MessageTypes,
+} from '@dmitry-n-medvedev/common/MessageTypes.mjs';
+import {
+  donateMessageHandler,
+} from './handlers/donateMessageHandler.mjs';
 
 export class Controller {
   /** @type {LibWebsocketServer} */
@@ -95,6 +101,19 @@ export class Controller {
     const messageObject = JSON.parse(this.#decoder.decode(message));
 
     console.log(ws, messageObject, isBinary);
+
+    switch (messageObject.type) {
+      case MessageTypes.DONATE: {
+        const outgoingMessage = donateMessageHandler(ws, messageObject, this.#libWebsocketServer.Clients, isBinary);
+
+        ws.send(outgoingMessage);
+
+        break;
+      }
+      default: {
+        console.log('handleWebsocketServerMessage: unknown message type', messageObject);
+      }
+    }
   }
 
   async #initLibWebsocketServer(serverConfig) {
