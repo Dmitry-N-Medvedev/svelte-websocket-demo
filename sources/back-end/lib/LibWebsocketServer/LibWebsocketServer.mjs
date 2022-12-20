@@ -6,18 +6,18 @@ import uWS from 'uWebSockets.js';
 import {
   nanoid,
 } from 'nanoid';
-import {
-  MessageTypes,
-} from '@dmitry-n-medvedev/common/MessageTypes.mjs';
-import {
-  createServerTSMessage,
-} from '@dmitry-n-medvedev/common/messages/serializers/createServerTSMessage.mjs';
-import {
-  createServerMoneyMessage,
-} from '@dmitry-n-medvedev/common/messages/serializers/createServerMoneyMessage.mjs';
-import {
-  donateMessageHandler,
-} from './handlers/donateMessageHandler.mjs';
+// import {
+//   MessageTypes,
+// } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
+// import {
+//   createServerTSMessage,
+// } from '@dmitry-n-medvedev/common/messages/serializers/createServerTSMessage.mjs';
+// import {
+//   createServerMoneyMessage,
+// } from '@dmitry-n-medvedev/common/messages/serializers/createServerMoneyMessage.mjs';
+// import {
+//   donateMessageHandler,
+// } from './handlers/donateMessageHandler.mjs';
 import {
   LibWebsocketServerEvents,
 } from './LibWebsocketServerEvents.mjs';
@@ -60,6 +60,10 @@ export class LibWebsocketServer {
     return this.#events;
   }
 
+  get Clients() {
+    return this.#clients;
+  }
+
   start() {
     return new Promise((ok, fail) => {
       if (this.#handle !== null) {
@@ -92,23 +96,6 @@ export class LibWebsocketServer {
               message,
               isBinary,
             });
-
-            // const messageObject = JSON.parse(this.#decoder.decode(message));
-
-            // switch (messageObject.type) {
-            //   case MessageTypes.DONATE: {
-            //     donateMessageHandler(ws, messageObject, this.#clients, isBinary, this.#debuglog);
-
-            //     break;
-            //   }
-            //   default: {
-            //     this.#debuglog(`unknown message type: ${messageObject.type}`, messageObject);
-
-            //     break;
-            //   }
-            // }
-
-            // ws.send(message, isBinary);
           },
           // eslint-disable-next-line no-unused-vars
           close: (ws, code, message) => {
