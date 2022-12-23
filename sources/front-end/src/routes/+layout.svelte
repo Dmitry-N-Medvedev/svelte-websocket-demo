@@ -31,8 +31,6 @@
       // @ts-ignore
       wsClient = new WSClient(`ws://127.0.0.1:9090/`);
       wsClient.start();
-
-      console.log(`ID: ${wsClient.ID}`);
     }
   });
 
