@@ -1,10 +1,12 @@
-import {
-  createServerMoneyMessage,
-} from '@dmitry-n-medvedev/common/messages/serializers/createServerMoneyMessage.mjs';
+export const donateMessageHandler = (libDB = null, clientId = null, messageObject = null, clients = null, debuglog = () => {}) => {
+  if (libDB === null) {
+    throw new ReferenceError('libDB is undefined');
+  }
 
-export const donateMessageHandler = (ws = null, messageObject = null, clients = null, isBinary = false, debuglog = () => {}) => {
-  if (ws === null) {
-    throw new ReferenceError('ws is undefined');
+  // this.#libDB.addSum(clientId, sum);
+
+  if (clientId === null) {
+    throw new ReferenceError('clientId is undefined');
   }
 
   if (messageObject === null) {
@@ -16,21 +18,21 @@ export const donateMessageHandler = (ws = null, messageObject = null, clients = 
   }
 
   const clientDonateSum = 0 - messageObject.payload;
-  debuglog(`${ws.id} => ${clientDonateSum} [${typeof clientDonateSum}]`);
-
   const numOfOtherClients = clients.size - 1;
-  debuglog({ numOfOtherClients });
 
-  const donateMessage = createServerMoneyMessage(clientDonateSum);
-  const donationToOthersMessage = createServerMoneyMessage(messageObject.payload / numOfOtherClients);
+  debuglog(`.donateMessageHandler: ${clientId} donates ${clientDonateSum}`, { numOfOtherClients });
 
+  debuglog('\n\n');
   for (const client of clients.values()) {
-    if (client.id !== ws.id) {
-      debuglog(`${client.id} !== ${ws.id}`, client.id !== ws.id);
+    if (client.id !== clientId) {
+      debuglog(`.donateMessageHandler::THEM ${messageObject.payload / numOfOtherClients}`);
 
-      client.send(donationToOthersMessage, isBinary);
+      libDB.addSum(client.id, (messageObject.payload / numOfOtherClients));
+    } else {
+      debuglog(`.donateMessageHandler::ME ${clientDonateSum}`);
+
+      libDB.addSum(clientId, clientDonateSum);
     }
   }
-
-  ws.send(donateMessage, isBinary);
+  debuglog('\n\n');
 };

@@ -19,7 +19,7 @@
     createDonateMessage,
   } from '@dmitry-n-medvedev/common/messages/serializers/createDonateMessage.mjs';
 
-  let money = 0;
+  let wallet = 0;
   let moneyDelta = 0;
   let moneyDeltaIsNegative = false;
   /** @type {BroadcastChannel | null} */
@@ -31,20 +31,22 @@
   }
 
   const unsubscribeFromMoneyStore = MoneyStore.subscribe((newState) => {
-    money = newState.sum;
+    // @ts-ignore
+    wallet = newState.wallet;
     moneyDelta = newState.delta;
   });
 
-  const unsubscribeFromWSOnlineStatusStore = WSOnlineStatusStore.subscribe((isConnected) => {
-    console.log('WSOnlineStatusStore::online status:', isConnected);
+  const unsubscribeFromWSOnlineStatusStore = WSOnlineStatusStore.subscribe((/** @type {Boolean} */  isConnected) => {
+    console.log(`WSOnlineStatusStore::online status: ${ isConnected ? 'connected' : 'disconnected'}`);
 
     IsOffline = !isConnected;
   });
 
   const handleSubmit = (/** @type {PointerEvent} */ event) => {
-    const donateMessage = createDonateMessage(money * 0.1);
+    const donateMessage = createDonateMessage(wallet * 0.1);
 
-    toServerChannel?.postMessage(donateMessage);
+    // @ts-ignore
+    toServerChannel.postMessage(donateMessage);
   }
 
   onMount(() => {
@@ -151,8 +153,8 @@
 <article class:IsOffline>
   <div id='money'>
     <div id='money-sum'>
-      {#if money}
-        {Number(money).toFixed(2)}
+      {#if wallet}
+        {Number(wallet).toFixed(2)}
       {:else}
         0.00
       {/if}

@@ -5,12 +5,18 @@ import {
   LibDBEvents,
 } from './LibDBEvents.mjs';
 
+const INITIAL_WALLET = 0.0;
+
 export class LibDB extends EventEmitter {
+  // eslint-disable-next-line class-methods-use-this
+  #debuglog = () => {};
   /** @type {Map} */
   #db = null;
 
-  constructor() {
+  constructor(debuglog) {
     super();
+
+    this.#debuglog = debuglog;
 
     this.#db = new Map();
   }
@@ -24,10 +30,15 @@ export class LibDB extends EventEmitter {
       throw new ReferenceError('userId is undefined');
     }
 
-    this.#db.set(userId, {});
+    this.#debuglog(`${this.constructor.name}.addUser(${userId})`);
+
+    this.#db.set(userId, {
+      wallet: INITIAL_WALLET,
+    });
     this.emit(LibDBEvents.USER_ADDED, {
       payload: {
         userId,
+        wallet: INITIAL_WALLET,
       },
     });
   }
@@ -40,38 +51,46 @@ export class LibDB extends EventEmitter {
     return this.#db.get(userId);
   }
 
-  deleteUser(userId = null) {
-    if (userId === null) {
+  deleteUser({ clientId = null }) {
+    if (clientId === null) {
       throw new ReferenceError('userId is undefined');
     }
 
-    this.#db.delete(userId);
+    this.#debuglog(`${this.constructor.name}.deleteUser(${clientId})`);
+
+    this.#db.delete(clientId);
     this.emit(LibDBEvents.USER_DELETED, {
       payload: {
-        userId,
+        clientId,
       },
     });
   }
 
-  addSum(userId = null, sum = 0.0) {
+  addSum(userId = null, delta = 0.0) {
     if (userId === null) {
       throw new ReferenceError('userId is undefined');
     }
 
-    const userData = this.#db.get(userId);
-
-    if (Object.hasOwn.call(userData, 'sum') === true) {
-      userData.sum += sum;
-    } else {
-      userData.sum = sum;
+    if (delta === 0.0) {
+      return;
     }
 
+    const userData = this.#db.get(userId);
+
+    // this.#debuglog(`[BEFORE] ${this.constructor.name}.addSum(userId = ${userId}, delta = ${delta}) :: userData =`, userData);
+
+    userData.wallet += delta;
+
     this.#db.set(userId, userData);
-    this.emit(LibDBEvents.SUM_ADDED, {
-      payload: {
-        userId,
-        sum: (this.#db.get(userId)).sum,
-      },
+
+    // this.#debuglog(`[AFTER] ${this.constructor.name}.addSum(userId = ${userId}, delta = ${delta}) :: userData =`, userData);
+
+    console.table(this.#db);
+
+    this.emit(LibDBEvents.WALLET_CHANGED, {
+      userId,
+      wallet: (this.#db.get(userId)).wallet,
+      delta,
     });
   }
 }

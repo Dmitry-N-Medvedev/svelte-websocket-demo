@@ -3,8 +3,8 @@ import {
 } from 'svelte/store';
 
 const STORE = {
-  sum: 0,
-  delta: 0,
+  wallet: 0.0,
+  delta: 0.0,
 };
 
 const createMoneyStore = () => {
@@ -15,13 +15,11 @@ const createMoneyStore = () => {
 
   return {
     subscribe,
-    updateMoneyFromServer: (money = 0) => update((currentState) => {
-      if (money === 0) {
-        return currentState;
-      }
+    updateMoneyFromServer: ({ userId = null, wallet = 0.0, delta = 0.0 }) => update((currentState) => {
+      console.log(`updateMoneyFromServer.payload: userId = ${userId}; wallet = ${wallet}; delta = ${delta}`);
 
-      currentState.sum += money;
-      currentState.delta = money;
+      currentState.wallet = wallet;
+      currentState.delta = delta;
 
       return currentState;
     }),
