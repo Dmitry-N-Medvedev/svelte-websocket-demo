@@ -21,14 +21,7 @@ export class WSClient {
       throw new ReferenceError('url is undefined');
     }
 
-    this.#id = self.crypto.randomUUID();
-
     this.#url = url;
-    // this.#handleOutgoingMessage.bind(this);
-  }
-
-  get ID() {
-    return this.#id;
   }
 
   async #handleMessage(messageEvent = null) {
@@ -58,7 +51,7 @@ export class WSClient {
     console.log('#handleClientClose', code, reason, wasClean);
 
     const onlineStatus = createWsOnlineStatusMessage(false);
-    this.#broadcastChannels.onlineStatus?.postMessage(onlineStatus);
+    this.#broadcastChannels?.onlineStatus?.postMessage(onlineStatus);
 
     if (this.#shouldStopConnection === false && reconnectInTimeout === null) {
       reconnectInTimeout = setTimeout(() => {
@@ -75,9 +68,8 @@ export class WSClient {
 
   #handleClientOpen(/** @type {Event} */ openEvent) {
     const onlineStatus = createWsOnlineStatusMessage(true);
-    this.#broadcastChannels.onlineStatus?.postMessage(onlineStatus);
 
-    console.log('#handleClientOpen', openEvent, this.#client);
+    this.#broadcastChannels.onlineStatus?.postMessage(onlineStatus);
   }
   
   start() {
@@ -113,7 +105,6 @@ export class WSClient {
 
     if (this.#broadcastChannels) {
       for (const broadcastChannel of Object.values(this.#broadcastChannels)) {
-        console.log(`BroadcastChannel[${broadcastChannel.name}].close()`);
         broadcastChannel.close();
       }
   
