@@ -37,8 +37,6 @@
   });
 
   const unsubscribeFromWSOnlineStatusStore = WSOnlineStatusStore.subscribe((/** @type {Boolean} */  isConnected) => {
-    console.log(`WSOnlineStatusStore::online status: ${ isConnected ? 'connected' : 'disconnected'}`);
-
     IsOffline = !isConnected;
   });
 
