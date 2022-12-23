@@ -30,8 +30,6 @@ export class LibDB extends EventEmitter {
       throw new ReferenceError('userId is undefined');
     }
 
-    this.#debuglog(`${this.constructor.name}.addUser(${userId})`);
-
     this.#db.set(userId, {
       wallet: INITIAL_WALLET,
     });
@@ -56,8 +54,6 @@ export class LibDB extends EventEmitter {
       throw new ReferenceError('userId is undefined');
     }
 
-    this.#debuglog(`${this.constructor.name}.deleteUser(${clientId})`);
-
     this.#db.delete(clientId);
     this.emit(LibDBEvents.USER_DELETED, {
       payload: {
@@ -77,14 +73,11 @@ export class LibDB extends EventEmitter {
 
     const userData = this.#db.get(userId);
 
-    // this.#debuglog(`[BEFORE] ${this.constructor.name}.addSum(userId = ${userId}, delta = ${delta}) :: userData =`, userData);
-
     userData.wallet += delta;
 
     this.#db.set(userId, userData);
 
-    // this.#debuglog(`[AFTER] ${this.constructor.name}.addSum(userId = ${userId}, delta = ${delta}) :: userData =`, userData);
-
+    // eslint-disable-next-line no-console
     console.table(this.#db);
 
     this.emit(LibDBEvents.WALLET_CHANGED, {

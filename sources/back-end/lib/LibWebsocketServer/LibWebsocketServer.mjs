@@ -51,7 +51,6 @@ export class LibWebsocketServer {
     this.#debuglog = util.debuglog(this.constructor.name);
     this.#config = Object.freeze({ ...config });
     this.#events = new EventEmitter();
-    // this.sendMessageToClient = this.sendMessageToClient.bind(this);
   }
 
   get IS_RUNNING() {
@@ -78,9 +77,6 @@ export class LibWebsocketServer {
     /** @type {uWS.WebSocket} */ const client = this.#clients.get(clientId);
 
     client.send(message, SHOULD_MESSAGE_BE_BINARY, SHOULD_MESSAGE_BE_COMPRESSED);
-    // client.publish(Topics.SERVER.MONEY, message, SHOULD_MESSAGE_BE_BINARY, SHOULD_MESSAGE_BE_COMPRESSED);
-
-    this.#debuglog(`${this.constructor.name}.sendMessageToClient(${clientId})`, client);
   }
 
   start() {
@@ -101,12 +97,6 @@ export class LibWebsocketServer {
           maxBackpressure: 1024,
           idleTimeout: 16,
           upgrade: (res, req, context) => {
-            this.#debuglog(`${this.constructor.name}.upgrade`);
-
-            // req.forEach((k, v) => {
-            //   this.#debuglog(`${k}: ${v}`);
-            // });
-
             const upgradeAborted = {
               isAborted: false,
             };
