@@ -17,7 +17,11 @@
     WsStoreAdapter,
   } from '$lib/modules/wsStoreAdapter/index.mjs';
 
+  /** @type {WSClient} */
+  // @ts-ignore
   let wsClient = null;
+  /** @type {WsStoreAdapter} */
+  // @ts-ignore
   let wsStoreAdapter = null;
 
   onMount(() => {
@@ -25,8 +29,10 @@
       wsStoreAdapter = new WsStoreAdapter();
       wsStoreAdapter.start();
       // @ts-ignore
-      wsClient = new WSClient('ws://127.0.0.1:9090');
+      wsClient = new WSClient(`ws://127.0.0.1:9090/`);
       wsClient.start();
+
+      console.log(`ID: ${wsClient.ID}`);
     }
   });
 

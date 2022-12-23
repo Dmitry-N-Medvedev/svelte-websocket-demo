@@ -20,7 +20,7 @@
   "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "xstate": "^4.35.0"
+    "xstate": "^4.35.1"
   },
   "devDependencies": {
     "c8": "^7.12.0",

@@ -71,7 +71,7 @@ process.on('uncaughtException', handleUncaughtException);
 process.on('unhandledRejection', handleUnhandledRejection);
 process.on('warning', handleWarning);
 
-ctrl = new Controller();
+ctrl = new Controller(debuglog);
 
 await ctrl.start(serverConfig);
 

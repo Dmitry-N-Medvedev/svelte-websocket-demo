@@ -4,10 +4,13 @@ import {
 
 const encoder = new TextEncoder();
 
-export const createServerMoneyMessage = (money) => {
+export const createServerMoneyMessage = (wallet = 0.0, delta = 0.0) => {
   const messageObject = Object.freeze({
     type: MessageTypes.MONEY,
-    payload: money || (Math.random() * 10),
+    payload: {
+      wallet,
+      delta,
+    },
   });
   const messageString = JSON.stringify(messageObject);
 

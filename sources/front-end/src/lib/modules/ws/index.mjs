@@ -14,14 +14,21 @@ export class WSClient {
   #url = null;
   #shouldStopConnection = true;
   #broadcastChannels = null;
+  #id = null;
 
   constructor(url = null) {
     if (url === null) {
       throw new ReferenceError('url is undefined');
     }
 
+    this.#id = self.crypto.randomUUID();
+
     this.#url = url;
     // this.#handleOutgoingMessage.bind(this);
+  }
+
+  get ID() {
+    return this.#id;
   }
 
   async #handleMessage(messageEvent = null) {
@@ -29,9 +36,11 @@ export class WSClient {
       throw new ReferenceError('messageEvent is undefined');
     }
 
-    const messageObject = JSON.parse(decoder.decode(await messageEvent.data.arrayBuffer()));
-
-    (this.#broadcastChannels[messageObject.type])?.postMessage(messageObject);
+    if (messageEvent.data instanceof Blob) {
+      const messageObject = JSON.parse(decoder.decode(await messageEvent.data.arrayBuffer()));
+  
+      (this.#broadcastChannels[messageObject.type])?.postMessage(messageObject);
+    }
   };
 
   async #handleOutgoingMessage(/** @type {MessageEvent} */ messageEvent) {
@@ -68,10 +77,12 @@ export class WSClient {
     const onlineStatus = createWsOnlineStatusMessage(true);
     this.#broadcastChannels.onlineStatus?.postMessage(onlineStatus);
 
-    console.log('#handleClientOpen', openEvent);
+    console.log('#handleClientOpen', openEvent, this.#client);
   }
   
   start() {
+    this.stop();
+
     this.#shouldStopConnection = false;
     this.#broadcastChannels = Object.freeze({
       ts: new BroadcastChannel(MessageTypes.TS),
@@ -91,17 +102,24 @@ export class WSClient {
     this.#shouldStopConnection = true;
 
     if (this.#client) {
-      this.#client.removeEventListener('message', this.#handleMessage.bind(this));
-      this.#client.removeEventListener('close', this.#handleClientClose.bind(this));
-      this.#client.removeEventListener('error', this.#handleClientError.bind(this));
-      this.#client.removeEventListener('open', this.#handleClientOpen.bind(this));
+      this.#client.removeEventListener('message', this.#handleMessage);
+      this.#client.removeEventListener('close', this.#handleClientClose);
+      this.#client.removeEventListener('error', this.#handleClientError);
+      this.#client.removeEventListener('open', this.#handleClientOpen);
       this.#client.close();
+
+      this.#client = undefined;
     }
 
-    for (const broadcastChannel of Object.values(this.#broadcastChannels)) {
-      broadcastChannel.close();
+    if (this.#broadcastChannels) {
+      for (const broadcastChannel of Object.values(this.#broadcastChannels)) {
+        console.log(`BroadcastChannel[${broadcastChannel.name}].close()`);
+        broadcastChannel.close();
+      }
+  
+      this.#broadcastChannels = undefined;
     }
 
-    this.#client = null;
+    this.#client = undefined;
   }
 }

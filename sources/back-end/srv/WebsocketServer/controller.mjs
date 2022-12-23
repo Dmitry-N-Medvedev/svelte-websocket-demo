@@ -27,6 +27,7 @@ import {
 } from './handlers/donateMessageHandler.mjs';
 
 export class Controller {
+  #debuglog = null;
   /** @type {LibWebsocketServer} */
   #libWebsocketServer = null;
   /** @type {LibDB} */
@@ -38,11 +39,11 @@ export class Controller {
   /** @type {Number} */
   #moneyInterval = null;
 
-  constructor() {
+  constructor(debuglog = () => {}) {
+    this.#debuglog = debuglog;
     this.#decoder = new TextDecoder();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   #handleUserAdded(userAddedEvent) {
     const {
       payload: {
@@ -50,38 +51,41 @@ export class Controller {
       },
     } = userAddedEvent;
 
-    console.log('handleUserAdded', userId);
+    this.#debuglog(`${this.constructor.name}.#handleUserAdded({ ${userId} })`, userAddedEvent);
   }
 
   // eslint-disable-next-line class-methods-use-this
   #handleUserDeleted(userDeletedEvent) {
     const {
       payload: {
-        userId,
+        clientId,
       },
     } = userDeletedEvent;
 
-    console.log('handleUserDeleted', userId);
+    this.#debuglog(`${this.constructor.name}.#handleUserDeleted({ ${clientId} })`, userDeletedEvent);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  #handleSumAdded(sumAddedEvent) {
+  #handleWalletChanged(walletChangedEvent) {
     const {
-      payload: {
-        userId,
-        sum,
-      },
-    } = sumAddedEvent;
+      userId,
+      wallet,
+      delta,
+    } = walletChangedEvent;
 
-    console.log('handleSumAdded', userId, sum);
+    this.#debuglog(`${this.constructor.name}.#handleWalletChanged({ ${userId}, ${wallet}, ${delta} })`);
+
+    const message = createServerMoneyMessage(wallet, delta);
+
+    this.#libWebsocketServer.sendMessageToClient(userId, message);
   }
 
   #initLibDB() {
-    this.#libDB = new LibDB();
+    this.#libDB = new LibDB(this.#debuglog);
 
-    this.#libDB.addListener(LibDBEvents.USER_ADDED, this.#handleUserAdded);
-    this.#libDB.addListener(LibDBEvents.USER_DELETED, this.#handleUserDeleted);
-    this.#libDB.addListener(LibDBEvents.SUM_ADDED, this.#handleSumAdded);
+    this.#libDB.addListener(LibDBEvents.USER_ADDED, this.#handleUserAdded.bind(this));
+    this.#libDB.addListener(LibDBEvents.USER_DELETED, this.#handleUserDeleted.bind(this));
+    this.#libDB.addListener(LibDBEvents.WALLET_CHANGED, this.#handleWalletChanged.bind(this));
   }
 
   #finitLibDB() {
@@ -95,18 +99,15 @@ export class Controller {
     const {
       ws,
       message,
-      isBinary,
     } = messageEvent;
 
     const messageObject = JSON.parse(this.#decoder.decode(message));
 
-    console.log(ws, messageObject, isBinary);
+    this.#debuglog(`${this.constructor.name}.#handleWebsocketServerMessage[${messageObject.type}]`);
 
     switch (messageObject.type) {
       case MessageTypes.DONATE: {
-        const outgoingMessage = donateMessageHandler(ws, messageObject, this.#libWebsocketServer.Clients, isBinary);
-
-        ws.send(outgoingMessage);
+        donateMessageHandler(this.#libDB, ws.id, messageObject, this.#libWebsocketServer.Clients, this.#debuglog);
 
         break;
       }
@@ -116,8 +117,20 @@ export class Controller {
     }
   }
 
+  #handleClientConnectedEvent({ clientId }) {
+    this.#libDB.addUser(clientId);
+  }
+
+  #handleClientDisconnectedEvent(clientId) {
+    this.#debuglog('handleClientDisconnectedEvent', clientId);
+
+    this.#libDB.deleteUser(clientId);
+  }
+
   async #initLibWebsocketServer(serverConfig) {
     this.#libWebsocketServer = new LibWebsocketServer(serverConfig);
+    this.#libWebsocketServer.Events.addListener(LibWebsocketServerEvents.CLIENT_CONNECTED, this.#handleClientConnectedEvent.bind(this));
+    this.#libWebsocketServer.Events.addListener(LibWebsocketServerEvents.CLIENT_DISCONNECTED, this.#handleClientDisconnectedEvent.bind(this));
     this.#libWebsocketServer.Events.addListener(LibWebsocketServerEvents.MESSAGE_EVENT, this.#handleWebsocketServerMessage.bind(this));
 
     await this.#libWebsocketServer.start();
@@ -143,16 +156,15 @@ export class Controller {
     clearInterval(this.#tsInterval);
   }
 
-  #startSendingMoneyMessages() {
+  #startAddingMoneyToWallets() {
     this.#moneyInterval = setInterval(() => {
-      this.#libWebsocketServer.publish(
-        createServerMoneyMessage(),
-        Topics.SERVER.MONEY,
-      );
-    }, Math.random() * 5000 + 1000);
+      for (const [clientId] of this.#libDB.Data) {
+        this.#libDB.addSum(clientId, Math.random() * 10);
+      }
+    }, 5000);
   }
 
-  #stopSendingMoneyMessages() {
+  #stopAddingMoneyToWallets() {
     clearInterval(this.#moneyInterval);
   }
 
@@ -161,12 +173,12 @@ export class Controller {
     await this.#initLibWebsocketServer(serverConfig);
 
     this.#startSendingTsMessages();
-    this.#startSendingMoneyMessages();
+    this.#startAddingMoneyToWallets();
   }
 
   async stop() {
     this.#stopSendingTsMessages();
-    this.#stopSendingMoneyMessages();
+    this.#stopAddingMoneyToWallets();
     this.#finitLibDB();
     await this.#finitLibWebsocketServer();
   }
