@@ -44,25 +44,24 @@ export class Controller {
     this.#decoder = new TextDecoder();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   #handleUserAdded(userAddedEvent) {
     const {
       payload: {
+        // eslint-disable-next-line no-unused-vars
         userId,
       },
     } = userAddedEvent;
-
-    this.#debuglog(`${this.constructor.name}.#handleUserAdded({ ${userId} })`, userAddedEvent);
   }
 
   // eslint-disable-next-line class-methods-use-this
   #handleUserDeleted(userDeletedEvent) {
     const {
       payload: {
+        // eslint-disable-next-line no-unused-vars
         clientId,
       },
     } = userDeletedEvent;
-
-    this.#debuglog(`${this.constructor.name}.#handleUserDeleted({ ${clientId} })`, userDeletedEvent);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -72,8 +71,6 @@ export class Controller {
       wallet,
       delta,
     } = walletChangedEvent;
-
-    this.#debuglog(`${this.constructor.name}.#handleWalletChanged({ ${userId}, ${wallet}, ${delta} })`);
 
     const message = createServerMoneyMessage(wallet, delta);
 
@@ -103,8 +100,6 @@ export class Controller {
 
     const messageObject = JSON.parse(this.#decoder.decode(message));
 
-    this.#debuglog(`${this.constructor.name}.#handleWebsocketServerMessage[${messageObject.type}]`);
-
     switch (messageObject.type) {
       case MessageTypes.DONATE: {
         donateMessageHandler(this.#libDB, ws.id, messageObject, this.#libWebsocketServer.Clients, this.#debuglog);
@@ -122,8 +117,6 @@ export class Controller {
   }
 
   #handleClientDisconnectedEvent(clientId) {
-    this.#debuglog('handleClientDisconnectedEvent', clientId);
-
     this.#libDB.deleteUser(clientId);
   }
 
