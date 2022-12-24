@@ -9,7 +9,7 @@ import {
 } from '$lib/stores/ts.store.mjs';
 import {
   WSOnlineStatusStore,
-} from '$lib/stores/ws-online-status.store.mjs/';
+} from '$lib/stores/ws-online-status.store.mjs';
 
 export class WsStoreAdapter {
   #channels = null;
