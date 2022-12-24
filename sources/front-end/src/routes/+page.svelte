@@ -77,13 +77,15 @@
     align-self: center;
 
     width: 15vw;
-    height: 20vh;
+    /* height: 20vh; */
 
-    min-width: 570.24px;
-    min-height: 405.6px;
+    /* min-width: 570.24px; */
+    /* min-height: 405.6px; */
+
+    aspect-ratio: calc(570.24 / 401.54);
 
     background-color: var(--theme-gray);
-    filter: drop-shadow(0 0 0.25rem var(--theme-black));
+    /* filter: drop-shadow(0 0 0.25rem var(--theme-black)); */
     border-radius: max(0.125vh, 0.125vw);
     top: calc(50% - 20vh / 2 );
 
@@ -99,12 +101,12 @@
     pointer-events: none;
   }
 
-  article:hover {
+  /* article:hover {
     filter: drop-shadow(0 0 0.8rem var(--theme-black));
     transform: scale3d(1.0, 1.0, 1.0);
 
     transition: all var(--transition-duration) var(--transition-timing-function);
-  }
+  } */
 
   #money {
     display: flex;
@@ -149,6 +151,83 @@
   .IsOffline {
     filter: blur(3px) opacity(0.5);
     pointer-events: none !important;
+  }
+
+/* 
+    320px — 480px: Mobile devices
+    481px — 768px: iPads, Tablets
+    769px — 1024px: Small screens, laptops
+    1025px — 1200px: Desktops, large screens
+    1201px and more —  Extra large screens, TV
+*/
+
+  @media screen and (hover: hover) {
+    article {
+      filter: drop-shadow(0 0 0.25rem var(--theme-black));
+    }
+
+    article:hover {
+      filter: drop-shadow(0 0 0.8rem var(--theme-black));
+      transform: scale3d(1.0, 1.0, 1.0);
+
+      transition: all var(--transition-duration) var(--transition-timing-function);
+    }
+  }
+
+  @media screen and (max-width: 480px) and (orientation: portrait) {
+    article {
+      width: 95vw;
+      top: 25%;
+    }
+  }
+
+  @media screen and (max-height: 480px) and (orientation: landscape) {
+    article {
+      width: 95vw;
+      top: auto;
+    }
+  }
+
+  @media screen and (max-width: 896px) and (orientation: landscape) {
+    article {
+      width: 65vw;
+      top: auto;
+    }
+  }
+
+  @media screen and (max-width: 915px) and (orientation: landscape) {
+    article {
+      width: 55vw;
+      top: auto;
+    }
+  }
+
+  @media screen and (max-width: 820px) and (orientation: portrait) {
+    article {
+      width: 65vw;
+    }
+  }
+
+  @media screen and (max-width: 1180px) and (orientation: landscape) {
+    article {
+      width: 45vw;
+      top: 25%;
+    }
+  }
+
+  @media screen and (max-width: 912px) and (orientation: portrait) {
+    article {
+      width: 65vw;
+      top: 25%;
+
+    }
+  }
+  
+  @media screen and (max-width: 1368px) and (orientation: landscape) {
+    article {
+      width: 45vw;
+      top: 25%;
+    }
   }
 </style>
 

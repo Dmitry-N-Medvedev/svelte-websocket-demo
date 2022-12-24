@@ -30,6 +30,11 @@
     font-size: 0.95rem;
   }
 
+  @media screen and (max-height: 480px) and (orientation: landscape) {
+    #ts {
+      font-size: 1.25rem;
+    }
+  }
 </style>
 
 <footer>

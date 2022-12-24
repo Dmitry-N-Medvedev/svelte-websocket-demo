@@ -109,3 +109,9 @@ button:active {
   background-color: var(--theme-black);
   box-shadow: inset min(0.125vh, 0.125vw) min(0.125vh, 0.125vw) 0.5vh black, 0 0 1px var(--theme-darkest_white);
 }
+
+@media screen and (max-height: 480px) and (orientation: landscape) {
+  :root {
+    --header-hight: 4vh;
+  }
+}
