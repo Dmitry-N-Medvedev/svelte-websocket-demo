@@ -1,8 +1,9 @@
 module.exports = {
   env: {
-    es2021: true,
+    es2022: true,
     node: true,
     mocha: true,
+    browser: true,
   },
   extends: [
     'airbnb-base',
@@ -18,7 +19,7 @@ module.exports = {
   ],
   parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 12,
+    ecmaVersion: 13,
     sourceType: 'module',
     ecmaFeatures: {
       impliedStrict: true,
