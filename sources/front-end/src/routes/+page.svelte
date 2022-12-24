@@ -36,7 +36,7 @@
   });
 
   const unsubscribeFromWSOnlineStatusStore = WSOnlineStatusStore.subscribe((/** @type {Boolean} */  isConnected) => {
-    IsOffline = isConnected;
+    IsOffline = !isConnected;
   });
 
   const handleSubmit = (/** @type {PointerEvent} */ event) => {
@@ -133,8 +133,9 @@
     cursor: pointer;
     justify-content: center;
     align-items: center;
-    font-size: 0.5vw;
+    font-size: 1.25rem;
     color: var(--theme-white);
+    background-color: var(--theme-blue);
     width: 50%;
     height: 50%;
     align-self: center;
