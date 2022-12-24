@@ -11,7 +11,7 @@
   } from '$lib/stores/money.store.mjs';
   import {
     WSOnlineStatusStore,
-  } from '$lib/stores/ws-online-status.store.mjs/';
+  } from '$lib/stores/ws-online-status.store.mjs';
   import {
     MessageTypes,
   } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
@@ -31,13 +31,12 @@
   }
 
   const unsubscribeFromMoneyStore = MoneyStore.subscribe((newState) => {
-    // @ts-ignore
     wallet = newState.wallet;
     moneyDelta = newState.delta;
   });
 
   const unsubscribeFromWSOnlineStatusStore = WSOnlineStatusStore.subscribe((/** @type {Boolean} */  isConnected) => {
-    IsOffline = !isConnected;
+    IsOffline = isConnected;
   });
 
   const handleSubmit = (/** @type {PointerEvent} */ event) => {
@@ -79,6 +78,10 @@
 
     width: 15vw;
     height: 20vh;
+
+    min-width: 570.24px;
+    min-height: 405.6px;
+
     background-color: var(--theme-gray);
     filter: drop-shadow(0 0 0.25rem var(--theme-black));
     border-radius: max(0.125vh, 0.125vw);
