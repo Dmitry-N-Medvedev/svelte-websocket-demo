@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "name": "SWSD",
+  "short_name": "SvelteWebSocket",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "SvelteKit + WebSockets Demo",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
+}

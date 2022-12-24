@@ -16,6 +16,9 @@
   import {
     WsStoreAdapter,
   } from '$lib/modules/wsStoreAdapter/index.mjs';
+  // import ServiceWorker from '../service-worker/index.js';
+
+  // console.log({ ServiceWorker });
 
   /** @type {WSClient} */
   // @ts-ignore
@@ -24,8 +27,24 @@
   // @ts-ignore
   let wsStoreAdapter = null;
 
-  onMount(() => {
+  const registerSW = async () => {
+    if ('serviceWorker' in navigator) {
+      try {
+        addEventListener('load', async() => {
+          const registrationResult = await navigator.serviceWorker.register('../service-worker/index.js');
+
+          console.log({ registrationResult });
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  onMount(async () => {
     if (IsInBrowser === true) {
+      await registerSW();
+
       wsStoreAdapter = new WsStoreAdapter();
       wsStoreAdapter.start();
       // @ts-ignore

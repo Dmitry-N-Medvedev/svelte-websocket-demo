@@ -8,6 +8,9 @@ const config = {
       precompress: false,
       envPrefix: 'CA_',
     }),
+    serviceWorker: {
+      register: false,
+    },
   }
 };
 
