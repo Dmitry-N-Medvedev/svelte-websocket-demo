@@ -2,15 +2,16 @@
   import 'inter-ui/inter.css';
 
   import {
+    env,
+  } from '$env/dynamic/public';
+
+  import {
     browser as IsInBrowser,
   } from '$app/environment';
   import {
     onMount,
     onDestroy,
   } from 'svelte';
-  // import {
-  //   WSClient,
-  // } from '$lib/modules/ws/index.mjs';
   import Header from '$lib/controls/Header/index.svelte';
   import Footer from '$lib/controls/Footer/index.svelte';
   import {
@@ -23,34 +24,17 @@
 
   /** @type {Ldr | null} */
   let ldr = null;
-  // /** @type {WSClient} */
-  // // @ts-ignore
-  // let wsClient = null;
-  /** @type {WsStoreAdapter} */
-  // @ts-ignore
+  /** @type {WsStoreAdapter | undefined | null} */
   let wsStoreAdapter = null;
   const workersConfig = {
     wsWorker: {
-      url: 'ws://127.0.0.1:9090/',
+      url: `${env.PUBLIC_WS_PROTO}://${env.PUBLIC_WS_HOST}:${env.PUBLIC_WS_PORT}/`,
     },
   };
 
-  // const registerSW = async () => {
-  //   if ('serviceWorker' in navigator) {
-  //     try {
-  //       addEventListener('load', async() => {
-  //         const registrationResult = await navigator.serviceWorker.register('../service-worker/index.js');
-
-  //         console.log({ registrationResult });
-  //       });
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  // };
-
   onMount(async () => {
     if (IsInBrowser === true) {
+
       // @ts-ignore
       ldr = new Ldr(workersConfig);
 
@@ -58,9 +42,6 @@
 
       wsStoreAdapter = new WsStoreAdapter();
       wsStoreAdapter.start();
-      // @ts-ignore
-      // wsClient = new WSClient(`ws://127.0.0.1:9090/`);
-      // wsClient.start();
     }
   });
 
