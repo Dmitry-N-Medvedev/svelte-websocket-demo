@@ -118,12 +118,12 @@ importers:
       ws: ^8.11.0
     dependencies:
       '@dmitry-n-medvedev/common': file:sources/common
+      dotenv: 16.0.3
       nanoid: 4.0.0
       uWebSockets.js: github.com/uNetworking/uWebSockets.js/77bc1fd5577ae42b56675912eb8481a31f3fefd2
     devDependencies:
       c8: 7.12.0
       chai: 4.3.7
-      dotenv: 16.0.3
       eslint: 8.30.0
       eslint-config-airbnb-base: 15.0.0_2lbwmhbr7bncddqbzzpg77o75m
       eslint-plugin-chai-friendly: 0.7.2_eslint@8.30.0
@@ -4555,6 +4555,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@dmitry-n-medvedev/common': file:sources/common
+      dotenv: 16.0.3
       nanoid: 4.0.0
       uWebSockets.js: github.com/uNetworking/uWebSockets.js/77bc1fd5577ae42b56675912eb8481a31f3fefd2
     dev: false

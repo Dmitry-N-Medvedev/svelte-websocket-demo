@@ -13,7 +13,7 @@
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "dockerize:back-end": "rm -rf sources/back-end/srv/WebsocketServer/node_modules && pnpm i -F --prod ./sources/back-end/srv/WebsocketServer --virtual-store-dir sources/back-end/srv/WebsocketServer/node_modules/.pnpm",
+    "dockerize:back-end": "rm -rf sources/back-end/srv/WebsocketServer/node_modules && pnpm i -F ./sources/back-end/srv/WebsocketServer --virtual-store-dir sources/back-end/srv/WebsocketServer/node_modules/.pnpm",
     "dockerize:front-end": "rm -rf sources/front-end/node_modules && pnpm i -F ./sources/front-end --virtual-store-dir sources/front-end/node_modules/.pnpm"
   },
   "repository": {

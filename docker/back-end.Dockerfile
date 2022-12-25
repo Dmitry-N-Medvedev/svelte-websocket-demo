@@ -5,10 +5,10 @@ RUN corepack enable \
 FROM system-setup AS build-all
 WORKDIR /repo
 ADD . ./
-RUN pnpm --recursive --prod install
+RUN pnpm --recursive install
 RUN pnpm run dockerize:back-end
 
-FROM node:19.3.0 AS package-server
+FROM node:19.3.0-bullseye-slim AS package-server
 SHELL ["/bin/bash", "-c"]
 ENV NODE_ENV=production
 WORKDIR /app
