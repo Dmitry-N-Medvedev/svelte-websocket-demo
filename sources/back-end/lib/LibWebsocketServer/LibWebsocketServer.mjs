@@ -6,6 +6,9 @@ import uWS from 'uWebSockets.js';
 import {
   nanoid,
 } from 'nanoid';
+import {
+  readJson,
+} from './readJson.mjs';
 // import {
 //   MessageTypes,
 // } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
@@ -91,6 +94,15 @@ export class LibWebsocketServer {
 
       this.#server = uWS
         .App({})
+        .post('/csp-violation-report', (res) => {
+          readJson(res, (o) => {
+            this.#debuglog('/csp-violation-report', o);
+
+            res.end();
+          }, (readError) => {
+            this.#debuglog(readError);
+          });
+        })
         .ws('/*', {
           compression: uWS.DEDICATED_COMPRESSOR_3KB,
           maxPayloadLength: 16 * 1024 * 1024,

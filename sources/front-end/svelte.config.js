@@ -11,6 +11,11 @@ const config = {
     serviceWorker: {
       register: false,
     },
+    files: {
+      hooks: {
+        server: 'src/files/hooks/hooks.server.mjs',
+      },
+    },
   }
 };
 
