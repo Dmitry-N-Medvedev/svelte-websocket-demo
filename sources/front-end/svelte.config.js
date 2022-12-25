@@ -9,7 +9,7 @@ const config = {
       envPrefix: 'CA_',
     }),
     serviceWorker: {
-      register: false,
+      register: true,
     },
     files: {
       hooks: {
