@@ -3,7 +3,7 @@ RUN apk update \
   && apk upgrade \
   && apk add --no-cache git bash
 RUN corepack enable \
-  && corepack prepare pnpm@7.18.2 --activate
+  && corepack prepare pnpm@7.19.0 --activate
 
 FROM system-setup AS build-all
 WORKDIR /repo
