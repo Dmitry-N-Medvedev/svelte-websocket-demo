@@ -1,6 +1,9 @@
 import {
   WorkerProtocolMessages,
 } from '$lib/workers/WorkerProtocolMessages.mjs';
+import {
+  dev as InDevMode,
+} from '$app/environment';
 
 export class Ldr {
   /** @type {Map} */
@@ -31,10 +34,23 @@ export class Ldr {
   }
 
   async #loadServiceWorker() {
+    
     if ('serviceWorker' in navigator) {
       try {
-        self.addEventListener('load', async() => {
-          return await navigator.serviceWorker.register('../service-worker/index.js');
+        self.addEventListener('load', () => {
+          console.log('#loadServiceWorker', 'serviceWorker' in navigator);
+
+          navigator
+            .serviceWorker
+            .register(new URL('$lib/service-worker/index.mjs', import.meta.ur), {
+              type: InDevMode ? 'module': 'module',
+            })
+            .then((registrationResult) => {
+              console.log({ registrationResult });
+            })
+            .catch((registrationError) => {
+              console.error({ registrationError });
+            });
         });
       } catch (error) {
         console.error(error);
