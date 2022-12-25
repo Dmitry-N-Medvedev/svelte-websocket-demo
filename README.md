@@ -3,7 +3,7 @@
 ## prerequisites
 
 1. node 19.3.0
-2. pnpm 7.18.2
+2. pnpm 7.19.0
 
 `NB`: I use [volta](https://volta.sh/) to manage node and pnpm versions.
 
@@ -18,7 +18,7 @@ volta install node@19.3.0
 Install pnpm using volta:
 
 ```bash
-volta install pnpm@7.18.2
+volta install pnpm@7.19.0
 ```
 
 Go to the root of the repository and run the following command:
