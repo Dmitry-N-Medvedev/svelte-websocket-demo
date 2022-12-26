@@ -1,8 +1,8 @@
 {
-  "name": "@dmitry-n-medvedev/serializers",
+  "name": "@dmitry-n-medvedev/serializers.timestampmessage",
   "private": true,
   "version": "0.0.0",
-  "description": "flatbuffers serializers",
+  "description": "serializers: createTimestampMessage",
   "type": "module",
   "engines": {
     "node": "19.3.0",
@@ -12,11 +12,10 @@
   "volta": {
     "node": "19.3.0"
   },
-  "bin": "bin/compile.mjs",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "lint": "./node_modules/.bin/eslint ./ --ext .mjs",
-    "test": "pnpm run lint && NODE_ENV=test NODE_DEBUG=Serializers* ./node_modules/.bin/c8 ./node_modules/.bin/mocha"
+    "test": "pnpm run lint && NODE_ENV=test NODE_DEBUG=serializers* ./node_modules/.bin/c8 ./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
