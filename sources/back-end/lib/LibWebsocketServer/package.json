@@ -15,7 +15,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "lint": "./node_modules/.bin/eslint ./ --ext .mjs",
-    "test": "pnpm run lint && NODE_ENV=test NODE_DEBUG=LibWebsocketServer* ./node_modules/.bin/c8 ./node_modules/.bin/mocha"
+    "test-skip": "pnpm run lint && NODE_ENV=test NODE_DEBUG=LibWebsocketServer* ./node_modules/.bin/c8 ./node_modules/.bin/mocha"
   },
   "dependencies": {
     "@dmitry-n-medvedev/common": "workspace:^0.0.0",
