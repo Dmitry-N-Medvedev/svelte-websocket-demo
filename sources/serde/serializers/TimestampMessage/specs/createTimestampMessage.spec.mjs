@@ -10,8 +10,8 @@ import {
 } from 'chai';
 import flatbuffers from 'flatbuffers';
 import {
-  TimestampMessage,
-} from '@dmitry-n-medvedev/fbs/compiled/mjs/ts/svelte-websocket-demo/timestamp-message.mjs';
+  deserializeTimestampMessage,
+} from '@dmitry-n-medvedev/deserializers.timestampmessage/deserializeTimestampMessage.mjs';
 import {
   createTimestampMessage,
 } from '../createTimestampMessage.mjs';
@@ -30,19 +30,10 @@ describe('serializers', () => {
   });
 
   it('should createTimestampMessage', async () => {
-    const deserialize = (uint8Array) => {
-      const buffer = new flatbuffers.ByteBuffer(uint8Array);
-
-      return TimestampMessage.getRootAsTimestampMessage(buffer).timestamp();
-    };
     const expectedTimestamp = Date.now();
-
     const timestampMessage = createTimestampMessage(builder, expectedTimestamp);
+    const deserializedTimestamp = deserializeTimestampMessage(timestampMessage);
 
-    expect(timestampMessage).to.exist;
-
-    const timestamp = deserialize(timestampMessage);
-
-    expect(timestamp).to.equal(expectedTimestamp);
+    expect(deserializedTimestamp).to.equal(expectedTimestamp);
   });
 });
