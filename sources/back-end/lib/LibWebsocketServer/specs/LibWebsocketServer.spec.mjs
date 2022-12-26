@@ -11,8 +11,13 @@ import {
 // eslint-disable-next-line no-unused-vars
 import WebSocket from 'ws';
 import {
+  // eslint-disable-next-line no-unused-vars
   nanoid,
 } from 'nanoid';
+import {
+  // eslint-disable-next-line no-unused-vars
+  MessageTypes,
+} from '@dmitry-n-medvedev/common/MessageTypes.mjs';
 import {
   LibWebsocketServer,
 } from '../LibWebsocketServer.mjs';
@@ -22,13 +27,11 @@ import {
 import {
   newClient,
 } from './helpers/newClient.mjs';
-import {
-  MessageTypes,
-} from '../messages/serializers/MessageTypes.mjs';
 
 describe('LibWebsocketServer', function describeLibWebsocketServer() {
   const debuglog = util.debug(`${LibWebsocketServer.name}:specs`);
   let serverConfig = null;
+  // eslint-disable-next-line no-unused-vars
   const decoder = new TextDecoder();
 
   before(async function doBefore() {
@@ -84,41 +87,43 @@ describe('LibWebsocketServer', function describeLibWebsocketServer() {
     client = null;
   });
 
-  it('should receive 3 ts updates', async function shouldReceiveThreeTsUpdates() {
-    const receiveThreeTsUpdates = (client = null) => new Promise((ok, fail) => {
-      let messageCount = 0;
+  // it('should receive 3 ts updates', async function shouldReceiveThreeTsUpdates() {
+  //   const receiveThreeTsUpdates = (client = null) => new Promise((ok, fail) => {
+  //     let messageCount = 0;
 
-      client.on('error', (err) => {
-        debuglog(['client:on:error =>', err]);
+  //     client.on('error', (err) => {
+  //       debuglog(['client:on:error =>', err]);
 
-        return fail(err);
-      });
+  //       return fail(err);
+  //     });
 
-      client.on('message', (message = null) => {
-        const messageObject = JSON.parse(decoder.decode(message));
+  //     client.on('message', (message = null) => {
+  //       const messageObject = JSON.parse(decoder.decode(message));
 
-        if (messageObject.type === MessageTypes.TS) {
-          debuglog('receiveThreeTsUpdates', messageObject);
+  //       debuglog({ messageObject });
 
-          messageCount += 1;
-        }
+  //       if (messageObject.type === MessageTypes.TS) {
+  //         debuglog('receiveThreeTsUpdates', messageObject);
 
-        if (messageCount > 2) {
-          client.close();
-        }
-      });
+  //         messageCount += 1;
+  //       }
 
-      client.on('close', (code = null, reason = null) => {
-        debuglog('client:close', code, `"${reason.toString()}"`);
+  //       if (messageCount > 2) {
+  //         client.close();
+  //       }
+  //     });
 
-        return ok();
-      });
-    });
+  //     client.on('close', (code = null, reason = null) => {
+  //       debuglog('client:close', code, `"${reason.toString()}"`);
 
-    let client = newClient(serverConfig.server.proto, serverConfig.server.host, serverConfig.server.port, '/');
+  //       return ok();
+  //     });
+  //   });
 
-    await receiveThreeTsUpdates(client);
+  //   let client = newClient(serverConfig.server.proto, serverConfig.server.host, serverConfig.server.port, '/');
 
-    client = null;
-  }).timeout(4000);
+  //   await receiveThreeTsUpdates(client);
+
+  //   client = null;
+  // }).timeout(60000);
 });

@@ -117,7 +117,7 @@ importers:
       uWebSockets.js: github:uNetworking/uWebSockets.js#v20.15.0
       ws: ^8.11.0
     dependencies:
-      '@dmitry-n-medvedev/common': file:sources/common
+      '@dmitry-n-medvedev/common': link:../../../common
       dotenv: 16.0.3
       nanoid: 4.0.0
       uWebSockets.js: github.com/uNetworking/uWebSockets.js/77bc1fd5577ae42b56675912eb8481a31f3fefd2
