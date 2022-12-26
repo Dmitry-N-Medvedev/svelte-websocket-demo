@@ -16,7 +16,7 @@ import {
   createTimestampMessage,
 } from '../createTimestampMessage.mjs';
 
-describe('Serializers', () => {
+describe('serializers', () => {
   const debuglog = util.debuglog('serializers:specs');
   /** @type {flatbuffers.Builder} */
   let builder = null;
