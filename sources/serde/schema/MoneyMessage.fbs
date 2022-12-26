@@ -1,0 +1,8 @@
+namespace SvelteWebsocketDemo;
+
+table MoneyMessage {
+  wallet: float64;
+  delta: float64;
+}
+
+root_type MoneyMessage;

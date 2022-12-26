@@ -1,0 +1,7 @@
+namespace SvelteWebsocketDemo;
+
+table TimestampMessage {
+  timestamp: float64;
+}
+
+root_type TimestampMessage;
