@@ -1,14 +1,13 @@
+import flatbuffers from 'flatbuffers';
 import {
   TimestampMessage,
 } from '@dmitry-n-medvedev/fbs/compiled/mjs/ts/svelte-websocket-demo/timestamp-message.mjs';
 
 export const deserializeTimestampMessage = (
-  /** @type {flatbuffers.Builder} */
-  builder = null,
-  /** @type {number} */
-  timestamp = 0,
+  /** @type {Uint8Array} */
+  byteArray = null,
 ) => {
-  builder.finish(TimestampMessage.createTimestampMessage(builder, timestamp));
+  const buffer = new flatbuffers.ByteBuffer(byteArray);
 
-  return builder.asUint8Array();
+  return TimestampMessage.getRootAsTimestampMessage(buffer).timestamp();
 };
