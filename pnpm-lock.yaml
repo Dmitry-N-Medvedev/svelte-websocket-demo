@@ -117,7 +117,7 @@ importers:
       uWebSockets.js: github:uNetworking/uWebSockets.js#v20.15.0
       ws: ^8.11.0
     dependencies:
-      '@dmitry-n-medvedev/common': link:../../../common
+      '@dmitry-n-medvedev/common': file:sources/common
       dotenv: 16.0.3
       nanoid: 4.0.0
       uWebSockets.js: github.com/uNetworking/uWebSockets.js/77bc1fd5577ae42b56675912eb8481a31f3fefd2
@@ -203,31 +203,6 @@ importers:
         injected: true
       inter-ui:
         injected: true
-
-  sources/fsm/front-end:
-    specifiers:
-      c8: ^7.12.0
-      chai: ^4.3.7
-      eslint: ^8.30.0
-      eslint-config-airbnb-base: ^15.0.0
-      eslint-plugin-chai-friendly: ^0.7.2
-      eslint-plugin-import: ^2.26.0
-      eslint-plugin-node: ^11.1.0
-      mocha: ^10.2.0
-      nanoid: ^4.0.0
-      xstate: ^4.35.1
-    dependencies:
-      xstate: 4.35.1
-    devDependencies:
-      c8: 7.12.0
-      chai: 4.3.7
-      eslint: 8.30.0
-      eslint-config-airbnb-base: 15.0.0_2lbwmhbr7bncddqbzzpg77o75m
-      eslint-plugin-chai-friendly: 0.7.2_eslint@8.30.0
-      eslint-plugin-import: 2.26.0_eslint@8.30.0
-      eslint-plugin-node: 11.1.0_eslint@8.30.0
-      mocha: 10.2.0
-      nanoid: 4.0.0
 
   sources/serde/deserializers/TimestampMessage:
     specifiers:
@@ -4258,6 +4233,7 @@ packages:
     resolution: {integrity: sha512-IgBP8piMxe/gf73RTQx7hmnhwz0aaEXYakvqZyE302IXW3HyVNhdNGC+O2MwMAVhLEnvXlvKtGbtJf6wvHihCg==}
     engines: {node: ^14 || ^16 || >=18}
     hasBin: true
+    dev: false
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
@@ -5619,10 +5595,6 @@ packages:
       utf-8-validate:
         optional: true
     dev: true
-
-  /xstate/4.35.1:
-    resolution: {integrity: sha512-imxk6+76HJRt7qHrUnWnAjaHHhAsUKoVa+PXkyaPd3Gll0VjZsy6/L+FkatIJnjI5Kpwp0R8k63KfIFnzVLskQ==}
-    dev: false
 
   /xtend/4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
