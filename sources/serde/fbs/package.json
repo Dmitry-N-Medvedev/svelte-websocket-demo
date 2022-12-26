@@ -1,8 +1,8 @@
 {
-  "name": "@dmitry-n-medvedev/svelte-websocket-demo-serde",
+  "name": "@dmitry-n-medvedev/fbs",
   "private": true,
   "version": "0.0.0",
-  "description": "svelte + websockets",
+  "description": "flatbuffers",
   "type": "module",
   "engines": {
     "node": "19.3.0",
