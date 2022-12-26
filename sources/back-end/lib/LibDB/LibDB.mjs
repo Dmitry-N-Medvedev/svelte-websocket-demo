@@ -49,15 +49,15 @@ export class LibDB extends EventEmitter {
     return this.#db.get(userId);
   }
 
-  deleteUser({ clientId = null }) {
-    if (clientId === null) {
+  deleteUser({ userId = null }) {
+    if (userId === null) {
       throw new ReferenceError('userId is undefined');
     }
 
-    this.#db.delete(clientId);
+    this.#db.delete(userId);
     this.emit(LibDBEvents.USER_DELETED, {
       payload: {
-        clientId,
+        userId,
       },
     });
   }
