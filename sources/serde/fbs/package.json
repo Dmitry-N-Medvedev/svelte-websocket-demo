@@ -15,7 +15,7 @@
   "bin": "bin/compile.mjs",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "rename:js:mjs": "./node_modules/.bin/renamer --force --silent --find .js --replace .mjs **/compiled/mjs/**",
+    "rename:js:mjs": "./node_modules/.bin/renamer --force --silent --find .js --replace .mjs **/generated/mjs/**",
     "lint:mjs": "./node_modules/.bin/eslint ./ --ext .mjs --fix",
     "build:schema": "node ./bin/compile.mjs && pnpm run rename:js:mjs && pnpm run lint:mjs"
   },

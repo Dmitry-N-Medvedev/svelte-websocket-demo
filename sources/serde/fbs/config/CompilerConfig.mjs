@@ -1,6 +1,6 @@
 export const CompilerConfig = Object.freeze({
   compileTo: ['ts'],
-  outputRootDir: './compiled',
+  outputRootDir: './generated',
   rootFile: './schema/main.fbs',
   languages: {
     ts: {
