@@ -5666,7 +5666,7 @@ packages:
     resolution: {directory: sources/back-end/lib/LibDB, type: directory}
     name: '@dmitry-n-medvedev/libdb'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.19.0}
+    engines: {node: 19.3.0, pnpm: 7.20.0}
     requiresBuild: true
     dependencies:
       nanoid: 4.0.0
@@ -5676,7 +5676,7 @@ packages:
     resolution: {directory: sources/back-end/lib/LibWebsocketServer, type: directory}
     name: '@dmitry-n-medvedev/libwebsocketserver'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.19.0}
+    engines: {node: 19.3.0, pnpm: 7.20.0}
     requiresBuild: true
     dependencies:
       '@dmitry-n-medvedev/common': file:sources/common
@@ -5689,7 +5689,7 @@ packages:
     resolution: {directory: sources/common, type: directory}
     name: '@dmitry-n-medvedev/common'
     version: 0.0.0
-    engines: {node: '=19.3.0', pnpm: '=7.19.0'}
+    engines: {node: '=19.3.0', pnpm: '=7.20.0'}
     requiresBuild: true
     dev: false
 
@@ -5697,7 +5697,7 @@ packages:
     resolution: {directory: sources/serde/deserializers/TimestampMessage, type: directory}
     name: '@dmitry-n-medvedev/deserializers.timestampmessage'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.19.0}
+    engines: {node: 19.3.0, pnpm: 7.20.0}
     hasBin: true
     requiresBuild: true
     dependencies:
@@ -5716,7 +5716,7 @@ packages:
     resolution: {directory: sources/serde/fbs, type: directory}
     name: '@dmitry-n-medvedev/fbs'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.19.0}
+    engines: {node: 19.3.0, pnpm: 7.20.0}
     hasBin: true
     requiresBuild: true
     dependencies:
@@ -5742,7 +5742,7 @@ packages:
     resolution: {directory: sources/serde/serializers/TimestampMessage, type: directory}
     name: '@dmitry-n-medvedev/serializers.timestampmessage'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.19.0}
+    engines: {node: 19.3.0, pnpm: 7.20.0}
     requiresBuild: true
     dependencies:
       '@dmitry-n-medvedev/deserializers.timestampmessage': file:sources/serde/deserializers/TimestampMessage
