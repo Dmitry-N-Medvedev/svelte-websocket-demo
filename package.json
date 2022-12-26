@@ -1,6 +1,6 @@
 {
   "name": "@dmitry-n-medvedev/svelte-websocket-demo",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "svelte + websockets",
   "type": "module",
   "packageManager": "pnpm@7.20.0",
