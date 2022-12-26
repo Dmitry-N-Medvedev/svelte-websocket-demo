@@ -12,9 +12,9 @@ export const postProcess = async ({
 }) => {
   const swc = resolve('node_modules/.bin/swc');
   const args = [
-    './compiled/ts',
+    './generated/ts',
     '--out-dir',
-    './compiled/mjs',
+    './generated/mjs',
     '--config-file',
     '.swcrc',
   ];
