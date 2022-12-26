@@ -1,0 +1,45 @@
+import util from 'node:util';
+import {
+  before,
+  after,
+  describe,
+  it,
+} from 'mocha';
+import {
+  expect,
+} from 'chai';
+import flatbuffers from 'flatbuffers';
+import {
+  deserializeTimestampMessage,
+} from '@dmitry-n-medvedev/deserializers.timestampmessage/deserializeTimestampMessage.mjs';
+import {
+  createTimestampMessage,
+} from '../createTimestampMessage.mjs';
+import {
+  mutateTimestampMessage,
+} from '../mutateTimestampMessage.mjs';
+
+describe('serializers', () => {
+  const debuglog = util.debuglog('serializers:specs');
+  const ONE_SECOND = 1000;
+  /** @type {flatbuffers.Builder} */
+  let builder = null;
+
+  before(() => {
+    builder = new flatbuffers.Builder(1024);
+  });
+
+  after(() => {
+    builder = undefined;
+  });
+
+  it('should mutateTimestampMessage', async () => {
+    const initialTimestamp = Date.now();
+    const expectedMutatedTimestamp = initialTimestamp + ONE_SECOND;
+    const initialTimestampMessage = createTimestampMessage(builder, initialTimestamp);
+    const mutatedTimestampMessage = mutateTimestampMessage(initialTimestampMessage, expectedMutatedTimestamp);
+    const deserializedMutatedTimestamp = deserializeTimestampMessage(mutatedTimestampMessage);
+
+    expect(deserializedMutatedTimestamp).to.equal(expectedMutatedTimestamp);
+  });
+});
