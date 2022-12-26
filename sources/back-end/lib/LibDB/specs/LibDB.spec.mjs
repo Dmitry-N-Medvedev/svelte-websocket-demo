@@ -39,7 +39,7 @@ describe(LibDB.name, () => {
 
     expect(libDB.Data.has(userId)).to.be.true;
 
-    libDB.deleteUser(userId);
+    libDB.deleteUser({ userId });
 
     expect(libDB.Data.has(userId)).to.be.false;
   });
@@ -81,7 +81,7 @@ describe(LibDB.name, () => {
     const waitForUserDeletedEvent = (userId) => new Promise((resolve, reject) => {
       try {
         libDB.addListener(LibDBEvents.USER_DELETED, resolve);
-        libDB.deleteUser(userId);
+        libDB.deleteUser({ userId });
       } catch (error) {
         reject(error);
       } finally {
@@ -119,34 +119,32 @@ describe(LibDB.name, () => {
 
     const userData = libDB.Data.get(userId);
 
-    expect(userData.sum).to.equal(expectedSum);
+    expect(userData.wallet).to.equal(expectedSum);
   });
 
-  it(`should handle ${LibDBEvents.SUM_ADDED} event`, async () => {
+  it(`should handle ${LibDBEvents.WALLET_CHANGED} event`, async () => {
     const expectedUserId = nanoid();
     const expectedSum = Math.random() * 10 + 1;
     const waitForSumAddedEvent = (userId, sum) => new Promise((resolve, reject) => {
       try {
-        libDB.addListener(LibDBEvents.SUM_ADDED, resolve);
+        libDB.addListener(LibDBEvents.WALLET_CHANGED, resolve);
         libDB.addSum(userId, sum);
       } catch (error) {
         reject(error);
       } finally {
-        libDB.removeListener(LibDBEvents.SUM_ADDED, resolve);
+        libDB.removeListener(LibDBEvents.WALLET_CHANGED, resolve);
       }
     });
 
     libDB.addUser(expectedUserId);
 
     const {
-      payload: {
-        userId,
-        sum,
-      },
+      userId,
+      wallet,
     } = await waitForSumAddedEvent(expectedUserId, expectedSum);
 
     expect(userId).to.equal(expectedUserId);
-    expect(sum).to.equal(expectedSum);
+    expect(wallet).to.equal(expectedSum);
   });
 
   it('should fail to addSum w/ userId undefined', async () => {
@@ -166,11 +164,11 @@ describe(LibDB.name, () => {
   it('should getUserData', async () => {
     const expectedUserId = nanoid();
     const expectedUserData = Object.freeze({
-      sum: Math.random(),
+      wallet: Math.random(),
     });
 
     libDB.addUser(expectedUserId);
-    libDB.addSum(expectedUserId, expectedUserData.sum);
+    libDB.addSum(expectedUserId, expectedUserData.wallet);
 
     const userData = libDB.getUserData(expectedUserId);
 
