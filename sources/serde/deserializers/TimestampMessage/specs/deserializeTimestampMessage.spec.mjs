@@ -10,19 +10,19 @@ import {
 } from 'chai';
 import flatbuffers from 'flatbuffers';
 import {
-  TimestampMessage,
-} from '@dmitry-n-medvedev/fbs/compiled/mjs/ts/svelte-websocket-demo/timestamp-message.mjs';
+  createTimestampMessage,
+} from '@dmitry-n-medvedev/serializers.timestampmessage/createTimestampMessage.mjs';
 import {
   deserializeTimestampMessage,
 } from '../deserializeTimestampMessage.mjs';
 
-describe('Serializers', () => {
-  const debuglog = util.debuglog('Serializers:specs');
+describe('deserializers', () => {
+  const debuglog = util.debuglog('deserializers:specs');
   /** @type {flatbuffers.Builder} */
   let builder = null;
 
   before(() => {
-    builder = new flatbuffers.Builder(1024);
+    builder = new flatbuffers.Builder(0);
   });
 
   after(() => {
@@ -30,19 +30,11 @@ describe('Serializers', () => {
   });
 
   it('should deserializeTimestampMessage', async () => {
-    const deserialize = (uint8Array) => {
-      const buffer = new flatbuffers.ByteBuffer(uint8Array);
-
-      return TimestampMessage.getRootAsTimestampMessage(buffer).timestamp();
-    };
     const expectedTimestamp = Date.now();
 
     const timestampMessage = createTimestampMessage(builder, expectedTimestamp);
+    const deserializedTimestamp = deserializeTimestampMessage(timestampMessage);
 
-    expect(timestampMessage).to.exist;
-
-    const timestamp = deserialize(timestampMessage);
-
-    expect(timestamp).to.equal(expectedTimestamp);
+    expect(deserializedTimestamp).to.equal(expectedTimestamp);
   });
 });

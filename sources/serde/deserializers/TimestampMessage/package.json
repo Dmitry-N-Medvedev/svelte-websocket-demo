@@ -1,5 +1,5 @@
 {
-  "name": "@dmitry-n-medvedev/deserializers",
+  "name": "@dmitry-n-medvedev/deserializers.timestampmessage",
   "private": true,
   "version": "0.0.0",
   "description": "flatbuffers serializers",
@@ -16,7 +16,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "lint": "./node_modules/.bin/eslint ./ --ext .mjs",
-    "test": "pnpm run lint && NODE_ENV=test NODE_DEBUG=Deserializers* ./node_modules/.bin/c8 ./node_modules/.bin/mocha"
+    "test": "pnpm run lint && NODE_ENV=test NODE_DEBUG=deserializers* ./node_modules/.bin/c8 ./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
   "homepage": "https://github.com/Dmitry-N-Medvedev/svelte-websocket-demo#readme",
   "dependencies": {
     "@dmitry-n-medvedev/fbs": "workspace:^0.0.0",
+    "@dmitry-n-medvedev/serializers.timestampmessage": "workspace:^0.0.0",
     "flatbuffers": "^22.12.6"
   },
   "devDependencies": {
