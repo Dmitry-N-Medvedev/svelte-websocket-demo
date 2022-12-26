@@ -44,14 +44,14 @@ jobs:
         run: pnpm --recursive install
   run-tests:
     runs-on: ubuntu-latest
+    needs: [cache-and-install]
 
     steps:
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          version: 7.20.0
-          run_install: false
-
+      # - uses: pnpm/action-setup@v2
+      #   name: Install pnpm
+      #   id: pnpm-install
+      #   with:
+      #     version: 7.20.0
+      #     run_install: false
       - name: Run tests
         run: pnpm --recursive test
