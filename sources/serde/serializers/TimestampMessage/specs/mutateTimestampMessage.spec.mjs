@@ -36,10 +36,14 @@ describe('serializers', () => {
   it('should mutateTimestampMessage', async () => {
     const initialTimestamp = Date.now();
     const expectedMutatedTimestamp = initialTimestamp + ONE_SECOND;
+
+    expect(initialTimestamp).to.not.equal(expectedMutatedTimestamp);
+
     const initialTimestampMessage = createTimestampMessage(builder, initialTimestamp);
     const mutatedTimestampMessage = mutateTimestampMessage(initialTimestampMessage, expectedMutatedTimestamp);
     const deserializedMutatedTimestamp = deserializeTimestampMessage(mutatedTimestampMessage);
 
     expect(deserializedMutatedTimestamp).to.equal(expectedMutatedTimestamp);
+    expect(deserializedMutatedTimestamp).to.not.equal(initialTimestamp);
   });
 });
