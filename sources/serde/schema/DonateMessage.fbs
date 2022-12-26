@@ -1,0 +1,7 @@
+namespace SvelteWebsocketDemo;
+
+table DonateMessage {
+  money: float64;
+}
+
+root_type DonateMessage;
