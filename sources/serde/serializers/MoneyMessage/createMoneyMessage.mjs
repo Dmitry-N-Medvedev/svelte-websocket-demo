@@ -1,6 +1,6 @@
 import {
   MoneyMessage,
-} from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/money-message.mjs';
+} from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/money-message.js';
 
 export const createMoneyMessage = (
   /** @type {flatbuffers.Builder} */

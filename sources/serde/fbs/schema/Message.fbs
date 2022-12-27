@@ -1,0 +1,17 @@
+include "TimestampMessage.fbs";
+include "MoneyMessage.fbs";
+include "DonateMessage.fbs";
+
+namespace SvelteWebsocketDemo;
+
+union AnyMessage {
+  TimestampMessage,
+  MoneyMessage,
+  DonateMessage,
+}
+
+table Message {
+  payload: AnyMessage;
+}
+
+root_type Message;
