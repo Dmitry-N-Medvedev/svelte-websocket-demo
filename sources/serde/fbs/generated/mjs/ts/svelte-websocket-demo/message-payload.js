@@ -3,15 +3,15 @@ import { DonateMessage } from './donate-message.js';
 import { MoneyMessage } from './money-message.js';
 import { TimestampMessage } from './timestamp-message.js';
 
-export var AnyMessage;
-(function (AnyMessage) {
-  AnyMessage[AnyMessage.NONE = 0] = 'NONE';
-  AnyMessage[AnyMessage.TimestampMessage = 1] = 'TimestampMessage';
-  AnyMessage[AnyMessage.MoneyMessage = 2] = 'MoneyMessage';
-  AnyMessage[AnyMessage.DonateMessage = 3] = 'DonateMessage';
-}(AnyMessage || (AnyMessage = {})));
-export function unionToAnyMessage(type, accessor) {
-  switch (AnyMessage[type]) {
+export var MessagePayload;
+(function (MessagePayload) {
+  MessagePayload[MessagePayload.NONE = 0] = 'NONE';
+  MessagePayload[MessagePayload.TimestampMessage = 1] = 'TimestampMessage';
+  MessagePayload[MessagePayload.MoneyMessage = 2] = 'MoneyMessage';
+  MessagePayload[MessagePayload.DonateMessage = 3] = 'DonateMessage';
+}(MessagePayload || (MessagePayload = {})));
+export function unionToMessagePayload(type, accessor) {
+  switch (MessagePayload[type]) {
     case 'NONE':
       return null;
     case 'TimestampMessage':
@@ -24,8 +24,8 @@ export function unionToAnyMessage(type, accessor) {
       return null;
   }
 }
-export function unionListToAnyMessage(type, accessor, index) {
-  switch (AnyMessage[type]) {
+export function unionListToMessagePayload(type, accessor, index) {
+  switch (MessagePayload[type]) {
     case 'NONE':
       return null;
     case 'TimestampMessage':

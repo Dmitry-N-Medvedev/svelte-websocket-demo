@@ -5,18 +5,18 @@ import { MoneyMessage } from '../svelte-websocket-demo/money-message.js';
 import { TimestampMessage } from '../svelte-websocket-demo/timestamp-message.js';
 
 
-export enum AnyMessage {
+export enum MessagePayload {
   NONE = 0,
   TimestampMessage = 1,
   MoneyMessage = 2,
   DonateMessage = 3
 }
 
-export function unionToAnyMessage(
-  type: AnyMessage,
+export function unionToMessagePayload(
+  type: MessagePayload,
   accessor: (obj:DonateMessage|MoneyMessage|TimestampMessage) => DonateMessage|MoneyMessage|TimestampMessage|null
 ): DonateMessage|MoneyMessage|TimestampMessage|null {
-  switch(AnyMessage[type]) {
+  switch(MessagePayload[type]) {
     case 'NONE': return null; 
     case 'TimestampMessage': return accessor(new TimestampMessage())! as TimestampMessage;
     case 'MoneyMessage': return accessor(new MoneyMessage())! as MoneyMessage;
@@ -25,12 +25,12 @@ export function unionToAnyMessage(
   }
 }
 
-export function unionListToAnyMessage(
-  type: AnyMessage, 
+export function unionListToMessagePayload(
+  type: MessagePayload, 
   accessor: (index: number, obj:DonateMessage|MoneyMessage|TimestampMessage) => DonateMessage|MoneyMessage|TimestampMessage|null, 
   index: number
 ): DonateMessage|MoneyMessage|TimestampMessage|null {
-  switch(AnyMessage[type]) {
+  switch(MessagePayload[type]) {
     case 'NONE': return null; 
     case 'TimestampMessage': return accessor(index, new TimestampMessage())! as TimestampMessage;
     case 'MoneyMessage': return accessor(index, new MoneyMessage())! as MoneyMessage;

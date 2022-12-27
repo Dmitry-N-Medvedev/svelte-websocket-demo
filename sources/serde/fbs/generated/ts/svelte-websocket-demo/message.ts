@@ -2,7 +2,7 @@
 
 import * as flatbuffers from 'flatbuffers';
 
-import { AnyMessage, unionToAnyMessage, unionListToAnyMessage } from '../svelte-websocket-demo/any-message.js';
+import { MessagePayload, unionToMessagePayload, unionListToMessagePayload } from '../svelte-websocket-demo/message-payload.js';
 
 
 export class Message {
@@ -23,9 +23,9 @@ static getSizePrefixedRootAsMessage(bb:flatbuffers.ByteBuffer, obj?:Message):Mes
   return (obj || new Message()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-payloadType():AnyMessage {
+payloadType():MessagePayload {
   const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : AnyMessage.NONE;
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : MessagePayload.NONE;
 }
 
 payload<T extends flatbuffers.Table>(obj:any):any|null {
@@ -37,8 +37,8 @@ static startMessage(builder:flatbuffers.Builder) {
   builder.startObject(2);
 }
 
-static addPayloadType(builder:flatbuffers.Builder, payloadType:AnyMessage) {
-  builder.addFieldInt8(0, payloadType, AnyMessage.NONE);
+static addPayloadType(builder:flatbuffers.Builder, payloadType:MessagePayload) {
+  builder.addFieldInt8(0, payloadType, MessagePayload.NONE);
 }
 
 static addPayload(builder:flatbuffers.Builder, payloadOffset:flatbuffers.Offset) {
@@ -58,7 +58,7 @@ static finishSizePrefixedMessageBuffer(builder:flatbuffers.Builder, offset:flatb
   builder.finish(offset, undefined, true);
 }
 
-static createMessage(builder:flatbuffers.Builder, payloadType:AnyMessage, payloadOffset:flatbuffers.Offset):flatbuffers.Offset {
+static createMessage(builder:flatbuffers.Builder, payloadType:MessagePayload, payloadOffset:flatbuffers.Offset):flatbuffers.Offset {
   Message.startMessage(builder);
   Message.addPayloadType(builder, payloadType);
   Message.addPayload(builder, payloadOffset);
