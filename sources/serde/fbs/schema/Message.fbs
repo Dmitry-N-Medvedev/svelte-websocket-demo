@@ -4,14 +4,14 @@ include "DonateMessage.fbs";
 
 namespace SvelteWebsocketDemo;
 
-union AnyMessage {
+union MessagePayload {
   TimestampMessage,
   MoneyMessage,
   DonateMessage,
 }
 
 table Message {
-  payload: AnyMessage;
+  payload: MessagePayload;
 }
 
 root_type Message;
