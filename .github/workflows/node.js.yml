@@ -52,6 +52,12 @@ jobs:
     needs: [install-dependencies]
 
     steps:
+      - name: get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "PNPM_STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
       - uses: actions/cache@v3
         name: restore pnpm cache
         with:
