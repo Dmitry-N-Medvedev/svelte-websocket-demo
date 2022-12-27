@@ -47,11 +47,11 @@ jobs:
       - name: install dependencies
         run: pnpm --recursive install
 
-  # run-tests:
-  #   runs-on: ubuntu-latest
-  #   needs: [install-dependencies]
+  run-tests:
+    runs-on: ubuntu-latest
+    needs: [install-dependencies]
 
-    # steps:
+    steps:
       - uses: actions/cache@v3
         name: restore pnpm cache
         with:
