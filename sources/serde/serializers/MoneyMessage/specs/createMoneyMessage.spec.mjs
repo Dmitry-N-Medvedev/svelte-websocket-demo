@@ -10,8 +10,8 @@ import {
 } from 'chai';
 import flatbuffers from 'flatbuffers';
 import {
-  MoneyMessage,
-} from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/money-message.mjs';
+  deserializeMoneyMessage,
+} from '@dmitry-n-medvedev/deserializers.moneymessage/deserializeMoneyMessage.mjs';
 import {
   createMoneyMessage,
 } from '../createMoneyMessage.mjs';
@@ -30,16 +30,13 @@ describe('serializers', () => {
   });
 
   it('should createMoneyMessage', async () => {
-    const expectedWallet = Math.random() * 10;
-    const expectedDelta = Math.random() * 10 + 1;
-    const moneyMessage = createMoneyMessage(builder, expectedWallet, expectedDelta);
-    const buffer = new flatbuffers.ByteBuffer(moneyMessage);
+    const expectedInput = {
+      wallet: Math.random() * 10,
+      delta: Math.random() * 10 + 1,
+    };
+    const moneyMessage = createMoneyMessage(builder, expectedInput.wallet, expectedInput.delta);
+    const moneyMessageObject = deserializeMoneyMessage(moneyMessage);
 
-    const moneyMessageObject = MoneyMessage.getRootAsMoneyMessage(buffer);
-    const wallet = moneyMessageObject.wallet();
-    const delta = moneyMessageObject.delta();
-
-    expect(wallet).to.equal(expectedWallet);
-    expect(delta).to.equal(expectedDelta);
+    expect(moneyMessageObject).to.deep.equal(expectedInput);
   });
 });
