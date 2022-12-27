@@ -11,20 +11,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: install node.js
+        id: node-install
+        uses: actions/setup-node@v3
         with:
-          version: 7.20.0
-      - uses: actions/setup-node@v3
-        with:
-          # node-version: 19.3.0
           node-version-file: 'package.json'
-          cache: 'pnpm'
+          # cache: 'pnpm'
           cache-dependency-path: '**/pnpm-lock.yaml'
           check-latest: false
 
-      # - name: Checkout
-      #   uses: actions/checkout@v3
+      - name: install pnpm
+        id: pnpm-install
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7.20.0
+          run_install: false
+
+      - name: get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "PNPM_STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.PNPM_STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: install dependencies
+        run: pnpm --recursive install
 
       # - uses: pnpm/action-setup@v2
       #   name: Install pnpm
