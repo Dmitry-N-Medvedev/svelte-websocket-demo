@@ -26,6 +26,9 @@ module.exports = {
     },
   },
   rules: {
+    'no-var': 0,
+    'func-names': 0,
+    'no-shadow': 0,
     'no-underscore-dangle': 0,
     'no-unused-expressions': 0,
     'chai-friendly/no-unused-expressions': 2,
