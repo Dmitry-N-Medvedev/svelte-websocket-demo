@@ -52,12 +52,13 @@ jobs:
     needs: [install-dependencies]
 
     steps:
-      - uses: actions/cache@v3
-        name: restore pnpm cache
+      - name: restore pnpm cache
+        uses: actions/cache@v3
         with:
           path: ${{ steps.pnpm-cache.outputs.PNPM_STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+
       - name: run tests
         run: pnpm --recursive test
