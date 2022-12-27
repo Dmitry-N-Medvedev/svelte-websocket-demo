@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/Dmitry-N-Medvedev/svelte-websocket-demo#readme",
   "dependencies": {
+    "@dmitry-n-medvedev/deserializers.moneymessage": "workspace:^0.0.0",
     "@dmitry-n-medvedev/fbs": "workspace:^0.0.0",
     "flatbuffers": "^22.12.6"
   },
