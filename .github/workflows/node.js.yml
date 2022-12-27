@@ -52,8 +52,8 @@ jobs:
     needs: [install-dependencies]
 
     steps:
-      - name: restore pnpm cache
-        uses: actions/cache@v3
+      - uses: actions/cache@v3
+        name: restore pnpm cache
         with:
           path: ${{ steps.pnpm-cache.outputs.PNPM_STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
