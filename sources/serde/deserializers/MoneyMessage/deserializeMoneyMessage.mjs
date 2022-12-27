@@ -1,7 +1,7 @@
 import flatbuffers from 'flatbuffers';
 import {
   MoneyMessage,
-} from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/money-message.mjs';
+} from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/money-message.js';
 
 export const deserializeMoneyMessage = (
   /** @type {Uint8Array} */

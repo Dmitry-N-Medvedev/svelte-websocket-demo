@@ -1,7 +1,7 @@
 import flatbuffers from 'flatbuffers';
 import {
   TimestampMessage,
-} from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/timestamp-message.mjs';
+} from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/timestamp-message.js';
 
 export const deserializeTimestampMessage = (
   /** @type {Uint8Array} */

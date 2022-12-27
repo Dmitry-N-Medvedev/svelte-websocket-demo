@@ -1,7 +1,7 @@
 export const CompilerConfig = Object.freeze({
   compileTo: ['ts'],
   outputRootDir: './generated',
-  rootFile: './schema/main.fbs',
+  rootFile: './schema/Message.fbs',
   languages: {
     ts: {
       generatorOptions: [

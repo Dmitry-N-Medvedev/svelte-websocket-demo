@@ -1,5 +1,0 @@
-include "TimestampMessage.fbs";
-include "MoneyMessage.fbs";
-include "DonateMessage.fbs";
-
-namespace SvelteWebsocketDemo;
