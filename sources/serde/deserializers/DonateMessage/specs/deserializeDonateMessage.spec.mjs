@@ -29,10 +29,10 @@ describe('serializers', () => {
     builder = undefined;
   });
 
-  it('should deserializeDonateMessage', async () => {
+  it('should deserializeDonateMessage ( using Flatbuffers Union )', async () => {
     const expectedMoney = Math.random() * 10;
-    const donateMessage = createDonateMessage(builder, expectedMoney);
-    const money = deserializeDonateMessage(donateMessage);
+    const donateMessageBytes = createDonateMessage(builder, expectedMoney);
+    const money = deserializeDonateMessage(donateMessageBytes);
 
     expect(money).to.equal(expectedMoney);
   });
