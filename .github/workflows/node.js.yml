@@ -1,57 +1,37 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ main ]
+  # push:
+  #   branches: [ main ]
   pull_request:
     branches: [ main ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
-  cache-and-install:
+  install-dependencies-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 19.3.0
+          node-version-file: 'package.json'
+          cache-dependency-path: 'pnpm-lock.yaml'
+          check-latest: false
+          # cache: 'pnpm'
 
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
+      - name: install pnpm
         id: pnpm-install
+        uses: pnpm/action-setup@v2
         with:
           version: 7.20.0
           run_install: false
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
+      - name: pnpm install
         run: pnpm --recursive install
-  run-tests:
-    runs-on: ubuntu-latest
 
-    steps:
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          version: 7.20.0
-          run_install: false
-
-      - name: Run tests
+      - name: run tests
         run: pnpm --recursive test
