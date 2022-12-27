@@ -1,0 +1,74 @@
+{
+  "name": "@dmitry-n-medvedev/deserializers.moneymessage",
+  "private": true,
+  "version": "0.0.0",
+  "description": "flatbuffers serializers",
+  "type": "module",
+  "packageManager": "pnpm@7.20.0",
+  "engines": {
+    "node": "19.3.0",
+    "pnpm": "7.20.0"
+  },
+  "engineStrict": true,
+  "volta": {
+    "node": "19.3.0"
+  },
+  "bin": "bin/compile.mjs",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "lint": "./node_modules/.bin/eslint ./ --ext .mjs",
+    "test": "pnpm run lint && NODE_ENV=test NODE_DEBUG=deserializers* ./node_modules/.bin/c8 ./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dmitry-N-Medvedev/svelte-websocket-demo.git"
+  },
+  "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dmitry-N-Medvedev/svelte-websocket-demo/issues"
+  },
+  "homepage": "https://github.com/Dmitry-N-Medvedev/svelte-websocket-demo#readme",
+  "dependencies": {
+    "@dmitry-n-medvedev/fbs": "workspace:^0.0.0",
+    "@dmitry-n-medvedev/serializers.moneymessage": "workspace:^0.0.0",
+    "flatbuffers": "^22.12.6"
+  },
+  "devDependencies": {
+    "c8": "^7.12.0",
+    "chai": "^4.3.7",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.30.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-chai-friendly": "^0.7.2",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "mocha": "^10.2.0"
+  },
+  "mocha": {
+    "allowUncaught": true,
+    "failZero": true,
+    "async-only": false,
+    "bail": true,
+    "checkLeaks": true,
+    "forbidOnly": true,
+    "exit": true,
+    "forbidPending": true,
+    "slow": 50,
+    "timeout": 1000,
+    "color": true,
+    "diff": true,
+    "fullTrace": true,
+    "growl": false,
+    "inline-diffs": true,
+    "reporter": "spec",
+    "noConfig": true,
+    "noOpts": true,
+    "exclude": [
+      "**/node_modules/**/*"
+    ],
+    "spec": [
+      "**/specs/*.mjs"
+    ]
+  }
+}
