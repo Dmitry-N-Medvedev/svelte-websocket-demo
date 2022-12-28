@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  install-dependencies-and-test:
+  run-specs:
     runs-on: ubuntu-latest
 
     steps:
