@@ -29,7 +29,7 @@ describe('deserializers', () => {
     builder = undefined;
   });
 
-  it('should deserializeTimestampMessage', async () => {
+  it('should deserializeTimestampMessage ( using Flatbuffers Union )', async () => {
     const expectedTimestamp = Date.now();
 
     const timestampMessage = createTimestampMessage(builder, expectedTimestamp);
