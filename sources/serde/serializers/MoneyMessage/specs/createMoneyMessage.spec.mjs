@@ -29,14 +29,14 @@ describe('serializers', () => {
     builder = undefined;
   });
 
-  it('should createMoneyMessage', async () => {
+  it('should createMoneyMessage ( using Flatbuffers Union )', async () => {
     const expectedInput = {
       wallet: Math.random() * 10,
       delta: Math.random() * 10 + 1,
     };
-    const moneyMessage = createMoneyMessage(builder, expectedInput.wallet, expectedInput.delta);
-    const moneyMessageObject = deserializeMoneyMessage(moneyMessage);
+    const moneyMessageBytes = createMoneyMessage(builder, expectedInput.wallet, expectedInput.delta);
+    const output = deserializeMoneyMessage(moneyMessageBytes);
 
-    expect(moneyMessageObject).to.deep.equal(expectedInput);
+    expect(output).to.deep.equal(expectedInput);
   });
 });
