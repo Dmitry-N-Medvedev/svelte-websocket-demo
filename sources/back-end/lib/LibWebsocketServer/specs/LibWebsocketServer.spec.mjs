@@ -86,44 +86,4 @@ describe('LibWebsocketServer', function describeLibWebsocketServer() {
 
     client = null;
   });
-
-  // it('should receive 3 ts updates', async function shouldReceiveThreeTsUpdates() {
-  //   const receiveThreeTsUpdates = (client = null) => new Promise((ok, fail) => {
-  //     let messageCount = 0;
-
-  //     client.on('error', (err) => {
-  //       debuglog(['client:on:error =>', err]);
-
-  //       return fail(err);
-  //     });
-
-  //     client.on('message', (message = null) => {
-  //       const messageObject = JSON.parse(decoder.decode(message));
-
-  //       debuglog({ messageObject });
-
-  //       if (messageObject.type === MessageTypes.TS) {
-  //         debuglog('receiveThreeTsUpdates', messageObject);
-
-  //         messageCount += 1;
-  //       }
-
-  //       if (messageCount > 2) {
-  //         client.close();
-  //       }
-  //     });
-
-  //     client.on('close', (code = null, reason = null) => {
-  //       debuglog('client:close', code, `"${reason.toString()}"`);
-
-  //       return ok();
-  //     });
-  //   });
-
-  //   let client = newClient(serverConfig.server.proto, serverConfig.server.host, serverConfig.server.port, '/');
-
-  //   await receiveThreeTsUpdates(client);
-
-  //   client = null;
-  // }).timeout(60000);
 });

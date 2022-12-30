@@ -20,21 +20,12 @@ import {
 import {
   Message,
 } from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/message.js';
-// import {
-//   createServerTSMessage,
-// } from '@dmitry-n-medvedev/common/messages/serializers/createServerTSMessage.mjs';
 import {
   createTimestampMessage,
 } from '@dmitry-n-medvedev/serializers.timestampmessage/createTimestampMessage.mjs';
-// import {
-//   createServerMoneyMessage,
-// } from '@dmitry-n-medvedev/common/messages/serializers/createServerMoneyMessage.mjs';
 import {
   createMoneyMessage,
 } from '@dmitry-n-medvedev/serializers.moneymessage/createMoneyMessage.mjs';
-// import {
-//   MessageTypes,
-// } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
 import {
   deserializeDonateMessage,
 } from '@dmitry-n-medvedev/deserializers.donatemessage/deserializeDonateMessage.mjs';
