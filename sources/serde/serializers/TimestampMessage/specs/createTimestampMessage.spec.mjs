@@ -31,7 +31,7 @@ describe('serializers', () => {
   let builder = null;
 
   before(() => {
-    builder = new flatbuffers.Builder(1024);
+    builder = new flatbuffers.Builder(0);
   });
 
   after(() => {

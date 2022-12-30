@@ -96,7 +96,7 @@ export class EdgeProxy {
   }
 
   start() {
-    this.#builder = new flatbuffers.Builder(1024);
+    this.#builder = new flatbuffers.Builder(0);
 
     this.#broadcastChannels[MessageTypes.PROXY.FROM_SERVER] = new BroadcastChannel(MessageTypes.PROXY.FROM_SERVER);
     this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER_REQ] = new BroadcastChannel(MessageTypes.PROXY.TO_SERVER_REQ);
