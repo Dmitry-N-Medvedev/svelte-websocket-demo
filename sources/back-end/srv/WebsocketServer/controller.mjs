@@ -60,7 +60,7 @@ export class Controller {
   constructor(debuglog = () => {}) {
     this.#debuglog = debuglog;
     this.#decoder = new TextDecoder();
-    this.#builder = new flatbuffers.Builder(1024);
+    this.#builder = new flatbuffers.Builder(0);
   }
 
   // eslint-disable-next-line class-methods-use-this
