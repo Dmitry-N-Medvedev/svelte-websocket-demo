@@ -12,18 +12,24 @@
   import {
     WSOnlineStatusStore,
   } from '$lib/stores/ws-online-status.store.mjs';
+  // import {
+  //   createDonateMessage,
+  // } from '@dmitry-n-medvedev/serializers.donatemessage/createDonateMessage.mjs';
+  // import {
+  //   MessageTypes,
+  // } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
+  // import {
+  //   createDonateMessage,
+  // } from '@dmitry-n-medvedev/common/messages/serializers/createDonateMessage.mjs';
   import {
     MessageTypes,
-  } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
-  import {
-    createDonateMessage,
-  } from '@dmitry-n-medvedev/common/messages/serializers/createDonateMessage.mjs';
+  } from '$lib/constants/MessageTypes.mjs';
 
   let wallet = 0;
   let moneyDelta = 0;
   let moneyDeltaIsNegative = false;
-  /** @type {BroadcastChannel | null} */
-  let toServerChannel = null;
+  /** @type {BroadcastChannel | null | undefined} */
+  let toServerBroadcastChannel = null;
   let IsOffline = true;
 
   $: {
@@ -40,15 +46,20 @@
   });
 
   const handleSubmit = (/** @type {PointerEvent} */ event) => {
-    const donateMessage = createDonateMessage(wallet * 0.1);
+    const donateMessage = Object.freeze({
+      type: MessageTypes.DATA.DONATE,
+      payload: {
+        donate: wallet * 0.1
+      },
+    });
 
     // @ts-ignore
-    toServerChannel.postMessage(donateMessage);
+    toServerBroadcastChannel.postMessage(donateMessage);
   }
 
   onMount(() => {
     if (IsInBrowser === true) {
-      toServerChannel = new BroadcastChannel(MessageTypes.TO_SERVER);
+      toServerBroadcastChannel = new BroadcastChannel(MessageTypes.PROXY.TO_SERVER_REQ);
     }
   });
 
@@ -58,8 +69,9 @@
       unsubscribeFromWSOnlineStatusStore();
     }
 
-    if (toServerChannel) {
-      toServerChannel.close();
+    if (toServerBroadcastChannel) {
+      toServerBroadcastChannel?.close();
+      toServerBroadcastChannel = undefined;
     }
   });
 </script>
