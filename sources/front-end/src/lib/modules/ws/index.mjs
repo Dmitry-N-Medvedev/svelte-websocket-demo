@@ -76,8 +76,6 @@ export class WSClient {
   }
 
   #handleToServerRawMessages(messageEvent) {
-    console.log('#handleToServerRawMessages', messageEvent.data);
-
     this.#client.send(messageEvent.data);
   }
   

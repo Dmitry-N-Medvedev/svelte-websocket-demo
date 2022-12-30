@@ -138,7 +138,9 @@ importers:
   sources/back-end/srv/WebsocketServer:
     specifiers:
       '@dmitry-n-medvedev/common': workspace:^0.0.0
+      '@dmitry-n-medvedev/deserializers.donatemessage': workspace:^0.0.0
       '@dmitry-n-medvedev/deserializers.moneymessage': workspace:^0.0.0
+      '@dmitry-n-medvedev/fbs': workspace:^0.0.0
       '@dmitry-n-medvedev/libdb': workspace:^0.0.0
       '@dmitry-n-medvedev/libwebsocketserver': workspace:^0.0.0
       '@dmitry-n-medvedev/serializers.moneymessage': workspace:^0.0.0
@@ -149,7 +151,9 @@ importers:
       nodemon: ^2.0.20
     dependencies:
       '@dmitry-n-medvedev/common': file:sources/common
+      '@dmitry-n-medvedev/deserializers.donatemessage': file:sources/serde/deserializers/DonateMessage
       '@dmitry-n-medvedev/deserializers.moneymessage': file:sources/serde/deserializers/MoneyMessage
+      '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
       '@dmitry-n-medvedev/libdb': file:sources/back-end/lib/LibDB
       '@dmitry-n-medvedev/libwebsocketserver': file:sources/back-end/lib/LibWebsocketServer
       '@dmitry-n-medvedev/serializers.moneymessage': file:sources/serde/serializers/MoneyMessage
@@ -162,7 +166,11 @@ importers:
     dependenciesMeta:
       '@dmitry-n-medvedev/common':
         injected: true
+      '@dmitry-n-medvedev/deserializers.donatemessage':
+        injected: true
       '@dmitry-n-medvedev/deserializers.moneymessage':
+        injected: true
+      '@dmitry-n-medvedev/fbs':
         injected: true
       '@dmitry-n-medvedev/libdb':
         injected: true
@@ -5843,6 +5851,23 @@ packages:
     version: 0.0.0
     engines: {node: '=19.3.0', pnpm: '=7.20.0'}
     requiresBuild: true
+    dev: false
+
+  file:sources/serde/deserializers/DonateMessage:
+    resolution: {directory: sources/serde/deserializers/DonateMessage, type: directory}
+    name: '@dmitry-n-medvedev/deserializers.donatemessage'
+    version: 0.0.0
+    engines: {node: 19.3.0, pnpm: 7.20.0}
+    requiresBuild: true
+    dependencies:
+      '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
+      flatbuffers: 22.12.6
+    transitivePeerDependencies:
+      - '@typescript-eslint/parser'
+      - chokidar
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - supports-color
     dev: false
 
   file:sources/serde/deserializers/MoneyMessage:

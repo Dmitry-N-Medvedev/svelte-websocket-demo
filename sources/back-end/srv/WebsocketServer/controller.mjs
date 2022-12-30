@@ -1,5 +1,8 @@
 import flatbuffers from 'flatbuffers';
 import {
+  MessagePayload,
+} from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/message-payload.js';
+import {
   LibWebsocketServer,
 } from '@dmitry-n-medvedev/libwebsocketserver/LibWebsocketServer.mjs';
 import {
@@ -14,6 +17,9 @@ import {
 import {
   LibDBEvents,
 } from '@dmitry-n-medvedev/libdb/LibDBEvents.mjs';
+import {
+  Message,
+} from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/message.js';
 // import {
 //   createServerTSMessage,
 // } from '@dmitry-n-medvedev/common/messages/serializers/createServerTSMessage.mjs';
@@ -26,9 +32,12 @@ import {
 import {
   createMoneyMessage,
 } from '@dmitry-n-medvedev/serializers.moneymessage/createMoneyMessage.mjs';
+// import {
+//   MessageTypes,
+// } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
 import {
-  MessageTypes,
-} from '@dmitry-n-medvedev/common/MessageTypes.mjs';
+  deserializeDonateMessage,
+} from '@dmitry-n-medvedev/deserializers.donatemessage/deserializeDonateMessage.mjs';
 import {
   donateMessageHandler,
 } from './handlers/donateMessageHandler.mjs';
@@ -102,23 +111,33 @@ export class Controller {
     this.#libDB = undefined;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  #handleWebsocketServerMessage(messageEvent) {
+  #handleClientMessage(messageEvent) {
     const {
       ws,
       message,
+      isBinary,
     } = messageEvent;
 
-    const messageObject = JSON.parse(this.#decoder.decode(message));
+    if (isBinary === false) {
+      this.#debuglog('message is not binary');
 
-    switch (messageObject.type) {
-      case MessageTypes.DONATE: {
-        donateMessageHandler(this.#libDB, ws.id, messageObject, this.#libWebsocketServer.Clients, this.#debuglog);
+      return;
+    }
+
+    const byteArray = new Uint8Array(message);
+    const messageObject = Message.getRootAsMessage(new flatbuffers.ByteBuffer(byteArray));
+    const messageObjectPayloadType = messageObject.payloadType();
+
+    switch (messageObjectPayloadType) {
+      case MessagePayload.DonateMessage: {
+        const donation = deserializeDonateMessage(byteArray);
+
+        donateMessageHandler(this.#libDB, ws.id, { payload: donation }, this.#libWebsocketServer.Clients, this.#debuglog);
 
         break;
       }
       default: {
-        this.#debuglog('handleWebsocketServerMessage: unknown message type', messageObject);
+        this.#debuglog('handleClientMessage: unknown message type', messageObject);
       }
     }
   }
@@ -137,7 +156,7 @@ export class Controller {
     this.#libWebsocketServer = new LibWebsocketServer(serverConfig);
     this.#libWebsocketServer.Events.addListener(LibWebsocketServerEvents.CLIENT_CONNECTED, this.#handleClientConnectedEvent.bind(this));
     this.#libWebsocketServer.Events.addListener(LibWebsocketServerEvents.CLIENT_DISCONNECTED, this.#handleClientDisconnectedEvent.bind(this));
-    this.#libWebsocketServer.Events.addListener(LibWebsocketServerEvents.MESSAGE_EVENT, this.#handleWebsocketServerMessage.bind(this));
+    this.#libWebsocketServer.Events.addListener(LibWebsocketServerEvents.MESSAGE_EVENT, this.#handleClientMessage.bind(this));
 
     await this.#libWebsocketServer.start();
   }

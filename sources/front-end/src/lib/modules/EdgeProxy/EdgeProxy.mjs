@@ -85,8 +85,6 @@ export class EdgeProxy {
 
         this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER_RAW].postMessage(donateMessageBytes);
 
-        console.log('#handleToServerMessage', type, payload, donate, donateMessageBytes);
-
         break;
       }
       default: {
