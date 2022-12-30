@@ -8,8 +8,6 @@ import {
   EdgeProxy,
 } from '$lib/modules/EdgeProxy/EdgeProxy.mjs';
 
-console.log('HALLO');
-
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 const startedMessage = Object.freeze(encoder.encode(JSON.stringify({
@@ -32,8 +30,6 @@ self.onerror = (errorEvent) => {
 }
 
 self.onmessage = (messageEvent) => {
-  console.log('self.onmessage', messageEvent.data);
-
   const {
     data,
   } = messageEvent;
