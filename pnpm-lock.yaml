@@ -203,7 +203,7 @@ importers:
       '@dmitry-n-medvedev/common': file:sources/common
       '@dmitry-n-medvedev/deserializers.moneymessage': file:sources/serde/deserializers/MoneyMessage
       '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
-      '@dmitry-n-medvedev/serializers.donatemessage': link:../serde/serializers/DonateMessage
+      '@dmitry-n-medvedev/serializers.donatemessage': file:sources/serde/serializers/DonateMessage
       flatbuffers: 22.12.6
       inter-ui: 3.19.3
     devDependencies:
@@ -226,6 +226,8 @@ importers:
       '@dmitry-n-medvedev/deserializers.moneymessage':
         injected: true
       '@dmitry-n-medvedev/fbs':
+        injected: true
+      '@dmitry-n-medvedev/serializers.donatemessage':
         injected: true
       inter-ui:
         injected: true
@@ -5879,6 +5881,23 @@ packages:
       execa: 6.1.0
       flatbuffers: 22.12.6
       renamer: 4.0.0
+    transitivePeerDependencies:
+      - '@typescript-eslint/parser'
+      - chokidar
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - supports-color
+    dev: false
+
+  file:sources/serde/serializers/DonateMessage:
+    resolution: {directory: sources/serde/serializers/DonateMessage, type: directory}
+    name: '@dmitry-n-medvedev/serializers.donatemessage'
+    version: 0.0.0
+    engines: {node: 19.3.0, pnpm: 7.20.0}
+    requiresBuild: true
+    dependencies:
+      '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
+      flatbuffers: 22.12.6
     transitivePeerDependencies:
       - '@typescript-eslint/parser'
       - chokidar
