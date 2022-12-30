@@ -1,6 +1,6 @@
 import {
-  WorkerProtocolMessages,
-} from '$lib/workers/WorkerProtocolMessages.mjs';
+  MessageTypes,
+} from '$lib/constants/MessageTypes.mjs';
 import {
   dev as InDevMode,
 } from '$app/environment';
@@ -28,7 +28,7 @@ export class Ldr {
     this.#workers = new Map();
 
     this.#stopMessage = Object.freeze(this.#encoder.encode(JSON.stringify({
-      type: WorkerProtocolMessages.STOP,
+      type: MessageTypes.PROTO.WORKER.STOP_REQ,
       payload: {},
     })).buffer);
   }
@@ -64,6 +64,10 @@ export class Ldr {
       credentials: 'include',
       name: 'wsWorker',
     }));
+
+    console.log({
+      workers: this.#workers,
+    })
   }
 
   #handleWorkerMessage({ data }) {
@@ -73,12 +77,12 @@ export class Ldr {
     } = JSON.parse(this.#decoder.decode(data))
 
     switch(type) {
-      case WorkerProtocolMessages.STARTed: {
+      case MessageTypes.PROTO.WORKER.START_RES: {
         console.log(`${payload.name} has ${type}`);
 
         break;
       }
-      case WorkerProtocolMessages.STOPped: {
+      case MessageTypes.PROTO.WORKER.STOP_RES: {
         console.log(`${payload.name} has ${type}`);
 
         this.#workers.get(payload.name).removeEventListener('message', this.#handleWorkerMessage.bind(this));
@@ -100,14 +104,14 @@ export class Ldr {
   async #startWorkers() {
     for await (const [workerName, worker] of this.#workers) {
       const startMessage = Object.freeze(this.#encoder.encode(JSON.stringify({
-        type: WorkerProtocolMessages.START,
+        type: MessageTypes.PROTO.WORKER.START_REQ,
         payload: this.#workersConfig[workerName],
       })).buffer);
       
       worker.addEventListener('message', this.#handleWorkerMessage.bind(this));
       worker.postMessage(startMessage, [ startMessage ]);
 
-      console.log(`requested ${workerName} to ${WorkerProtocolMessages.START}`);
+      console.log(`requested ${workerName} to ${MessageTypes.PROTO.WORKER.START_REQ}`);
     }
   }
 
@@ -115,12 +119,12 @@ export class Ldr {
     for await (const [workerName, worker] of this.#workers) {
       worker.postMessage(this.#stopMessage);
 
-      console.log(`requested ${workerName} to ${WorkerProtocolMessages.STOP}`);
+      console.log(`requested ${workerName} to ${MessageTypes.PROTO.WORKER.STOP_REQ}`);
     }
   }
 
   async start() {
-    await this.#loadServiceWorker();
+    // await this.#loadServiceWorker();
     await this.#loadWSClientWebWorker();
 
     await this.#startWorkers();

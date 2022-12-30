@@ -15,7 +15,7 @@ const createMoneyStore = () => {
 
   return {
     subscribe,
-    updateMoneyFromServer: ({ userId = null, wallet = 0.0, delta = 0.0 }) => update((currentState) => {
+    updateMoneyFromServer: ({ wallet = 0.0, delta = 0.0 }) => update((currentState) => {
       currentState.wallet = wallet;
       currentState.delta = delta;
 

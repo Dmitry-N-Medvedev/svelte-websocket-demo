@@ -9,18 +9,6 @@ import {
 import {
   readJson,
 } from './readJson.mjs';
-// import {
-//   MessageTypes,
-// } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
-// import {
-//   createServerTSMessage,
-// } from '@dmitry-n-medvedev/common/messages/serializers/createServerTSMessage.mjs';
-// import {
-//   createServerMoneyMessage,
-// } from '@dmitry-n-medvedev/common/messages/serializers/createServerMoneyMessage.mjs';
-// import {
-//   donateMessageHandler,
-// } from './handlers/donateMessageHandler.mjs';
 import {
   LibWebsocketServerEvents,
 } from './LibWebsocketServerEvents.mjs';
@@ -77,9 +65,13 @@ export class LibWebsocketServer {
       throw new ReferenceError('message is undefined');
     }
 
-    /** @type {uWS.WebSocket} */ const client = this.#clients.get(clientId);
+    try {
+      const client = this.#clients.get(clientId);
 
-    client.send(message, SHOULD_MESSAGE_BE_BINARY, SHOULD_MESSAGE_BE_COMPRESSED);
+      client.send(message, SHOULD_MESSAGE_BE_BINARY, SHOULD_MESSAGE_BE_COMPRESSED);
+    } catch (error) {
+      this.#debuglog(error);
+    }
   }
 
   start() {
@@ -159,6 +151,8 @@ export class LibWebsocketServer {
           },
           // eslint-disable-next-line no-unused-vars
           close: (ws, code, message) => {
+            console.log('CLOSE', ws.id);
+
             // ws.unsubscribe(Topics.SERVER.TS);
 
             this.#clients.delete(ws.id);

@@ -49,7 +49,7 @@ export class LibDB extends EventEmitter {
     return this.#db.get(userId);
   }
 
-  deleteUser({ userId = null }) {
+  deleteUser(userId = null) {
     if (userId === null) {
       throw new ReferenceError('userId is undefined');
     }

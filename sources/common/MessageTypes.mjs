@@ -5,4 +5,5 @@ export const MessageTypes = Object.freeze({
   DONATE: 'donate',
   ONLINE_STATUS: 'online-status',
   TO_SERVER: 'to-server',
+  FROM_SERVER: 'from-server',
 });
