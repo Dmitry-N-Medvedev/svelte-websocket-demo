@@ -39,7 +39,7 @@ describe(LibDB.name, () => {
 
     expect(libDB.Data.has(userId)).to.be.true;
 
-    libDB.deleteUser({ userId });
+    libDB.deleteUser(userId);
 
     expect(libDB.Data.has(userId)).to.be.false;
   });
@@ -81,7 +81,7 @@ describe(LibDB.name, () => {
     const waitForUserDeletedEvent = (userId) => new Promise((resolve, reject) => {
       try {
         libDB.addListener(LibDBEvents.USER_DELETED, resolve);
-        libDB.deleteUser({ userId });
+        libDB.deleteUser(userId);
       } catch (error) {
         reject(error);
       } finally {

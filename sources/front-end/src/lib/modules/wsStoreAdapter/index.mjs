@@ -1,6 +1,9 @@
 import {
   MessageTypes,
-} from '@dmitry-n-medvedev/common/MessageTypes.mjs';
+} from '$lib/constants/MessageTypes.mjs';
+import {
+  MessagePayload,
+} from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/message-payload.js';
 import {
   MoneyStore,
 } from '$lib/stores/money.store.mjs';
@@ -12,20 +15,19 @@ import {
 } from '$lib/stores/ws-online-status.store.mjs';
 
 export class WsStoreAdapter {
-  #channels = null;
+  #broadcastChannels = null;
 
   constructor() {
-    this.#channels = {
+    this.#broadcastChannels = {
       moneyStoreChannel: null,
-      tsStoreChannel: null,
-      wsOnlineStatusChannel: null,
+      [MessageTypes.PROTO.CONNECTION.STATUS]: null,
+      [MessageTypes.DATA.TIMESTAMP]: null,
+      [MessageTypes.DATA.MONEY]: null,
     };
   }
 
   #handleMoneyStoreChannelMessage(messageEvent) {
-    if (messageEvent.data.type === MessageTypes.MONEY) {
-      MoneyStore.updateMoneyFromServer(messageEvent.data.payload);
-    }
+    MoneyStore.updateMoneyFromServer(messageEvent.data.payload);
   }
 
   #handleWsOnlineStatusChannelMessage(messageEvent) {
@@ -37,27 +39,24 @@ export class WsStoreAdapter {
   }
 
   start() {
-    this.#channels.moneyStoreChannel = new BroadcastChannel(MessageTypes.MONEY);
-    this.#channels.moneyStoreChannel.addEventListener('message', this.#handleMoneyStoreChannelMessage.bind(this));
+    this.#broadcastChannels[MessageTypes.DATA.MONEY] = new BroadcastChannel(MessageTypes.DATA.MONEY);
+    this.#broadcastChannels[MessageTypes.DATA.MONEY].addEventListener('message', this.#handleMoneyStoreChannelMessage.bind(this));
 
-    this.#channels.tsStoreChannel = new BroadcastChannel(MessageTypes.TS);
-    this.#channels.tsStoreChannel.addEventListener('message', this.#handleTsStoreChannelMessage.bind(this));
+    this.#broadcastChannels[MessageTypes.DATA.TIMESTAMP] = new BroadcastChannel(MessageTypes.DATA.TIMESTAMP);
+    this.#broadcastChannels[MessageTypes.DATA.TIMESTAMP].addEventListener('message', this.#handleTsStoreChannelMessage.bind(this));
 
-    this.#channels.wsOnlineStatusChannel = new BroadcastChannel(MessageTypes.ONLINE_STATUS);
-    this.#channels.wsOnlineStatusChannel.addEventListener('message', this.#handleWsOnlineStatusChannelMessage.bind(this));
+    this.#broadcastChannels[MessageTypes.PROTO.CONNECTION.STATUS] = new BroadcastChannel(MessageTypes.PROTO.CONNECTION.STATUS);
+    this.#broadcastChannels[MessageTypes.PROTO.CONNECTION.STATUS].addEventListener('message', this.#handleWsOnlineStatusChannelMessage.bind(this));
   }
 
   stop() {
-    this.#channels.moneyStoreChannel.removeEventListener('message', this.#handleMoneyStoreChannelMessage.bind(this));
-    this.#channels.moneyStoreChannel.close();
-    this.#channels.moneyStoreChannel = null;
+    this.#broadcastChannels[MessageTypes.DATA.MONEY].removeEventListener('message', this.#handleMoneyStoreChannelMessage.bind(this));
+    this.#broadcastChannels[MessageTypes.DATA.TIMESTAMP].removeEventListener('message', this.#handleTsStoreChannelMessage.bind(this));
+    this.#broadcastChannels[MessageTypes.PROTO.CONNECTION.STATUS].removeEventListener('message', this.#handleWsOnlineStatusChannelMessage.bind(this));
 
-    this.#channels.tsStoreChannel.removeEventListener('message', this.#handleTsStoreChannelMessage.bind(this));
-    this.#channels.tsStoreChannel.close();
-    this.#channels.tsStoreChannel = null;
-
-    this.#channels.wsOnlineStatusChannel.removeEventListener('message', this.#handleWsOnlineStatusChannelMessage.bind(this));
-    this.#channels.wsOnlineStatusChannel.close();
-    this.#channels.wsOnlineStatusChannel = null;
+    for (let channel of Object.values(this.#broadcastChannels)) {
+      channel.close();
+      channel = undefined;
+    }
   }
 }

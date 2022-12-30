@@ -138,25 +138,39 @@ importers:
   sources/back-end/srv/WebsocketServer:
     specifiers:
       '@dmitry-n-medvedev/common': workspace:^0.0.0
+      '@dmitry-n-medvedev/deserializers.moneymessage': workspace:^0.0.0
       '@dmitry-n-medvedev/libdb': workspace:^0.0.0
       '@dmitry-n-medvedev/libwebsocketserver': workspace:^0.0.0
+      '@dmitry-n-medvedev/serializers.moneymessage': workspace:^0.0.0
+      '@dmitry-n-medvedev/serializers.timestampmessage': workspace:^0.0.0
       dotenv: ^16.0.3
+      flatbuffers: ^22.12.6
       linkemon: ^0.1.1
       nodemon: ^2.0.20
     dependencies:
       '@dmitry-n-medvedev/common': file:sources/common
+      '@dmitry-n-medvedev/deserializers.moneymessage': file:sources/serde/deserializers/MoneyMessage
       '@dmitry-n-medvedev/libdb': file:sources/back-end/lib/LibDB
       '@dmitry-n-medvedev/libwebsocketserver': file:sources/back-end/lib/LibWebsocketServer
+      '@dmitry-n-medvedev/serializers.moneymessage': file:sources/serde/serializers/MoneyMessage
+      '@dmitry-n-medvedev/serializers.timestampmessage': file:sources/serde/serializers/TimestampMessage
       dotenv: 16.0.3
+      flatbuffers: 22.12.6
     devDependencies:
       linkemon: 0.1.1_nodemon@2.0.20
       nodemon: 2.0.20
     dependenciesMeta:
       '@dmitry-n-medvedev/common':
         injected: true
+      '@dmitry-n-medvedev/deserializers.moneymessage':
+        injected: true
       '@dmitry-n-medvedev/libdb':
         injected: true
       '@dmitry-n-medvedev/libwebsocketserver':
+        injected: true
+      '@dmitry-n-medvedev/serializers.moneymessage':
+        injected: true
+      '@dmitry-n-medvedev/serializers.timestampmessage':
         injected: true
       dotenv:
         injected: true
@@ -167,12 +181,15 @@ importers:
   sources/front-end:
     specifiers:
       '@dmitry-n-medvedev/common': workspace:^0.0.0
+      '@dmitry-n-medvedev/deserializers.moneymessage': workspace:^0.0.0
+      '@dmitry-n-medvedev/fbs': workspace:^0.0.0
       '@playwright/test': ^1.29.1
       '@sveltejs/adapter-node': 1.0.0
       '@sveltejs/kit': 1.0.1
       eslint: ^8.30.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-svelte3: ^4.0.0
+      flatbuffers: ^22.12.6
       inter-ui: ^3.19.3
       prettier: ^2.8.1
       prettier-plugin-svelte: ^2.9.0
@@ -183,6 +200,9 @@ importers:
       vitest: ^0.26.2
     dependencies:
       '@dmitry-n-medvedev/common': file:sources/common
+      '@dmitry-n-medvedev/deserializers.moneymessage': file:sources/serde/deserializers/MoneyMessage
+      '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
+      flatbuffers: 22.12.6
       inter-ui: 3.19.3
     devDependencies:
       '@playwright/test': 1.29.1
@@ -200,6 +220,10 @@ importers:
       vitest: 0.26.2
     dependenciesMeta:
       '@dmitry-n-medvedev/common':
+        injected: true
+      '@dmitry-n-medvedev/deserializers.moneymessage':
+        injected: true
+      '@dmitry-n-medvedev/fbs':
         injected: true
       inter-ui:
         injected: true
@@ -5817,6 +5841,24 @@ packages:
     requiresBuild: true
     dev: false
 
+  file:sources/serde/deserializers/MoneyMessage:
+    resolution: {directory: sources/serde/deserializers/MoneyMessage, type: directory}
+    name: '@dmitry-n-medvedev/deserializers.moneymessage'
+    version: 0.0.0
+    engines: {node: 19.3.0, pnpm: 7.20.0}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
+      flatbuffers: 22.12.6
+    transitivePeerDependencies:
+      - '@typescript-eslint/parser'
+      - chokidar
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - supports-color
+    dev: false
+
   file:sources/serde/fbs:
     resolution: {directory: sources/serde/fbs, type: directory}
     name: '@dmitry-n-medvedev/fbs'
@@ -5835,6 +5877,40 @@ packages:
       execa: 6.1.0
       flatbuffers: 22.12.6
       renamer: 4.0.0
+    transitivePeerDependencies:
+      - '@typescript-eslint/parser'
+      - chokidar
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - supports-color
+    dev: false
+
+  file:sources/serde/serializers/MoneyMessage:
+    resolution: {directory: sources/serde/serializers/MoneyMessage, type: directory}
+    name: '@dmitry-n-medvedev/serializers.moneymessage'
+    version: 0.0.0
+    engines: {node: 19.3.0, pnpm: 7.20.0}
+    requiresBuild: true
+    dependencies:
+      '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
+      flatbuffers: 22.12.6
+    transitivePeerDependencies:
+      - '@typescript-eslint/parser'
+      - chokidar
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - supports-color
+    dev: false
+
+  file:sources/serde/serializers/TimestampMessage:
+    resolution: {directory: sources/serde/serializers/TimestampMessage, type: directory}
+    name: '@dmitry-n-medvedev/serializers.timestampmessage'
+    version: 0.0.0
+    engines: {node: 19.3.0, pnpm: 7.20.0}
+    requiresBuild: true
+    dependencies:
+      '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
+      flatbuffers: 22.12.6
     transitivePeerDependencies:
       - '@typescript-eslint/parser'
       - chokidar

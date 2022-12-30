@@ -1,3 +1,4 @@
+import flatbuffers from 'flatbuffers';
 import {
   LibWebsocketServer,
 } from '@dmitry-n-medvedev/libwebsocketserver/LibWebsocketServer.mjs';
@@ -13,12 +14,18 @@ import {
 import {
   LibDBEvents,
 } from '@dmitry-n-medvedev/libdb/LibDBEvents.mjs';
+// import {
+//   createServerTSMessage,
+// } from '@dmitry-n-medvedev/common/messages/serializers/createServerTSMessage.mjs';
 import {
-  createServerTSMessage,
-} from '@dmitry-n-medvedev/common/messages/serializers/createServerTSMessage.mjs';
+  createTimestampMessage,
+} from '@dmitry-n-medvedev/serializers.timestampmessage/createTimestampMessage.mjs';
+// import {
+//   createServerMoneyMessage,
+// } from '@dmitry-n-medvedev/common/messages/serializers/createServerMoneyMessage.mjs';
 import {
-  createServerMoneyMessage,
-} from '@dmitry-n-medvedev/common/messages/serializers/createServerMoneyMessage.mjs';
+  createMoneyMessage,
+} from '@dmitry-n-medvedev/serializers.moneymessage/createMoneyMessage.mjs';
 import {
   MessageTypes,
 } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
@@ -38,10 +45,13 @@ export class Controller {
   #tsInterval = null;
   /** @type {Number} */
   #moneyInterval = null;
+  /** @type {flatbuffers.Builder} */
+  #builder = null;
 
   constructor(debuglog = () => {}) {
     this.#debuglog = debuglog;
     this.#decoder = new TextDecoder();
+    this.#builder = new flatbuffers.Builder(1024);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -72,7 +82,8 @@ export class Controller {
       delta,
     } = walletChangedEvent;
 
-    const message = createServerMoneyMessage(wallet, delta);
+    // const message = createServerMoneyMessage(wallet, delta);
+    const message = createMoneyMessage(this.#builder, wallet, delta);
 
     this.#libWebsocketServer.sendMessageToClient(userId, message);
   }
@@ -107,7 +118,7 @@ export class Controller {
         break;
       }
       default: {
-        console.log('handleWebsocketServerMessage: unknown message type', messageObject);
+        this.#debuglog('handleWebsocketServerMessage: unknown message type', messageObject);
       }
     }
   }
@@ -116,7 +127,9 @@ export class Controller {
     this.#libDB.addUser(clientId);
   }
 
-  #handleClientDisconnectedEvent(clientId) {
+  #handleClientDisconnectedEvent({ clientId }) {
+    console.log('#handleClientDisconnectedEvent', clientId);
+
     this.#libDB.deleteUser(clientId);
   }
 
@@ -139,7 +152,7 @@ export class Controller {
   #startSendingTsMessages() {
     this.#tsInterval = setInterval(() => {
       this.#libWebsocketServer.publish(
-        createServerTSMessage(),
+        createTimestampMessage(this.#builder, Date.now()),
         Topics.SERVER.TS,
       );
     }, 1000);

@@ -1,12 +1,19 @@
+// import { flatbuffers } from 'flatbuffers/js/flatbuffers';
+// import {
+//   Message, 
+// } from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/message.js';
+// import {
+//   MessageTypes,
+// } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
 import {
   MessageTypes,
-} from '@dmitry-n-medvedev/common/MessageTypes.mjs';
+} from '$lib/constants/MessageTypes.mjs';
 import {
   createWsOnlineStatusMessage,
 } from '@dmitry-n-medvedev/common/messages/serializers/createWsOnlineStatusMessage.mjs';
 
-const decoder = new TextDecoder();
-const encoder = new TextEncoder();
+// const decoder = new TextDecoder();
+// const encoder = new TextEncoder();
 
 export class WSClient {
   /** @type {WebSocket} */
@@ -29,11 +36,7 @@ export class WSClient {
       throw new ReferenceError('messageEvent is undefined');
     }
 
-    if (messageEvent.data instanceof Blob) {
-      const messageObject = JSON.parse(decoder.decode(await messageEvent.data.arrayBuffer()));
-  
-      (this.#broadcastChannels[messageObject.type])?.postMessage(messageObject);
-    }
+    (this.#broadcastChannels[MessageTypes.PROXY.FROM_SERVER]).postMessage(messageEvent.data);
   };
 
   async #handleOutgoingMessage(/** @type {MessageEvent} */ messageEvent) {
@@ -51,7 +54,7 @@ export class WSClient {
     console.log('#handleClientClose', code, reason, wasClean);
 
     const onlineStatus = createWsOnlineStatusMessage(false);
-    this.#broadcastChannels?.onlineStatus?.postMessage(onlineStatus);
+    this.#broadcastChannels[MessageTypes.PROTO.CONNECTION.STATUS].postMessage(onlineStatus);
 
     if (this.#shouldStopConnection === false && reconnectInTimeout === null) {
       reconnectInTimeout = setTimeout(() => {
@@ -66,10 +69,10 @@ export class WSClient {
     console.error('#handleClientError', errorEvent);
   }
 
-  #handleClientOpen(/** @type {Event} */ openEvent) {
+  #handleClientOpen() {
     const onlineStatus = createWsOnlineStatusMessage(true);
 
-    this.#broadcastChannels.onlineStatus?.postMessage(onlineStatus);
+    (this.#broadcastChannels[MessageTypes.PROTO.CONNECTION.STATUS]).postMessage(onlineStatus);
   }
   
   start() {
@@ -77,17 +80,17 @@ export class WSClient {
 
     this.#shouldStopConnection = false;
     this.#broadcastChannels = Object.freeze({
-      ts: new BroadcastChannel(MessageTypes.TS),
-      money: new BroadcastChannel(MessageTypes.MONEY),
-      toServer: new BroadcastChannel(MessageTypes.TO_SERVER),
-      onlineStatus: new BroadcastChannel(MessageTypes.ONLINE_STATUS)
+      [MessageTypes.PROXY.FROM_SERVER]: new BroadcastChannel(MessageTypes.PROXY.FROM_SERVER),
+      [MessageTypes.PROTO.CONNECTION.STATUS]: new BroadcastChannel(MessageTypes.PROTO.CONNECTION.STATUS),
     });
     this.#client = new WebSocket(this.#url);
+
+    this.#client.binaryType = 'arraybuffer';
+
     this.#client.addEventListener('message', this.#handleMessage.bind(this));
     this.#client.addEventListener('close', this.#handleClientClose.bind(this));
     this.#client.addEventListener('error', this.#handleClientError.bind(this));
     this.#client.addEventListener('open', this.#handleClientOpen.bind(this));
-    this.#broadcastChannels.toServer.addEventListener('message', this.#handleOutgoingMessage.bind(this));
   }
 
   stop() {
@@ -104,8 +107,9 @@ export class WSClient {
     }
 
     if (this.#broadcastChannels) {
-      for (const broadcastChannel of Object.values(this.#broadcastChannels)) {
+      for (let broadcastChannel of Object.values(this.#broadcastChannels)) {
         broadcastChannel.close();
+        broadcastChannel = undefined;
       }
   
       this.#broadcastChannels = undefined;
