@@ -183,6 +183,7 @@ importers:
       '@dmitry-n-medvedev/common': workspace:^0.0.0
       '@dmitry-n-medvedev/deserializers.moneymessage': workspace:^0.0.0
       '@dmitry-n-medvedev/fbs': workspace:^0.0.0
+      '@dmitry-n-medvedev/serializers.donatemessage': workspace:^0.0.0
       '@playwright/test': ^1.29.1
       '@sveltejs/adapter-node': 1.0.0
       '@sveltejs/kit': 1.0.1
@@ -202,6 +203,7 @@ importers:
       '@dmitry-n-medvedev/common': file:sources/common
       '@dmitry-n-medvedev/deserializers.moneymessage': file:sources/serde/deserializers/MoneyMessage
       '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
+      '@dmitry-n-medvedev/serializers.donatemessage': link:../serde/serializers/DonateMessage
       flatbuffers: 22.12.6
       inter-ui: 3.19.3
     devDependencies:

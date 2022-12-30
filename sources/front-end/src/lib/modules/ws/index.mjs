@@ -74,6 +74,12 @@ export class WSClient {
 
     (this.#broadcastChannels[MessageTypes.PROTO.CONNECTION.STATUS]).postMessage(onlineStatus);
   }
+
+  #handleToServerRawMessages(messageEvent) {
+    console.log('#handleToServerRawMessages', messageEvent.data);
+
+    this.#client.send(messageEvent.data);
+  }
   
   start() {
     this.stop();
@@ -81,8 +87,12 @@ export class WSClient {
     this.#shouldStopConnection = false;
     this.#broadcastChannels = Object.freeze({
       [MessageTypes.PROXY.FROM_SERVER]: new BroadcastChannel(MessageTypes.PROXY.FROM_SERVER),
+      [MessageTypes.PROXY.TO_SERVER_RAW]: new BroadcastChannel(MessageTypes.PROXY.TO_SERVER_RAW),
       [MessageTypes.PROTO.CONNECTION.STATUS]: new BroadcastChannel(MessageTypes.PROTO.CONNECTION.STATUS),
     });
+
+    this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER_RAW].addEventListener('message', this.#handleToServerRawMessages.bind(this));
+
     this.#client = new WebSocket(this.#url);
 
     this.#client.binaryType = 'arraybuffer';
@@ -107,6 +117,8 @@ export class WSClient {
     }
 
     if (this.#broadcastChannels) {
+      this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER_RAW].removeEventListener('message', this.#handleToServerRawMessages.bind(this));
+
       for (let broadcastChannel of Object.values(this.#broadcastChannels)) {
         broadcastChannel.close();
         broadcastChannel = undefined;

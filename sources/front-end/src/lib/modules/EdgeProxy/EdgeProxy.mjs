@@ -16,6 +16,9 @@ import {
 import {
   MessageTypes,
 } from '$lib/constants/MessageTypes.mjs';
+import {
+  createDonateMessage,
+} from '@dmitry-n-medvedev/serializers.donatemessage/createDonateMessage.mjs';
 
 export class EdgeProxy {
   #broadcastChannels = {
@@ -28,6 +31,7 @@ export class EdgeProxy {
     /** @type {BroadcastChannel} */
     [MessageTypes.DATA.MONEY]: null,
   };
+  #builder = null;
 
   constructor() {}
 
@@ -66,27 +70,55 @@ export class EdgeProxy {
     }
   }
 
-  #handleToServerMessage(/** @type {MessageEvent} */ messageEvent) {
-    console.log('#handleToServerMessage', messageEvent);
+  #handleToServerRequestMessage(/** @type {MessageEvent} */ messageEvent) {
+    const {
+      data: {
+        type,
+        payload,
+      }
+    } = messageEvent;
+
+    switch(type) {
+      case MessageTypes.DATA.DONATE: {
+        const { donate } = payload;
+        const donateMessageBytes = createDonateMessage(this.#builder, donate);
+
+        this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER_RAW].postMessage(donateMessageBytes);
+
+        console.log('#handleToServerMessage', type, payload, donate, donateMessageBytes);
+
+        break;
+      }
+      default: {
+        console.error('unknown message type', messageEvent.data);
+
+        break;
+      }
+    }
   }
 
   start() {
+    this.#builder = new flatbuffers.Builder(1024);
+
     this.#broadcastChannels[MessageTypes.PROXY.FROM_SERVER] = new BroadcastChannel(MessageTypes.PROXY.FROM_SERVER);
-    this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER] = new BroadcastChannel(MessageTypes.PROXY.TO_SERVER);
+    this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER_REQ] = new BroadcastChannel(MessageTypes.PROXY.TO_SERVER_REQ);
+    this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER_RAW] = new BroadcastChannel(MessageTypes.PROXY.TO_SERVER_RAW);
     this.#broadcastChannels[MessageTypes.DATA.TIMESTAMP] = new BroadcastChannel(MessageTypes.DATA.TIMESTAMP);
     this.#broadcastChannels[MessageTypes.DATA.MONEY] = new BroadcastChannel(MessageTypes.DATA.MONEY);
 
     this.#broadcastChannels[MessageTypes.PROXY.FROM_SERVER].addEventListener('message', this.#handleFromServerMessage.bind(this));
-    this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER].addEventListener('message', this.#handleToServerMessage.bind(this));
+    this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER_REQ].addEventListener('message', this.#handleToServerRequestMessage.bind(this));
   }
 
   stop() {
     this.#broadcastChannels[MessageTypes.PROXY.FROM_SERVER].removeEventListener('message', this.#handleFromServerMessage.bind(this));
-    this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER].removeEventListener('message', this.#handleToServerMessage.bind(this));
+    this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER_REQ].removeEventListener('message', this.#handleToServerRequestMessage.bind(this));
 
     for (let broadcastChannel of Object.values(this.#broadcastChannels)) {
       broadcastChannel.close();
       broadcastChannel = undefined;
     }
+
+    this.#builder = undefined;
   }
 }

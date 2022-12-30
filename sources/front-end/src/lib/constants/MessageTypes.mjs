@@ -1,11 +1,13 @@
 export const MessageTypes = {
   PROXY: {
     FROM_SERVER: 'proxy:from:server',
-    TO_SERVER: 'proxy:to:server',
+    TO_SERVER_REQ: 'proxy:to-server:req',
+    TO_SERVER_RAW: 'proxy:to-server:raw',
   },
   DATA: {
     TIMESTAMP: 'data:ts',
     MONEY: 'data:money',
+    DONATE: 'data:donate',
   },
   PROTO: {
     CONNECTION: {
