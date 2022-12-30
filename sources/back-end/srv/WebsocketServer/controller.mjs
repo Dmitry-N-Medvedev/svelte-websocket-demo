@@ -94,6 +94,8 @@ export class Controller {
     // const message = createServerMoneyMessage(wallet, delta);
     const message = createMoneyMessage(this.#builder, wallet, delta);
 
+    this.#builder.clear();
+
     this.#libWebsocketServer.sendMessageToClient(userId, message);
   }
 
@@ -174,6 +176,8 @@ export class Controller {
         createTimestampMessage(this.#builder, Date.now()),
         Topics.SERVER.TS,
       );
+
+      this.#builder.clear();
     }, 1000);
   }
 

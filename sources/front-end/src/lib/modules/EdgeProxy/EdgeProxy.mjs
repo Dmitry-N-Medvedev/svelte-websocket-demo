@@ -31,6 +31,7 @@ export class EdgeProxy {
     /** @type {BroadcastChannel} */
     [MessageTypes.DATA.MONEY]: null,
   };
+  /** @type {flatbuffers.Builder} */
   #builder = null;
 
   constructor() {}
@@ -82,6 +83,8 @@ export class EdgeProxy {
       case MessageTypes.DATA.DONATE: {
         const { donate } = payload;
         const donateMessageBytes = createDonateMessage(this.#builder, donate);
+
+        this.#builder.clear();
 
         this.#broadcastChannels[MessageTypes.PROXY.TO_SERVER_RAW].postMessage(donateMessageBytes);
 
