@@ -64,10 +64,6 @@ export class Ldr {
       credentials: 'include',
       name: 'wsWorker',
     }));
-
-    console.log({
-      workers: this.#workers,
-    })
   }
 
   #handleWorkerMessage({ data }) {

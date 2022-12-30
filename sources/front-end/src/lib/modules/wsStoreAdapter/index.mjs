@@ -55,7 +55,7 @@ export class WsStoreAdapter {
     this.#broadcastChannels[MessageTypes.PROTO.CONNECTION.STATUS].removeEventListener('message', this.#handleWsOnlineStatusChannelMessage.bind(this));
 
     for (let channel of Object.values(this.#broadcastChannels)) {
-      channel.close();
+      channel?.close();
       channel = undefined;
     }
   }
