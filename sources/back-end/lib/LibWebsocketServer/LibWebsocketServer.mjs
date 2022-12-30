@@ -132,7 +132,6 @@ export class LibWebsocketServer {
           // eslint-disable-next-line no-unused-vars
           open: (ws) => {
             ws.id = nanoid();
-            // ws.IP = this.#decoder.decode(ws.getRemoteAddressAsText());
             this.#clients.set(ws.id, ws);
 
             this.#events.emit(LibWebsocketServerEvents.CLIENT_CONNECTED, {
@@ -151,10 +150,6 @@ export class LibWebsocketServer {
           },
           // eslint-disable-next-line no-unused-vars
           close: (ws, code, message) => {
-            console.log('CLOSE', ws.id);
-
-            // ws.unsubscribe(Topics.SERVER.TS);
-
             this.#clients.delete(ws.id);
 
             this.#events.emit(LibWebsocketServerEvents.CLIENT_DISCONNECTED, {

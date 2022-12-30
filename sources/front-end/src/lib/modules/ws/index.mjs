@@ -1,19 +1,9 @@
-// import { flatbuffers } from 'flatbuffers/js/flatbuffers';
-// import {
-//   Message, 
-// } from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/message.js';
-// import {
-//   MessageTypes,
-// } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
 import {
   MessageTypes,
 } from '$lib/constants/MessageTypes.mjs';
 import {
   createWsOnlineStatusMessage,
 } from '@dmitry-n-medvedev/common/messages/serializers/createWsOnlineStatusMessage.mjs';
-
-// const decoder = new TextDecoder();
-// const encoder = new TextEncoder();
 
 export class WSClient {
   /** @type {WebSocket} */

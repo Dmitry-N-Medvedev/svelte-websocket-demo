@@ -1,9 +1,6 @@
 import {
   MessageTypes,
 } from '$lib/constants/MessageTypes.mjs';
-// import {
-//   MessagePayload,
-// } from '@dmitry-n-medvedev/fbs/generated/mjs/ts/svelte-websocket-demo/message-payload.js';
 import {
   MoneyStore,
 } from '$lib/stores/money.store.mjs';

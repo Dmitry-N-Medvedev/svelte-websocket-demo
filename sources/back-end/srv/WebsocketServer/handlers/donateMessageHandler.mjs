@@ -3,8 +3,6 @@ export const donateMessageHandler = (libDB = null, clientId = null, messageObjec
     throw new ReferenceError('libDB is undefined');
   }
 
-  // this.#libDB.addSum(clientId, sum);
-
   if (clientId === null) {
     throw new ReferenceError('clientId is undefined');
   }
