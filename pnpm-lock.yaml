@@ -5826,7 +5826,7 @@ packages:
     resolution: {directory: sources/back-end/lib/LibDB, type: directory}
     name: '@dmitry-n-medvedev/libdb'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.20.0}
+    engines: {node: 19.3.0, pnpm: 7.21.0}
     requiresBuild: true
     dependencies:
       nanoid: 4.0.0
@@ -5836,7 +5836,7 @@ packages:
     resolution: {directory: sources/back-end/lib/LibWebsocketServer, type: directory}
     name: '@dmitry-n-medvedev/libwebsocketserver'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.20.0}
+    engines: {node: 19.3.0, pnpm: 7.21.0}
     requiresBuild: true
     dependencies:
       '@dmitry-n-medvedev/common': file:sources/common
@@ -5849,7 +5849,7 @@ packages:
     resolution: {directory: sources/common, type: directory}
     name: '@dmitry-n-medvedev/common'
     version: 0.0.0
-    engines: {node: '=19.3.0', pnpm: '=7.20.0'}
+    engines: {node: '=19.3.0', pnpm: '=7.21.0'}
     requiresBuild: true
     dev: false
 
@@ -5857,7 +5857,7 @@ packages:
     resolution: {directory: sources/serde/deserializers/DonateMessage, type: directory}
     name: '@dmitry-n-medvedev/deserializers.donatemessage'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.20.0}
+    engines: {node: 19.3.0, pnpm: 7.21.0}
     requiresBuild: true
     dependencies:
       '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
@@ -5874,7 +5874,7 @@ packages:
     resolution: {directory: sources/serde/deserializers/MoneyMessage, type: directory}
     name: '@dmitry-n-medvedev/deserializers.moneymessage'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.20.0}
+    engines: {node: 19.3.0, pnpm: 7.21.0}
     hasBin: true
     requiresBuild: true
     dependencies:
@@ -5892,7 +5892,7 @@ packages:
     resolution: {directory: sources/serde/fbs, type: directory}
     name: '@dmitry-n-medvedev/fbs'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.20.0}
+    engines: {node: 19.3.0, pnpm: 7.21.0}
     hasBin: true
     requiresBuild: true
     dependencies:
@@ -5918,7 +5918,7 @@ packages:
     resolution: {directory: sources/serde/serializers/DonateMessage, type: directory}
     name: '@dmitry-n-medvedev/serializers.donatemessage'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.20.0}
+    engines: {node: 19.3.0, pnpm: 7.21.0}
     requiresBuild: true
     dependencies:
       '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
@@ -5935,7 +5935,7 @@ packages:
     resolution: {directory: sources/serde/serializers/MoneyMessage, type: directory}
     name: '@dmitry-n-medvedev/serializers.moneymessage'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.20.0}
+    engines: {node: 19.3.0, pnpm: 7.21.0}
     requiresBuild: true
     dependencies:
       '@dmitry-n-medvedev/fbs': file:sources/serde/fbs
@@ -5952,7 +5952,7 @@ packages:
     resolution: {directory: sources/serde/serializers/TimestampMessage, type: directory}
     name: '@dmitry-n-medvedev/serializers.timestampmessage'
     version: 0.0.0
-    engines: {node: 19.3.0, pnpm: 7.20.0}
+    engines: {node: 19.3.0, pnpm: 7.21.0}
     requiresBuild: true
     dependencies:
       '@dmitry-n-medvedev/fbs': file:sources/serde/fbs

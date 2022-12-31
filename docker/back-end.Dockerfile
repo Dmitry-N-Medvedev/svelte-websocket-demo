@@ -1,6 +1,6 @@
 FROM node:19.3.0-bullseye-slim AS system-setup
 RUN corepack enable \
-  && corepack prepare pnpm@7.20.0 --activate
+  && corepack prepare pnpm@7.21.0 --activate
 
 FROM system-setup AS build-all
 WORKDIR /repo
