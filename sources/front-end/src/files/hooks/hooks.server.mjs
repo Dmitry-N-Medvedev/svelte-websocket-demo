@@ -8,6 +8,12 @@ import {
   PUBLIC_WEB_PORT,
 } from '$env/static/public';
 
+const quotableStatements = Object.freeze(['none', 'self', 'unsafe-inline']);
+
+const quote = (statement) => {
+  return quotableStatements.includes(statement) ? `'${statement}'` : statement;
+};
+
 const cspDirectives = {
   'default-src': ['none'],
   'img-src': ['self'],
@@ -25,7 +31,7 @@ const cspDirectives = {
   'report-uri': [`${PUBLIC_WEB_PROTO}://${PUBLIC_WS_HOST}:${PUBLIC_WS_PORT}/csp-violation-report`],
 };
 
-const DIRECTIVES = Object.entries(cspDirectives).map(([key, values]) => `${key} ${values.map((value) => `'${value}'`).join(' ')}`).join(';');
+const DIRECTIVES = Object.entries(cspDirectives).map(([key, values]) => `${key} ${values.map((value) => `${quote(value)}`).join(' ')}`).join(';');
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
