@@ -1,4 +1,7 @@
 import {
+  dev as IsDevMode,
+} from '$app/environment';
+import {
   PUBLIC_WS_PROTO,
   PUBLIC_WS_HOST,
   PUBLIC_WS_PORT,
@@ -6,6 +9,7 @@ import {
   PUBLIC_WEB_PROTO,
   PUBLIC_WEB_HOST,
   PUBLIC_WEB_PORT,
+  PUBLIC_WEB_DEBUG_PORT,
 } from '$env/static/public';
 
 const quotableStatements = Object.freeze(['none', 'self', 'unsafe-inline']);
@@ -23,8 +27,10 @@ const cspDirectives = {
   'script-src': ['self', 'unsafe-inline'],
   'connect-src': [
     'self',
+    // svelte front-end
+    `${PUBLIC_WEB_PROTO}://${PUBLIC_WEB_HOST}:${PUBLIC_WEB_PORT}/`,
     // svelte dev server's port
-    `${PUBLIC_WS_PROTO}://${PUBLIC_WEB_HOST}:${PUBLIC_WEB_PORT}/`,
+    `${PUBLIC_WS_PROTO}://${PUBLIC_WEB_HOST}:${PUBLIC_WEB_DEBUG_PORT}/`,
     // API port
     `${PUBLIC_WS_PROTO}://${PUBLIC_WS_HOST}:${PUBLIC_WS_PORT}/`,
   ],
@@ -38,6 +44,10 @@ export async function handle({ event, resolve }) {
   const response = await resolve(event);
 
   response.headers.set('Content-Security-Policy-Report-Only', DIRECTIVES);
- 
+
+  // if (IsDevMode === false) {
+  //   response.headers.set('Content-Encoding', 'br, gzip');
+  // }
+  
   return response;
 }
