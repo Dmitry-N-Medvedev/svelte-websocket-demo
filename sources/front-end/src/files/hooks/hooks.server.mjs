@@ -1,7 +1,4 @@
 import {
-  dev as IsDevMode,
-} from '$app/environment';
-import {
   PUBLIC_WS_PROTO,
   PUBLIC_WS_HOST,
   PUBLIC_WS_PORT,
@@ -45,9 +42,5 @@ export async function handle({ event, resolve }) {
 
   response.headers.set('Content-Security-Policy-Report-Only', DIRECTIVES);
 
-  // if (IsDevMode === false) {
-  //   response.headers.set('Content-Encoding', 'br, gzip');
-  // }
-  
   return response;
 }
