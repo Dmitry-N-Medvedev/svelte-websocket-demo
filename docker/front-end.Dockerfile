@@ -1,27 +1,37 @@
 FROM node:alpine3.16 AS system-setup
 RUN apk update \
-  && apk upgrade \
-  && apk add --no-cache git bash
-RUN corepack enable \
-  && corepack prepare pnpm@7.21.0 --activate
+  && apk upgrade
 
 FROM system-setup AS build-all
 WORKDIR /repo
 ADD . ./
+RUN apk add --no-cache brotli \
+  && corepack enable \
+  && corepack prepare pnpm@7.21.0 --activate
 RUN pnpm --recursive install \
   && rm -rf sources/front-end/node_modules \
   && rm -rf sources/front-end/.svelte-kit \
   && rm -rf sources/front-end/build \
   && pnpm run dockerize:front-end \
-  && pnpm --filter=@dmitry-n-medvedev/svelte-websocket-demo-front-end run build
+  && pnpm --filter=@dmitry-n-medvedev/svelte-websocket-demo-front-end run build \
+  && find . \
+    -not -type d \
+    -and -not -iname "*.gz" \
+    -and -not -iname "*.br" \
+    -and -not -iname "*.png" \
+    -and -not -iname "*.jpg" \
+    -and -not -iname "*.ico" \
+    -and -not -path "*node_modules*" \
+    -exec gzip -9 -k '{}' \; \
+    -exec brotli --best '{}' \;
 
 FROM node:alpine3.16 AS package-web-app
-SHELL ["/bin/bash", "-c"]
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --chown=node:node --from=build-all /repo/sources/front-end/node_modules ./node_modules
 COPY --chown=node:node --from=build-all /repo/sources/front-end/build .
 COPY --chown=node:node --from=build-all /repo/sources/front-end/package.json .
+RUN find . -exec touch -d@$(( $(date +%s ) )) '{}' \;
 
 FROM package-web-app AS run-web-app
 USER node
