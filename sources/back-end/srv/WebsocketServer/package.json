@@ -51,6 +51,24 @@
     "nodemon": "^2.0.20"
   },
   "dependenciesMeta": {
+    "@dmitry-n-medvedev/common": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/deserializers.donatemessage": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/deserializers.moneymessage": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/fbs": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/serializers.moneymessage": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/serializers.timestampmessage": {
+      "injected": true
+    },
     "@dmitry-n-medvedev/libwebsocketserver": {
       "injected": true
     },
@@ -58,6 +76,9 @@
       "injected": true
     },
     "@dmitry-n-medvedev/libdb": {
+      "injected": true
+    },
+    "flatbuffers": {
       "injected": true
     }
   }
