@@ -7,13 +7,14 @@ WORKDIR /repo
 ADD . ./
 RUN apk add --no-cache brotli \
   && corepack enable \
-  && corepack prepare pnpm@7.21.0 --activate
-RUN pnpm --recursive install \
+  && corepack prepare pnpm@7.21.0 --activate \
+  && pnpm --recursive install \
   && rm -rf sources/front-end/node_modules \
   && rm -rf sources/front-end/.svelte-kit \
   && rm -rf sources/front-end/build \
   && pnpm run dockerize:front-end \
   && pnpm --filter=@dmitry-n-medvedev/svelte-websocket-demo-front-end run build \
+  && rm -f sources/front-end/build/client/vite-manifest.json \
   && find . \
     -not -type d \
     -and -not -iname "*.gz" \
@@ -29,10 +30,10 @@ RUN pnpm --recursive install \
 FROM node:alpine3.16 AS package-web-app
 ENV NODE_ENV=production
 WORKDIR /app
-COPY --chown=node:node --from=build-all /repo/sources/front-end/node_modules ./node_modules
 COPY --chown=node:node --from=build-all /repo/sources/front-end/build .
 COPY --chown=node:node --from=build-all /repo/sources/front-end/package.json .
-RUN find . -exec touch -d@$(( $(date +%s ) )) '{}' \;
+RUN find client/_app/immutable/assets -iname "*.woff*" -and -not -iname "Inter.var*.woff2*" -exec rm -f '{}' \; \
+    && find . -exec touch -d@$(( $(date +%s ) )) '{}' \;
 
 FROM package-web-app AS run-web-app
 USER node
