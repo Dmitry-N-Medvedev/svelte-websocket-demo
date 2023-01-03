@@ -22,6 +22,7 @@ RUN pnpm --recursive install \
     -and -not -iname "*.jpg" \
     -and -not -iname "*.ico" \
     -and -not -path "*node_modules*" \
+    -and -not -path "*server*" \
     -exec gzip -9 -k '{}' \; \
     -exec brotli --best '{}' \;
 
