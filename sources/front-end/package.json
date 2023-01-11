@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@7.21.0",
+  "packageManager": "pnpm@7.24.2",
   "engines": {
-    "node": "=19.3.0",
-    "pnpm": "=7.21.0"
+    "node": "=19.4.0",
+    "pnpm": "=7.24.2"
   },
   "engineStrict": true,
   "scripts": {
@@ -26,23 +26,23 @@
     "@dmitry-n-medvedev/deserializers.moneymessage": "workspace:^0.0.0",
     "@dmitry-n-medvedev/fbs": "workspace:^0.0.0",
     "@dmitry-n-medvedev/serializers.donatemessage": "workspace:^0.0.0",
-    "flatbuffers": "^22.12.6",
+    "flatbuffers": "^23.1.4",
     "inter-ui": "^3.19.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.29.1",
-    "@sveltejs/adapter-node": "1.0.0",
-    "@sveltejs/kit": "1.0.1",
+    "@playwright/test": "^1.29.2",
+    "@sveltejs/adapter-node": "1.1.0",
+    "@sveltejs/kit": "1.0.11",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-svelte3": "^4.0.0",
-    "prettier": "^2.8.1",
+    "prettier": "^2.8.2",
     "prettier-plugin-svelte": "^2.9.0",
-    "svelte": "^3.55.0",
-    "svelte-check": "^3.0.1",
+    "svelte": "^3.55.1",
+    "svelte-check": "^3.0.2",
     "typescript": "^4.9.4",
-    "vite": "^4.0.3",
-    "vitest": "^0.26.3"
+    "vite": "^4.0.4",
+    "vitest": "^0.27.0"
   },
   "dependenciesMeta": {
     "@dmitry-n-medvedev/common": {
