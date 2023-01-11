@@ -3,14 +3,14 @@
   "version": "0.0.1",
   "description": "svelte + websockets",
   "type": "module",
-  "packageManager": "pnpm@7.21.0",
+  "packageManager": "pnpm@7.24.2",
   "engines": {
-    "node": "19.3.0",
-    "pnpm": "7.21.0"
+    "node": "19.4.0",
+    "pnpm": "7.24.2"
   },
   "engineStrict": true,
   "volta": {
-    "node": "19.3.0"
+    "node": "19.4.0"
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/Dmitry-N-Medvedev/svelte-websocket-demo#readme",
   "devDependencies": {
-    "@babel/core": "^7.20.7",
+    "@babel/core": "^7.20.12",
     "@babel/eslint-parser": "^7.19.1",
     "@babel/eslint-plugin": "^7.19.1",
     "@babel/preset-env": "^7.20.2",

@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "description": "common stuff",
   "type": "module",
-  "packageManager": "pnpm@7.21.0",
+  "packageManager": "pnpm@7.24.2",
   "engines": {
-    "node": "=19.3.0",
-    "pnpm": "=7.21.0"
+    "node": "=19.4.0",
+    "pnpm": "=7.24.2"
   },
   "engineStrict": true,
   "volta": {
-    "node": "19.3.0"
+    "node": "19.4.0"
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm"

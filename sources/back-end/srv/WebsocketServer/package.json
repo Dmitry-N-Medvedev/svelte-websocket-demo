@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "description": "Websocket Server",
   "type": "module",
-  "packageManager": "pnpm@7.21.0",
+  "packageManager": "pnpm@7.24.2",
   "engines": {
-    "node": "=19.3.0",
-    "pnpm": "=7.21.0"
+    "node": "=19.4.0",
+    "pnpm": "=7.24.2"
   },
   "engineStrict": true,
   "volta": {
-    "node": "19.3.0"
+    "node": "19.4.0"
   },
   "main": "./server.mjs",
   "bin": "./server.mjs",
@@ -30,7 +30,7 @@
     "@dmitry-n-medvedev/serializers.moneymessage": "workspace:^0.0.0",
     "@dmitry-n-medvedev/serializers.timestampmessage": "workspace:^0.0.0",
     "dotenv": "^16.0.3",
-    "flatbuffers": "^22.12.6"
+    "flatbuffers": "^23.1.4"
   },
   "nodemonConfig": {
     "restartable": "rs",
