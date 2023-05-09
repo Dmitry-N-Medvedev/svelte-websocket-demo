@@ -7,7 +7,7 @@ WORKDIR /repo
 ADD . ./
 RUN apk add --no-cache brotli \
   && corepack enable \
-  && corepack prepare pnpm@7.24.2 --activate \
+  && corepack prepare pnpm@8.4.0 --activate \
   && pnpm --recursive install \
   && rm -rf sources/front-end/node_modules \
   && rm -rf sources/front-end/.svelte-kit \

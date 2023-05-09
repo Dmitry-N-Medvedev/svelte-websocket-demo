@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "description": "WS implementation",
   "type": "module",
-  "packageManager": "pnpm@7.24.2",
+  "packageManager": "pnpm@8.4.0",
   "engines": {
-    "node": "19.4.0",
-    "pnpm": "7.24.2"
+    "node": "20.1.0",
+    "pnpm": "8.4.0"
   },
   "engineStrict": true,
   "volta": {
-    "node": "19.4.0"
+    "node": "20.1.0"
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -21,7 +21,7 @@
     "@dmitry-n-medvedev/common": "workspace:^0.0.0",
     "dotenv": "^16.0.3",
     "nanoid": "^4.0.0",
-    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.15.0"
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.23.0"
   },
   "devDependencies": {
     "c8": "^7.12.0",
